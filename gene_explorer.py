@@ -59,7 +59,7 @@ def view_gene_sequence(gene_name="") -> str:
         print("Gene not found")
         return None
     else:
-        return genes_sequence[gene_name]
+        return gene_name + " sequence: " + genes_sequence[gene_name]
 
 
 def count_nucleotides(gene_name="") -> str:
@@ -72,10 +72,18 @@ def count_nucleotides(gene_name="") -> str:
     else:
         sequence = genes_sequence[gene_name]
         return (
-            gene_name + ": " + str(sequences_counts[sequence])
+            gene_name + " nucleotide count(s): " + str(sequences_counts[sequence])
         )  # TODO :: clean up the output so it's more human readable
 
 
 parse_genes_data()
 list_all_genes()
 print(count_nucleotides("FactorOmega"))
+print(view_gene_sequence("FactorOmega"))
+
+while 1:
+    print("1. List all genes")
+    print("2. View gene sequence of gene")
+    print("3. Count nucleotides of gene sequence")
+    print("4. Exit application")
+    user_input = input("Enter choice: ")
