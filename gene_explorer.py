@@ -8,7 +8,7 @@ sequence_to_nucleotide_counts = {}
 
 def count_nucleotides_in_sequence(sequence="") -> None:
     if sequence == "":
-        print("Sequence must be a non-empty string")
+        print("Must provide non-empty sequence to count nucleotides")
     else:
         counts = {"A": 0, "C": 0, "T": 0, "G": 0}
         sequence_to_nucleotide_counts[sequence] = counts
