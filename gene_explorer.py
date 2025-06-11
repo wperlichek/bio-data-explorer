@@ -53,17 +53,18 @@ def list_all_genes() -> None:
 
 def view_gene_sequence(gene_name="") -> str:
     if gene_name == "":
-        print("Must provide gene name to view its sequence")
+        print("Must provide gene name to view sequence")
         return None
     elif gene_name not in genes_sequence:
         print("Gene not found")
         return None
-    return
+    else:
+        return genes_sequence[gene_name]
 
 
 def count_nucleotides(gene_name="") -> str:
     if gene_name == "":
-        print("Must provide gene to count nucleotides")
+        print("Must provide gene name to count nucleotides")
         return None
     elif gene_name not in genes_sequence:
         print("Gene not found")
