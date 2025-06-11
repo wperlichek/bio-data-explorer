@@ -76,14 +76,30 @@ def count_nucleotides(gene_name="") -> str:
         )  # TODO :: clean up the output so it's more human readable
 
 
-parse_genes_data()
-list_all_genes()
-print(count_nucleotides("FactorOmega"))
-print(view_gene_sequence("FactorOmega"))
+def cli_app() -> None:
+    parse_genes_data()
+    while True:
 
-while 1:
-    print("1. List all genes")
-    print("2. View gene sequence of gene")
-    print("3. Count nucleotides of gene sequence")
-    print("4. Exit application")
-    user_input = input("Enter choice: ")
+        print("Gene Sequence Explorer")
+        print("1. List all genes")
+        print("2. View gene sequence of gene")
+        print("3. Count nucleotides of gene")
+        print("4. Exit application")
+
+        user_input = input("Enter choice (1-4): ").strip()
+
+        print("Choice: " + user_input, file=sys.stdout, flush=True)
+
+        if user_input == "1":
+            list_all_genes()
+        elif user_input == "2":
+            user_input = input("Enter gene name: ")
+        elif user_input == "3":
+            user_input = input("Enter gene name: ")
+        elif user_input == "4":
+            sys.exit()
+        else:
+            print("Invalid choice.")
+
+
+cli_app()
