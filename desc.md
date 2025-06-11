@@ -1,4 +1,3 @@
-Certainly! Here are the requirements for your Gene Sequence Explorer CLI Tool, formatted in Markdown for immediate use:
 
 ---
 
