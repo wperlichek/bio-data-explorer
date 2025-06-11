@@ -87,15 +87,18 @@ def cli_app() -> None:
         print("4. Exit application")
 
         user_input = input("Enter choice (1-4): ").strip()
-
-        print("Choice: " + user_input, file=sys.stdout, flush=True)
+        res = ""
 
         if user_input == "1":
             list_all_genes()
         elif user_input == "2":
             user_input = input("Enter gene name: ")
+            res = view_gene_sequence(user_input).strip()
+            print(res)
         elif user_input == "3":
-            user_input = input("Enter gene name: ")
+            user_input = input("Enter gene name: ").strip()
+            res = count_nucleotides(user_input)
+            print(res)
         elif user_input == "4":
             sys.exit()
         else:
