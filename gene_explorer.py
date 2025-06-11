@@ -21,16 +21,16 @@ def count_nucleotides_in_sequence(sequence="") -> None:
                 and nucleotide != "G"
             ):
                 print(
-                    "Warning: unknown nucleotide present in sequence "
+                    "Warning: Unknown nucleotide present in sequence "
                     + sequence
                     + " at position "
                     + str(idx)
-                    + " :"
+                    + " : "
                     + nucleotide
                 )
                 pass
             else:
-                sequence_to_nucleotide_counts[sequence][sequence[idx]] += 1
+                sequence_to_nucleotide_counts[sequence][nucleotide] += 1
 
 
 def parse_genes_data() -> None:
@@ -44,13 +44,13 @@ def parse_genes_data() -> None:
                 if gene_name not in gene_to_sequence:
                     gene_to_sequence[gene_name] = gene_sequence
                 else:
-                    print("Gene " + gene_name + ", already loaded")
+                    print("Gene " + gene_name + " already loaded")
 
-                if gene_to_sequence[1] not in sequence_to_nucleotide_counts:
+                if gene_sequence not in sequence_to_nucleotide_counts:
                     count_nucleotides_in_sequence(gene_sequence)
                 else:
                     print(
-                        "There is already a sequence count for sequence "
+                        "Warning: There is already a nucleotide count for sequence "
                         + gene_sequence
                     )
     except FileNotFoundError as e:
@@ -86,11 +86,20 @@ def get_count_nucleotides(gene_name="") -> str:
         return None
     else:
         sequence = gene_to_sequence[gene_name]
-        return (
-            gene_name
-            + " nucleotide count(s): "
-            + str(sequence_to_nucleotide_counts[sequence])
-        )  # TODO :: clean up the output so it's more human readable
+        if sequence not in sequence_to_nucleotide_counts:
+            print("Sequence not found")
+        else:
+            return sequence_to_nucleotide_counts[sequence]
+
+
+def pretty_print_count_nucleotides(gene_name="", nucleotide_counts={}) -> None:
+    if not nucleotide_counts:
+        print("Must provide nucleotide count map to print")
+    else:
+        pretty_printed = ""
+        for k, v in nucleotide_counts.items():
+            pretty_printed = pretty_printed + k + "=" + str(v) + " "
+        print(gene_name + ": " + pretty_printed)
 
 
 def cli_app() -> None:
@@ -116,7 +125,7 @@ def cli_app() -> None:
         elif user_input == "3":
             user_input = input("Enter gene name: ").strip()
             res = get_count_nucleotides(user_input)
-            print(res)
+            pretty_print_count_nucleotides(user_input, res)
         elif user_input == "4":
             sys.exit()
         else:
