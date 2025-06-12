@@ -38,17 +38,15 @@ class GenesData:
         else:
             return gene_name + " sequence: " + self.gene_to_sequence[gene_name]
 
-    def get_gene_sequence(self) -> Optional[str]:
-        if self.gene_name == "":
+    def get_gene_sequence(self, gene_name: str = "") -> Optional[str]:
+        if gene_name == "":
             print("Must provide gene name to view sequence")
             return None
-        elif self.gene_name not in self.gene_to_sequence:
+        elif gene_name not in self.gene_to_sequence:
             print("Gene not found")
             return None
         else:
-            return (
-                self.gene_name + " sequence: " + self.gene_to_sequence[self.gene_name]
-            )
+            return gene_name + " sequence: " + self.gene_to_sequence[gene_name]
 
     def count_nucleotides_in_sequence(self, sequence: str = "") -> Dict[str, int]:
         if sequence == "":
@@ -126,7 +124,7 @@ def pretty_print_count_nucleotides(
 
 def cli_app() -> None:
 
-    genes = parse_genes_data()
+    genes = parse_genes_data(GENES_FILE)
 
     gene_data = GenesData()
 
@@ -152,7 +150,7 @@ def cli_app() -> None:
                 print(result)
         elif menu_choice == "3":
             gene_name = input("Enter gene name: ").strip()
-            sequence = gene_data.get_gene_sequence(sequence)
+            sequence = gene_data.get_gene_sequence(gene_name)
             if sequence:
                 result = gene_data.get_count_nucleotides(sequence)
                 if result:
