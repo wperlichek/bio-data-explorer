@@ -101,7 +101,6 @@ def parse_genes_data(genes_file: str = "") -> List[Gene]:
                     logging.warning(
                         f"Line {line} in {genes_file} is incorrectly formatted, will not parse it"
                     )
-                    pass
                 genes.append(Gene(gene_and_sequence[0], gene_and_sequence[1].upper()))
         return genes
     except FileNotFoundError as e:
