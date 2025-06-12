@@ -52,23 +52,23 @@ class GenesData:
                 self.gene_name + " sequence: " + self.gene_to_sequence[self.gene_name]
             )
 
-    def count_nucleotides_in_sequence(self) -> None:
-        if self.sequence == "":
+    def count_nucleotides_in_sequence(self, sequence: str = "") -> Dict[str, int]:
+        if sequence == "":
             print("Must provide non-empty sequence to count nucleotides")
         else:
             counts = {"A": 0, "C": 0, "T": 0, "G": 0}
-            self.sequence_to_nucleotide_counts[self.sequence] = counts
-            for nucleotide in self.sequence:
+            for nucleotide in sequence:
                 if nucleotide in counts:
-                    self.sequence_to_nucleotide_counts[self.sequence][nucleotide] += 1
+                    counts[nucleotide] += 1
                 else:
                     print(
                         "Warning: Unknown nucleotide present in sequence "
-                        + self.sequence
+                        + sequence
                         + ": "
                         + nucleotide
                     )
                     pass
+            return counts
 
     def get_count_nucleotides(self) -> Optional[Dict[str, int]]:
         if self.gene_name == "":
