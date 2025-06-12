@@ -36,17 +36,7 @@ class GenesData:
             print("Gene not found")
             return None
         else:
-            return gene_name + " sequence: " + self.gene_to_sequence[gene_name]
-
-    def get_gene_sequence(self, gene_name: str = "") -> Optional[str]:
-        if gene_name == "":
-            print("Must provide gene name to view sequence")
-            return None
-        elif gene_name not in self.gene_to_sequence:
-            print("Gene not found")
-            return None
-        else:
-            return gene_name + " sequence: " + self.gene_to_sequence[gene_name]
+            return self.gene_to_sequence[gene_name]
 
     def count_nucleotides_in_sequence(self, sequence: str = "") -> Dict[str, int]:
         if sequence == "":
