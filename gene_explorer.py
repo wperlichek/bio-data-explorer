@@ -26,36 +26,36 @@ class GenesExplorer:
                 self.add_sequence_nucleotide_counts(gene.sequence)
 
     def add_gene_sequence(self, gene_name: str = "", sequence: str = "") -> None:
-        if gene_name not in self.gene_to_sequence:
-            self.gene_to_sequence[gene_name.lower()] = sequence
+        if gene_name.lower() not in self.gene_to_sequence:
+            self.gene_to_sequence[gene_name.lower()] = sequence.upper()
             self.gene_name_casing_map[gene_name.lower()] = gene_name
         else:
             logging.warning(f"{gene_name} already exists, not adding it to genes data")
 
     def add_sequence_nucleotide_counts(self, sequence: str = "") -> None:
-        if sequence not in self.sequence_to_nucleotide_counts:
-            self.sequence_to_nucleotide_counts[sequence] = (
-                self.count_nucleotides_in_sequence(sequence)
+        if sequence.upper() not in self.sequence_to_nucleotide_counts:
+            self.sequence_to_nucleotide_counts[sequence.upper()] = (
+                self.count_nucleotides_in_sequence(sequence.upper())
             )
 
     def get_gene_sequence(self, gene_name: str = "") -> Optional[str]:
         if gene_name == "":
             logging.info("Must provide gene name to get its sequence")
             return None
-        elif gene_name not in self.gene_to_sequence:
+        elif gene_name.lower() not in self.gene_to_sequence:
             logging.warning("Gene not found")
             return None
         else:
-            return self.gene_to_sequence[gene_name]
+            return self.gene_to_sequence[gene_name.lower()]
 
     def get_gene_name_original_casing(
-        self, gene_name_lower_case: str = ""
+        self, gene_name_case_insensitive: str = ""
     ) -> Optional[str]:
-        if gene_name_lower_case not in self.gene_name_casing_map:
+        if gene_name_case_insensitive.lower() not in self.gene_name_casing_map:
             logging.warning("Gene not found")
             return None
         else:
-            return self.gene_name_casing_map[gene_name_lower_case]
+            return self.gene_name_casing_map[gene_name_case_insensitive.lower()]
 
     def count_nucleotides_in_sequence(self, sequence: str = "") -> Dict[str, int]:
         counts = {"A": 0, "C": 0, "T": 0, "G": 0}
@@ -76,11 +76,11 @@ class GenesExplorer:
         if sequence == "":
             logging.warning("Must provide sequence to count nucleotides")
             return None
-        elif sequence not in self.sequence_to_nucleotide_counts:
+        elif sequence.upper() not in self.sequence_to_nucleotide_counts:
             logging.warning("Sequence not found")
             return None
         else:
-            return self.sequence_to_nucleotide_counts[sequence]
+            return self.sequence_to_nucleotide_counts[sequence.upper()]
 
     def print_all_genes(self) -> None:
         print(f"There are {len(self.gene_name_casing_map)} genes loaded: ")
