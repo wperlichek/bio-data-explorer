@@ -1,4 +1,4 @@
-from sys import exit
+import sys
 from typing import Dict, Optional
 
 GENES_FILE = "genes.txt"
@@ -137,5 +137,6 @@ def cli_app() -> None:
         else:
             print("Invalid choice")
 
-# TODO :: wrap in standard python startup idiom
-cli_app()
+
+if __name__ == "__main__":
+    cli_app()
