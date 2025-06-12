@@ -67,12 +67,12 @@ class GenesExplorer:
             logging.warning("Must provide non-empty sequence to count nucleotides")
             return counts
         else:
-            for nucleotide in sequence:
+            for nucleotide in sequence.upper():
                 if nucleotide in counts:
                     counts[nucleotide] += 1
                 else:
                     logging.warning(
-                        f"Warning: Unknown nucleotide present in sequence {sequence}: {nucleotide}"
+                        f"Warning: Unknown nucleotide present in sequence {sequence.upper()}: {nucleotide}"
                     )
             return counts
 
@@ -94,9 +94,9 @@ class GenesExplorer:
             number += 1
 
     def pretty_print_count_nucleotides(
-        self, gene_name: str = "", nucleotide_counts: Dict[str, int] = None
+        self, gene_name: str = "", nucleotide_counts: Optional[Dict[str, int]] = None
     ) -> None:
-        if not nucleotide_counts:
+        if nucleotide_counts is None:
             logging.warning("Must provide nucleotide count map to print")
         else:
             pretty_printed = ""
