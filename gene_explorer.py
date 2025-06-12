@@ -1,4 +1,4 @@
-import logging
+import logging, sys
 from typing import Dict, Optional, List
 
 GENES_FILE = "genes.txt"
@@ -6,6 +6,10 @@ GENES_FILE = "genes.txt"
 logging.basicConfig(
     level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s"
 )
+
+
+class GenesFileParsingError(Exception):
+    pass
 
 
 class Gene:
@@ -116,14 +120,18 @@ def parse_genes_data(genes_file: str = "") -> List[Gene]:
         return genes
     except FileNotFoundError as e:
         logging.error(f"Could not open {genes_file}: {e.strerror}")
-        raise Exception(e)
+        raise GenesFileParsingError(e)
 
 
 def cli_app() -> None:
 
     logging.info("Starting app")
 
-    genes = parse_genes_data(GENES_FILE)
+    try:
+        genes = parse_genes_data(GENES_FILE)
+    except GenesFileParsingError:
+        logging.info("Exiting app")
+        sys.exit()
 
     genes_explorer = GenesExplorer(genes)
 
