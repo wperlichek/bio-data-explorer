@@ -47,7 +47,7 @@ class GenesExplorer:
             logging.info("Must provide gene name to get its sequence")
             return None
         elif gene_name.lower() not in self.gene_to_sequence:
-            logging.warning("Gene not found")
+            logging.warning(f"Gene not found: {gene_name}")
             return None
         else:
             return self.gene_to_sequence[gene_name.lower()]
@@ -56,7 +56,7 @@ class GenesExplorer:
         self, gene_name_case_insensitive: str = ""
     ) -> Optional[str]:
         if gene_name_case_insensitive.lower() not in self.gene_name_casing_map:
-            logging.warning("Gene not found")
+            logging.warning(f"Gene not found: {gene_name_case_insensitive}")
             return None
         else:
             return self.gene_name_casing_map[gene_name_case_insensitive.lower()]
@@ -129,9 +129,9 @@ def cli_app() -> None:
 
     try:
         genes = parse_genes_data(GENES_FILE)
-    except GenesFileParsingError:
-        logging.info("Exiting app")
-        sys.exit()
+    except GenesFileParsingError as e:
+        logging.critical(f"Application can't start due to {e}, exiting application")
+        sys.exit(1)
 
     genes_explorer = GenesExplorer(genes)
 
