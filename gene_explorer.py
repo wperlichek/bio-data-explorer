@@ -9,7 +9,7 @@ logging.basicConfig(
 
 
 class Gene:
-    def __init__(self, gene_name, sequence):
+    def __init__(self, gene_name: str = "", sequence: str = ""):
         self.gene_name = gene_name
         self.sequence = sequence
 
@@ -19,6 +19,7 @@ class GenesExplorer:
     def __init__(self, genes: Optional[List[Gene]] = None):
         self.gene_to_sequence: Dict[str, str] = {}
         self.sequence_to_nucleotide_counts: Dict[str, Dict[str, int]] = {}
+        self.gene_name_casing_map: Dict[str, str] = {}
         if genes:
             for gene in genes:
                 self.add_gene_sequence(gene.gene_name, gene.sequence)
@@ -26,7 +27,8 @@ class GenesExplorer:
 
     def add_gene_sequence(self, gene_name: str = "", sequence: str = "") -> None:
         if gene_name not in self.gene_to_sequence:
-            self.gene_to_sequence[gene_name] = sequence
+            self.gene_to_sequence[gene_name.lower()] = sequence
+            self.gene_name_casing_map[gene_name.lower()] = gene_name
         else:
             logging.warning(f"{gene_name} already exists, not adding it to genes data")
 
@@ -45,6 +47,15 @@ class GenesExplorer:
             return None
         else:
             return self.gene_to_sequence[gene_name]
+
+    def get_gene_name_original_casing(
+        self, gene_name_lower_case: str = ""
+    ) -> Optional[str]:
+        if gene_name_lower_case not in self.gene_name_casing_map:
+            logging.warning("Gene not found")
+            return None
+        else:
+            return self.gene_name_casing_map[gene_name_lower_case]
 
     def count_nucleotides_in_sequence(self, sequence: str = "") -> Dict[str, int]:
         counts = {"A": 0, "C": 0, "T": 0, "G": 0}
@@ -72,10 +83,10 @@ class GenesExplorer:
             return self.sequence_to_nucleotide_counts[sequence]
 
     def print_all_genes(self) -> None:
-        print(f"There are {len(self.gene_to_sequence)} genes loaded: ")
+        print(f"There are {len(self.gene_name_casing_map)} genes loaded: ")
         number = 1
-        for k, _ in self.gene_to_sequence.items():
-            print(f"{number}: {k}")
+        for _, v in self.gene_name_casing_map.items():
+            print(f"{number}: {v}")
             number += 1
 
     def pretty_print_count_nucleotides(
@@ -87,7 +98,7 @@ class GenesExplorer:
             pretty_printed = ""
             for k, v in nucleotide_counts.items():
                 pretty_printed += f"{k}={v} "
-            print(f"{gene_name}: {pretty_printed}")
+            print(f"{self.get_gene_name_original_casing(gene_name)}: {pretty_printed}")
 
 
 def parse_genes_data(genes_file: str = "") -> List[Gene]:
@@ -128,12 +139,14 @@ def cli_app() -> None:
         if menu_choice == "1":
             genes_explorer.print_all_genes()
         elif menu_choice == "2":
-            gene_name = input("Enter gene name (case-sensitive): ").strip()
+            gene_name = input("Enter gene name: ").strip().lower()
             result = genes_explorer.get_gene_sequence(gene_name)
             if result:
-                print(f"{gene_name}: {result}")
+                print(
+                    f"{genes_explorer.get_gene_name_original_casing(gene_name)}: {result}"
+                )
         elif menu_choice == "3":
-            gene_name = input("Enter gene name (case-sensitive): ").strip()
+            gene_name = input("Enter gene name: ").strip().lower()
             sequence = genes_explorer.get_gene_sequence(gene_name)
             if sequence:
                 result = genes_explorer.get_count_nucleotides(sequence)
