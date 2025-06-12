@@ -1,7 +1,11 @@
-import sys
+import sys, logging
 from typing import Dict, Optional, List
 
 GENES_FILE = "genes.txt"
+
+logging.basicConfig(
+    level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s"
+)
 
 
 class Gene:
@@ -10,19 +14,23 @@ class Gene:
         self.sequence = sequence
 
 
-class GenesData:
+class GenesExplorer:
 
-    def __init__(self):
+    def __init__(self, genes: Optional[List[Gene]] = None):
         self.gene_to_sequence: Dict[str, str] = {}
         self.sequence_to_nucleotide_counts: Dict[str, Dict[str, int]] = {}
+        if genes:
+            for gene in genes:
+                self.add_gene_sequence(gene.gene_name, gene.sequence)
+                self.add_sequence_nucleotide_counts(gene.sequence)
 
-    def add_gene_to_sequence(self, gene_name: str = "", sequence: str = "") -> None:
+    def add_gene_sequence(self, gene_name: str = "", sequence: str = "") -> None:
         if gene_name not in self.gene_to_sequence:
             self.gene_to_sequence[gene_name] = sequence
         else:
-            print(f"Warning: {gene_name} already exists, not adding it to genes data")
+            logging.warning(f"{gene_name} already exists, not adding it to genes data")
 
-    def add_sequence_to_nucleotide_counts(self, sequence: str = "") -> None:
+    def add_sequence_nucleotide_counts(self, sequence: str = "") -> None:
         if sequence not in self.sequence_to_nucleotide_counts:
             self.sequence_to_nucleotide_counts[sequence] = (
                 self.count_nucleotides_in_sequence(sequence)
@@ -30,24 +38,24 @@ class GenesData:
 
     def get_gene_sequence(self, gene_name: str = "") -> Optional[str]:
         if gene_name == "":
-            print("Must provide gene name to get its sequence")
+            logging.info("Must provide gene name to get its sequence")
             return None
         elif gene_name not in self.gene_to_sequence:
-            print("Gene not found")
+            logging.warning("Gene not found")
             return None
         else:
             return self.gene_to_sequence[gene_name]
 
     def count_nucleotides_in_sequence(self, sequence: str = "") -> Dict[str, int]:
         if sequence == "":
-            print("Must provide non-empty sequence to count nucleotides")
+            logging.warning("Must provide non-empty sequence to count nucleotides")
         else:
             counts = {"A": 0, "C": 0, "T": 0, "G": 0}
             for nucleotide in sequence:
                 if nucleotide in counts:
                     counts[nucleotide] += 1
                 else:
-                    print(
+                    logging.warning(
                         f"Warning: Unknown nucleotide present in sequence {sequence}: {nucleotide}"
                     )
                     pass
@@ -55,10 +63,10 @@ class GenesData:
 
     def get_count_nucleotides(self, sequence: str = "") -> Optional[Dict[str, int]]:
         if sequence == "":
-            print("Must provide sequence to count nucleotides")
+            logging.warning("Must provide sequence to count nucleotides")
             return None
         elif sequence not in self.sequence_to_nucleotide_counts:
-            print("Sequence not found")
+            logging.warning("Sequence not found")
             return None
         else:
             return self.sequence_to_nucleotide_counts[sequence]
@@ -80,14 +88,14 @@ def parse_genes_data(genes_file: str = "") -> List[Gene]:
                 gene_and_sequence = line.strip().split(":")
 
                 if len(gene_and_sequence) != 2:
-                    print(
+                    logging.warning(
                         f"Line {line} in {genes_file} is incorrectly formatted, will not parse it"
                     )
                     pass
                 genes.append(Gene(gene_and_sequence[0], gene_and_sequence[1]))
         return genes
     except FileNotFoundError as e:
-        print(f"Could not open {genes_file}: {e.strerror}")
+        logging.error(f"Could not open {genes_file}: {e.strerror}")
         sys.exit()
 
 
@@ -95,7 +103,7 @@ def pretty_print_count_nucleotides(
     gene_name: str = "", nucleotide_counts: Dict[str, int] = None
 ) -> None:
     if not nucleotide_counts:
-        print("Must provide nucleotide count map to print")
+        logging.warning("Must provide nucleotide count map to print")
     else:
         pretty_printed = ""
         for k, v in nucleotide_counts.items():
@@ -105,13 +113,11 @@ def pretty_print_count_nucleotides(
 
 def cli_app() -> None:
 
+    logging.info("Starting app")
+
     genes = parse_genes_data(GENES_FILE)
 
-    gene_data = GenesData()
-
-    for gene in genes:
-        gene_data.add_gene_to_sequence(gene.gene_name, gene.sequence)
-        gene_data.add_sequence_to_nucleotide_counts(gene.sequence)
+    gene_data = GenesExplorer(genes)
 
     while True:
         print("** Gene Sequence Explorer **")
