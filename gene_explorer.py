@@ -5,9 +5,9 @@ GENES_FILE = "genes.txt"
 
 
 class Gene:
-    def __init__(self, gene_name, gene_sequence):
+    def __init__(self, gene_name, sequence):
         self.gene_name = gene_name
-        self.gene_sequence = gene_sequence
+        self.sequence = sequence
 
 
 class GenesData:
@@ -17,12 +17,16 @@ class GenesData:
         self.sequence_to_nucleotide_counts: Dict[str, Dict[str, int]] = {}
 
     def add_gene_to_sequence(self, gene_name: str = "", sequence: str = "") -> None:
-        return
+        if gene_name not in self.gene_to_sequence:
+            self.gene_to_sequence[gene_name] = sequence
+        else:
+            print(f"Warning: {gene_name} already exists, not adding it to genes data")
 
-    def add_sequence_to_nucleotide_counts(
-        self, sequence: str = "", nucleotide_counts: Dict[str, int] = {}
-    ) -> None:
-        return
+    def add_sequence_to_nucleotide_counts(self, sequence: str = "") -> None:
+        if sequence not in self.sequence_to_nucleotide_counts:
+            self.sequence_to_nucleotide_counts[sequence] = (
+                self.count_nucleotides_in_sequence(sequence)
+            )
 
     def get_gene_sequence(self) -> Optional[str]:
         if self.gene_name == "":
@@ -98,10 +102,10 @@ class GenesData:
             print(self.gene_name + ": " + pretty_printed)
 
 
-def parse_genes_data() -> List[Gene]:
+def parse_genes_data(genes_file: str = "") -> List[Gene]:
     genes = []
     try:
-        with open(GENES_FILE) as File:
+        with open(genes_file) as File:
             lines = File.readlines()
             for line in lines:
                 gene_and_sequence = line.strip().split(":")
@@ -111,7 +115,7 @@ def parse_genes_data() -> List[Gene]:
                         "Line "
                         + line
                         + " in "
-                        + GENES_FILE
+                        + genes_file
                         + " is incorrectly formatted, will not parse it"
                     )
                     pass
@@ -119,13 +123,21 @@ def parse_genes_data() -> List[Gene]:
         return genes
     except FileNotFoundError as e:
         # TODO :: use python logging module
-        print("Could not open " + GENES_FILE + ": " + e.strerror)
+        print("Could not open " + genes_file + ": " + e.strerror)
         sys.exit()
 
 
 def cli_app() -> None:
 
     genes = parse_genes_data()
+
+    gene_data = GenesData()
+
+    for gene in genes:
+        gene_data.add_gene_to_sequence(gene.gene_name, gene.sequence)
+        gene_data.add_sequence_to_nucleotide_counts(
+            gene.sequence,
+        )
 
     while True:
         print("Gene Sequence Explorer")
