@@ -28,17 +28,15 @@ class GenesData:
                 self.count_nucleotides_in_sequence(sequence)
             )
 
-    def get_gene_sequence(self) -> Optional[str]:
-        if self.gene_name == "":
-            print("Must provide gene name to view sequence")
+    def get_gene_sequence(self, gene_name: str = "") -> Optional[str]:
+        if gene_name == "":
+            print("Must provide gene name to get its sequence")
             return None
-        elif self.gene_name not in self.gene_to_sequence:
+        elif gene_name not in self.gene_to_sequence:
             print("Gene not found")
             return None
         else:
-            return (
-                self.gene_name + " sequence: " + self.gene_to_sequence[self.gene_name]
-            )
+            return gene_name + " sequence: " + self.gene_to_sequence[gene_name]
 
     def get_gene_sequence(self) -> Optional[str]:
         if self.gene_name == "":
@@ -70,25 +68,21 @@ class GenesData:
                     pass
             return counts
 
-    def get_count_nucleotides(self) -> Optional[Dict[str, int]]:
-        if self.gene_name == "":
-            print("Must provide gene name to count nucleotides")
+    def get_count_nucleotides(self, sequence: str = "") -> Optional[Dict[str, int]]:
+        if sequence == "":
+            print("Must provide sequence to count nucleotides")
             return None
-        elif self.gene_name not in self.gene_to_sequence:
-            print("Gene not found")
+        elif sequence not in self.sequence_to_nucleotide_counts:
+            print("Sequence not found.")
             return None
         else:
-            sequence = self.ene_to_sequence[self.gene_name]
-            if sequence not in self.sequence_to_nucleotide_counts:
-                print("Sequence not found")
-            else:
-                return self.sequence_to_nucleotide_counts[sequence]
+            return self.sequence_to_nucleotide_counts[sequence]
 
     def print_all_genes(self) -> None:
         # TODO - consistent use of f-strings
         print(f"There are {len(self.gene_to_sequence)} genes loaded: ")
         number = 1
-        for k, v in self.gene_to_sequence.items():
+        for k, _ in self.gene_to_sequence.items():
             print(str(number) + ": " + k)
             number += 1
 
@@ -135,9 +129,7 @@ def cli_app() -> None:
 
     for gene in genes:
         gene_data.add_gene_to_sequence(gene.gene_name, gene.sequence)
-        gene_data.add_sequence_to_nucleotide_counts(
-            gene.sequence,
-        )
+        gene_data.add_sequence_to_nucleotide_counts(gene.sequence)
 
     while True:
         print("Gene Sequence Explorer")
@@ -150,17 +142,19 @@ def cli_app() -> None:
         result = ""
 
         if user_input == "1":
-            print_all_genes()
+            gene_data.print_all_genes()
         elif user_input == "2":
             user_input = input("Enter gene name: ").strip()
-            result = get_gene_sequence(user_input)
+            result = gene_data.get_gene_sequence(user_input)
             if result:
                 print(result)
         elif user_input == "3":
             user_input = input("Enter gene name: ").strip()
-            result = get_count_nucleotides(user_input)
-            if result:
-                pretty_print_count_nucleotides(user_input, result)
+            sequence = gene_data.get_gene_sequence(sequence)
+            if sequence:
+                result = gene_data.get_count_nucleotides(sequence)
+                if result:
+                    pretty_print_count_nucleotides(user_input, result)
         elif user_input == "4":
             break
         else:
