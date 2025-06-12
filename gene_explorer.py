@@ -72,7 +72,7 @@ class GenesExplorer:
                     counts[nucleotide] += 1
                 else:
                     logging.warning(
-                        f"Warning: Unknown nucleotide present in sequence {sequence.upper()}: {nucleotide}"
+                        f"Unknown nucleotide present in sequence {sequence.upper()}: {nucleotide}"
                     )
             return counts
 
