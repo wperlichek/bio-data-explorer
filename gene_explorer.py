@@ -63,7 +63,7 @@ def parse_genes_data() -> None:
 
 def print_all_genes() -> None:
     # TODO - consistent use of f-strings
-    print(f"There are " + {len(gene_to_sequence)} + " genes loaded: ")
+    print(f"There are {len(gene_to_sequence)} genes loaded: ")
     number = 1
     for k, v in gene_to_sequence.items():
         print(str(number) + ": " + k)
