@@ -47,10 +47,11 @@ class GenesExplorer:
             return self.gene_to_sequence[gene_name]
 
     def count_nucleotides_in_sequence(self, sequence: str = "") -> Dict[str, int]:
+        counts = {"A": 0, "C": 0, "T": 0, "G": 0}
         if sequence == "":
             logging.warning("Must provide non-empty sequence to count nucleotides")
+            return counts
         else:
-            counts = {"A": 0, "C": 0, "T": 0, "G": 0}
             for nucleotide in sequence:
                 if nucleotide in counts:
                     counts[nucleotide] += 1
@@ -58,7 +59,6 @@ class GenesExplorer:
                     logging.warning(
                         f"Warning: Unknown nucleotide present in sequence {sequence}: {nucleotide}"
                     )
-                    pass
             return counts
 
     def get_count_nucleotides(self, sequence: str = "") -> Optional[Dict[str, int]]:
