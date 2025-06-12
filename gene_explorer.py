@@ -6,7 +6,7 @@ GENES_FILE = "genes.txt"
 # TODO::refactor into class
 # TODO:: should these be caps in the class?
 gene_to_sequence: Dict[str, str] = {}
-sequence_to_nucleotide_counts: Dict[str, Dict[str,int]] = {}
+sequence_to_nucleotide_counts: Dict[str, Dict[str, int]] = {}
 
 
 def count_nucleotides_in_sequence(sequence: str = "") -> None:
@@ -26,7 +26,6 @@ def count_nucleotides_in_sequence(sequence: str = "") -> None:
                     + nucleotide
                 )
                 pass
-                
 
 
 def parse_genes_data() -> None:
@@ -36,9 +35,14 @@ def parse_genes_data() -> None:
             for line in lines:
                 gene_and_sequence = line.strip().split(":")
 
-                if (len(gene_and_sequence) != 2):
-                    print("Line " + line + " in " + GENES_FILE + 
-                          " is incorrectly formatted, will not parse it")
+                if len(gene_and_sequence) != 2:
+                    print(
+                        "Line "
+                        + line
+                        + " in "
+                        + GENES_FILE
+                        + " is incorrectly formatted, will not parse it"
+                    )
                     pass
 
                 gene_name = gene_and_sequence[0]
@@ -96,7 +100,9 @@ def get_count_nucleotides(gene_name: str = "") -> Optional[Dict[str, int]]:
             return sequence_to_nucleotide_counts[sequence]
 
 
-def pretty_print_count_nucleotides(gene_name: str = "", nucleotide_counts: Optional[Dict[str, int]] = None) -> None:
+def pretty_print_count_nucleotides(
+    gene_name: str = "", nucleotide_counts: Optional[Dict[str, int]] = None
+) -> None:
     if not nucleotide_counts:
         print("Must provide nucleotide count map to print")
     else:
