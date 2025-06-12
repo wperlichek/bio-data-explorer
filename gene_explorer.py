@@ -86,15 +86,6 @@ class GenesData:
             print(str(number) + ": " + k)
             number += 1
 
-    def pretty_print_count_nucleotides(self) -> None:
-        if not self.nucleotide_counts:
-            print("Must provide nucleotide count map to print")
-        else:
-            pretty_printed = ""
-            for k, v in self.nucleotide_counts.items():
-                pretty_printed += f"{k}={v} "
-            print(self.gene_name + ": " + pretty_printed)
-
 
 def parse_genes_data(genes_file: str = "") -> List[Gene]:
     genes = []
@@ -119,6 +110,18 @@ def parse_genes_data(genes_file: str = "") -> List[Gene]:
         # TODO :: use python logging module
         print("Could not open " + genes_file + ": " + e.strerror)
         sys.exit()
+
+
+def pretty_print_count_nucleotides(
+    gene_name: str = "", nucleotide_counts: Dict[str, int] = None
+) -> None:
+    if not nucleotide_counts:
+        print("Must provide nucleotide count map to print")
+    else:
+        pretty_printed = ""
+        for k, v in nucleotide_counts.items():
+            pretty_printed += f"{k}={v} "
+        print(gene_name + ": " + pretty_printed)
 
 
 def cli_app() -> None:
