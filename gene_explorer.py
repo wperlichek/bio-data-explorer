@@ -73,7 +73,7 @@ class GenesData:
             print("Must provide sequence to count nucleotides")
             return None
         elif sequence not in self.sequence_to_nucleotide_counts:
-            print("Sequence not found.")
+            print("Sequence not found")
             return None
         else:
             return self.sequence_to_nucleotide_counts[sequence]
@@ -135,30 +135,29 @@ def cli_app() -> None:
         gene_data.add_sequence_to_nucleotide_counts(gene.sequence)
 
     while True:
-        print("Gene Sequence Explorer")
+        print("** Gene Sequence Explorer **")
         print("1. List all genes")
-        print("2. View gene sequence of gene")
+        print("2. View sequence of gene")
         print("3. Count nucleotides of gene")
         print("4. Exit application")
 
-        user_input = input("Enter choice (1-4): ").strip()
-        result = ""
+        menu_choice = input("Enter choice (1-4): ").strip()
 
-        if user_input == "1":
+        if menu_choice == "1":
             gene_data.print_all_genes()
-        elif user_input == "2":
-            user_input = input("Enter gene name: ").strip()
-            result = gene_data.get_gene_sequence(user_input)
+        elif menu_choice == "2":
+            gene_name = input("Enter gene name: ").strip()
+            result = gene_data.get_gene_sequence(gene_name)
             if result:
                 print(result)
-        elif user_input == "3":
-            user_input = input("Enter gene name: ").strip()
+        elif menu_choice == "3":
+            gene_name = input("Enter gene name: ").strip()
             sequence = gene_data.get_gene_sequence(sequence)
             if sequence:
                 result = gene_data.get_count_nucleotides(sequence)
                 if result:
-                    pretty_print_count_nucleotides(user_input, result)
-        elif user_input == "4":
+                    pretty_print_count_nucleotides(gene_name, result)
+        elif menu_choice == "4":
             break
         else:
             print("Invalid choice")
