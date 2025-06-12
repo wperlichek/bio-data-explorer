@@ -1,4 +1,4 @@
-import sys, logging
+import logging
 from typing import Dict, Optional, List
 
 GENES_FILE = "genes.txt"
@@ -83,8 +83,7 @@ def parse_genes_data(genes_file: str = "") -> List[Gene]:
     genes = []
     try:
         with open(genes_file) as File:
-            lines = File.readlines()
-            for line in lines:
+            for line in File:
                 gene_and_sequence = line.strip().split(":")
 
                 if len(gene_and_sequence) != 2:
@@ -92,11 +91,11 @@ def parse_genes_data(genes_file: str = "") -> List[Gene]:
                         f"Line {line} in {genes_file} is incorrectly formatted, will not parse it"
                     )
                     pass
-                genes.append(Gene(gene_and_sequence[0], gene_and_sequence[1]))
+                genes.append(Gene(gene_and_sequence[0], gene_and_sequence[1].upper()))
         return genes
     except FileNotFoundError as e:
         logging.error(f"Could not open {genes_file}: {e.strerror}")
-        sys.exit()
+        raise Exception(e)
 
 
 def pretty_print_count_nucleotides(
