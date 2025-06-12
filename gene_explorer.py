@@ -48,10 +48,7 @@ class GenesData:
                     counts[nucleotide] += 1
                 else:
                     print(
-                        "Warning: Unknown nucleotide present in sequence "
-                        + sequence
-                        + ": "
-                        + nucleotide
+                        f"Warning: Unknown nucleotide present in sequence {sequence}: {nucleotide}"
                     )
                     pass
             return counts
@@ -67,7 +64,6 @@ class GenesData:
             return self.sequence_to_nucleotide_counts[sequence]
 
     def print_all_genes(self) -> None:
-        # TODO - consistent use of f-strings
         print(f"There are {len(self.gene_to_sequence)} genes loaded: ")
         number = 1
         for k, _ in self.gene_to_sequence.items():
@@ -85,18 +81,13 @@ def parse_genes_data(genes_file: str = "") -> List[Gene]:
 
                 if len(gene_and_sequence) != 2:
                     print(
-                        "Line "
-                        + line
-                        + " in "
-                        + genes_file
-                        + " is incorrectly formatted, will not parse it"
+                        f"Line {line} in {genes_file} is incorrectly formatted, will not parse it"
                     )
                     pass
                 genes.append(Gene(gene_and_sequence[0], gene_and_sequence[1]))
         return genes
     except FileNotFoundError as e:
-        # TODO :: use python logging module
-        print("Could not open " + genes_file + ": " + e.strerror)
+        print(f"Could not open {genes_file}: {e.strerror}")
         sys.exit()
 
 
