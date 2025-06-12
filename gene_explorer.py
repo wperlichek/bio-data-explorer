@@ -75,8 +75,19 @@ class GenesExplorer:
         print(f"There are {len(self.gene_to_sequence)} genes loaded: ")
         number = 1
         for k, _ in self.gene_to_sequence.items():
-            print(str(number) + ": " + k)
+            print(f"{number}: {k}")
             number += 1
+
+    def pretty_print_count_nucleotides(
+        self, gene_name: str = "", nucleotide_counts: Dict[str, int] = None
+    ) -> None:
+        if not nucleotide_counts:
+            logging.warning("Must provide nucleotide count map to print")
+        else:
+            pretty_printed = ""
+            for k, v in nucleotide_counts.items():
+                pretty_printed += f"{k}={v} "
+            print(f"{gene_name}: {pretty_printed}")
 
 
 def parse_genes_data(genes_file: str = "") -> List[Gene]:
@@ -98,25 +109,13 @@ def parse_genes_data(genes_file: str = "") -> List[Gene]:
         raise Exception(e)
 
 
-def pretty_print_count_nucleotides(
-    gene_name: str = "", nucleotide_counts: Dict[str, int] = None
-) -> None:
-    if not nucleotide_counts:
-        logging.warning("Must provide nucleotide count map to print")
-    else:
-        pretty_printed = ""
-        for k, v in nucleotide_counts.items():
-            pretty_printed += f"{k}={v} "
-        print(gene_name + ": " + pretty_printed)
-
-
 def cli_app() -> None:
 
     logging.info("Starting app")
 
     genes = parse_genes_data(GENES_FILE)
 
-    gene_data = GenesExplorer(genes)
+    genes_explorer = GenesExplorer(genes)
 
     while True:
         print("** Gene Sequence Explorer **")
@@ -128,20 +127,21 @@ def cli_app() -> None:
         menu_choice = input("Enter choice (1-4): ").strip()
 
         if menu_choice == "1":
-            gene_data.print_all_genes()
+            genes_explorer.print_all_genes()
         elif menu_choice == "2":
-            gene_name = input("Enter gene name: ").strip()
-            result = gene_data.get_gene_sequence(gene_name)
+            gene_name = input("Enter gene name (case-sensitive): ").strip()
+            result = genes_explorer.get_gene_sequence(gene_name)
             if result:
-                print(result)
+                print(f"{gene_name}: {result}")
         elif menu_choice == "3":
-            gene_name = input("Enter gene name: ").strip()
-            sequence = gene_data.get_gene_sequence(gene_name)
+            gene_name = input("Enter gene name (case-sensitive): ").strip()
+            sequence = genes_explorer.get_gene_sequence(gene_name)
             if sequence:
-                result = gene_data.get_count_nucleotides(sequence)
+                result = genes_explorer.get_count_nucleotides(sequence)
                 if result:
-                    pretty_print_count_nucleotides(gene_name, result)
+                    genes_explorer.pretty_print_count_nucleotides(gene_name, result)
         elif menu_choice == "4":
+            logging.info("Exiting app")
             break
         else:
             print("Invalid choice")
