@@ -119,6 +119,7 @@ def parse_genes_data(genes_file: str = "") -> List[Gene]:
             identifier = ""
             description = ""
             sequence = ""
+            found_format_problem = False
             for line in File:
                 stripped_line = line.strip()
                 if not stripped_line:
@@ -127,20 +128,27 @@ def parse_genes_data(genes_file: str = "") -> List[Gene]:
                     if line_is_formatted_correctly(stripped_line):
                         if stripped_line[0] == ">":
                             if sequence:
-                                genes.append(
-                                    Gene(identifier, description, sequence.upper())
-                                )
+                                if not found_format_problem:
+                                    genes.append(
+                                        Gene(identifier, description, sequence.upper())
+                                    )
+                                else:
+                                    found_format_problem = False
                             identifier_and_description = (
                                 stripped_line[1::].strip().split(" ")
                             )
                             identifier = identifier_and_description[0]
                             description = " ".join(identifier_and_description[1::])
                             sequence = ""
-                        else:
+                        elif not found_format_problem:
                             sequence += stripped_line
                     else:
-                        pass
-            genes.append(Gene(identifier, description, sequence.upper()))
+                        logging.warning(
+                            f"{line} is not formatted correctly, skipping this FASTA entry"
+                        )
+                        found_format_problem = True
+            if not found_format_problem:
+                genes.append(Gene(identifier, description, sequence.upper()))
         return genes
     except FileNotFoundError as e:
         logging.error(f"Could not open {genes_file}: {e.strerror}")
@@ -157,7 +165,6 @@ def line_is_formatted_correctly(line: str = "") -> bool:
             return False
     else:
         fasta_letters = set("ACGTURYSWKMBDHVNACDEFGHIKLMNPQRSTVWYBXZ*")
-        print(line)
         for ch in line:
             if ch not in fasta_letters:
                 logging.warning(f"Found non-FASTA character {ch} in {line}")
