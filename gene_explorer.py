@@ -1,7 +1,9 @@
-import logging, sys
+import logging, sys, gzip
 from typing import Dict, Optional, List
 
-GENES_FILE = "genes.txt"
+GENES_FILE = "sample_genes.fasta.gz"
+
+FASTA_SEQUENCE_CHARS_DNA = set("ACGT")
 
 logging.basicConfig(
     level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s"
@@ -13,8 +15,9 @@ class GenesFileParsingError(Exception):
 
 
 class Gene:
-    def __init__(self, gene_name: str = "", sequence: str = ""):
-        self.gene_name = gene_name
+    def __init__(self, identifier: str = "", description: str = "", sequence: str = ""):
+        self.gene_name = identifier  # for simplicity, assume identifier is a gene_name
+        self.description = description
         self.sequence = sequence
 
 
@@ -24,15 +27,20 @@ class GenesExplorer:
         self.gene_to_sequence: Dict[str, str] = {}
         self.sequence_to_nucleotide_counts: Dict[str, Dict[str, int]] = {}
         self.gene_name_casing_map: Dict[str, str] = {}
+        self.gene_to_description: Dict[str, str] = {}
         if genes:
             for gene in genes:
-                self.add_gene_sequence(gene.gene_name, gene.sequence)
+                self.add_gene_sequence(gene.gene_name, gene.description, gene.sequence)
                 self.add_sequence_nucleotide_counts(gene.sequence)
 
-    def add_gene_sequence(self, gene_name: str = "", sequence: str = "") -> None:
-        if gene_name.lower() not in self.gene_to_sequence:
-            self.gene_to_sequence[gene_name.lower()] = sequence.upper()
-            self.gene_name_casing_map[gene_name.lower()] = gene_name
+    def add_gene_sequence(
+        self, gene_name: str = "", description: str = "", sequence: str = ""
+    ) -> None:
+        gene_name_lower = gene_name.lower()
+        if gene_name_lower not in self.gene_to_sequence:
+            self.gene_to_sequence[gene_name_lower] = sequence.upper()
+            self.gene_name_casing_map[gene_name_lower] = gene_name
+            self.gene_to_description[gene_name_lower] = description
         else:
             logging.warning(f"{gene_name} already exists, not adding it to genes data")
 
@@ -87,10 +95,11 @@ class GenesExplorer:
             return self.sequence_to_nucleotide_counts[sequence.upper()]
 
     def print_all_genes(self) -> None:
+        # TODO :: print the description too
         print(f"There are {len(self.gene_name_casing_map)} genes loaded: ")
         number = 1
-        for _, v in self.gene_name_casing_map.items():
-            print(f"{number}: {v}")
+        for k, v in self.gene_name_casing_map.items():
+            print(f"{number}. {v} | {self.gene_to_description[k]}")
             number += 1
 
     def pretty_print_count_nucleotides(
@@ -99,28 +108,72 @@ class GenesExplorer:
         if nucleotide_counts is None:
             logging.warning("Must provide nucleotide count map to print")
         else:
-            pretty_printed = ""
-            for k, v in nucleotide_counts.items():
-                pretty_printed += f"{k}={v} "
+            parts = [f"{k}={v}" for k, v in nucleotide_counts.items()]
+            pretty_printed = " ".join(parts)
             print(f"{self.get_gene_name_original_casing(gene_name)}: {pretty_printed}")
 
 
 def parse_genes_data(genes_file: str = "") -> List[Gene]:
-    genes = []
+    genes: List[Gene] = []
     try:
-        with open(genes_file) as File:
+        with gzip.open(genes_file, "rt", encoding="utf-8") as File:
+            identifier = ""
+            description = ""
+            sequence = ""
+            found_format_problem = False
             for line in File:
-                gene_and_sequence = line.strip().split(":")
-
-                if len(gene_and_sequence) != 2:
-                    logging.warning(
-                        f"Line {line} in {genes_file} is incorrectly formatted, will not parse it"
-                    )
-                genes.append(Gene(gene_and_sequence[0], gene_and_sequence[1].upper()))
+                stripped_line = line.strip()
+                if not stripped_line:
+                    pass
+                else:
+                    if line_is_formatted_correctly(stripped_line):
+                        if stripped_line[0] == ">":
+                            if sequence:
+                                if not found_format_problem:
+                                    genes.append(
+                                        Gene(identifier, description, sequence.upper())
+                                    )
+                                else:
+                                    found_format_problem = False
+                            identifier_and_description = (
+                                stripped_line[1::].strip().split(" ")
+                            )
+                            identifier = identifier_and_description[0]
+                            description = " ".join(identifier_and_description[1::])
+                            sequence = ""
+                        else:
+                            sequence += stripped_line
+                    else:
+                        logging.warning(
+                            f"{line} is not formatted correctly, skipping this entire FASTA entry"
+                        )
+                        if sequence and not found_format_problem:
+                            genes.append(
+                                Gene(identifier, description, sequence.upper())
+                            )
+                        found_format_problem = True
+            if not found_format_problem:
+                genes.append(Gene(identifier, description, sequence.upper()))
         return genes
     except FileNotFoundError as e:
         logging.error(f"Could not open {genes_file}: {e.strerror}")
         raise GenesFileParsingError(e)
+
+
+def line_is_formatted_correctly(line: str = "") -> bool:
+    if line[0] == ">":
+        there_are_contents = len(line) > 1
+        if there_are_contents:
+            return True
+        else:
+            logging.warning(f"Line {line} is missing identifier")
+            return False
+    else:
+        for ch in line:
+            if ch not in FASTA_SEQUENCE_CHARS_DNA:
+                logging.warning(f"Found non-FASTA character {ch} in {line}")
+                return False
+        return True
 
 
 def cli_app() -> None:
