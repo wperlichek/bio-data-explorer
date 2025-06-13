@@ -39,7 +39,59 @@
 5.  **Exit Program:**
     * **Action:** Terminate the application.
 
+---
 
+### FASTA File: The Absolute Must-Knows (Conceptual)
+
+* **Starts with `>` (Greater-Than Symbol):** Every sequence entry begins with a header line marked by a `>` character. This `>` is the universal signal for a new sequence.
+
+* **Header Line Components:**
+    * **Identifier (ID):** The unique name for the sequence, immediately following the `>`. It's typically the first "word" on the header line.
+    * **Optional Description:** Any text after the first space on the header line serves as a description, providing more details about the sequence. This can be free-form text.
+
+* **Sequence Data Follows Header:** The lines immediately after the header contain the actual biological sequence (DNA, RNA, or protein).
+
+* **Multi-Line Sequences are Standard:** Long sequences are often broken into multiple lines for readability. All these lines, up to the next `>` symbol, collectively form a single, continuous sequence.
+
+* **Character Set:**
+    * For **DNA**, you'll see `A`, `C`, `G`, `T`.
+    * For **RNA**, you'll see `A`, `C`, `G`, `U`.
+    * You might also encounter **IUPAC ambiguity codes** (like `N` for "any nucleotide") or other characters depending on the data source.
+    * **Case is Often Uppercase:** While the format itself isn't strictly case-sensitive, sequences are typically represented in uppercase by convention in most datasets and tools.
+
+* **Purpose:** FASTA files are designed to store **raw biological sequences**. They are *not* typically used for storing detailed annotations about those sequences (like gene coordinates or features), which are handled by other specialized formats.
+
+* **Common Usage:** They are widely used as a universal input and output format for countless bioinformatics tools, especially for tasks involving reference genomes, gene prediction, or sequence comparison.
+
+* **Compression:** In real-world scenarios, FASTA files are very frequently compressed, commonly with `gzip` (e.g., ending in `.fasta.gz` or `.fa.gz`).
+
+---
+
+### Product Requirements for Part 1.5: FASTA File Support
+
+As a product manager, my goal for this next iteration is to broaden the application's data intake capabilities.
+
+**Feature Name:** FASTA File Support
+
+**Objective:** Enable the application to load gene and sequence data from the industry-standard FASTA file format, making it more compatible with common bioinformatics datasets.
+
+**Key Requirements:**
+
+1.  **FASTA Data Ingestion:** The application **must** be able to successfully read and interpret gene and sequence information directly from standard FASTA files. This includes accurately identifying individual sequence entries and their corresponding identifiers.
+
+2.  **Robust Sequence Assembly:** The system **must** correctly reconstruct complete sequences, even when they are broken across multiple lines within the FASTA file.
+
+3.  **Data Consistency:** All loaded sequence data **should** be stored and processed in a consistent format (e.g., uppercase), regardless of the original casing in the FASTA file.
+
+4.  **Compressed File Handling:** The application **should** be able to read and process FASTA files that have been compressed using the common `gzip` format.
+
+5.  **Graceful Error Management:**
+    * If the specified FASTA file cannot be found, the application **must** inform the user and exit gracefully.
+    * Any structural anomalies or unexpected content within the FASTA file **should** be noted (e.g., via logging), but the application **must** continue to parse valid entries where possible.
+
+6.  **Seamless Integration:** Once loaded from a FASTA file, the gene and sequence data **must** fully support all existing application functionalities (e.g., listing genes, viewing sequences, counting nucleotides) without any degradation of performance or accuracy.
+
+This set of requirements defines the desired outcome from a user and system perspective, leaving the implementation details to you, the developer!
 
 ---
 
