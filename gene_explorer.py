@@ -3,7 +3,7 @@ from typing import Dict, Optional, List
 
 GENES_FILE = "sample_genes.fasta.gz"
 
-FASTA_SEQUENCE_CHARS = set("ABCDEFGHIKLMNPQRSTUVWXYZ-")
+FASTA_SEQUENCE_CHARS_DNA = set("ACGT")
 
 logging.basicConfig(
     level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s"
@@ -170,7 +170,7 @@ def line_is_formatted_correctly(line: str = "") -> bool:
             return False
     else:
         for ch in line:
-            if ch not in FASTA_SEQUENCE_CHARS:
+            if ch not in FASTA_SEQUENCE_CHARS_DNA:
                 logging.warning(f"Found non-FASTA character {ch} in {line}")
                 return False
         return True
