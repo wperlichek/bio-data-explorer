@@ -1,7 +1,7 @@
-import logging, sys
+import logging, sys, gzip
 from typing import Dict, Optional, List
 
-GENES_FILE = "sample_genes.fasta"
+GENES_FILE = "sample_genes.fasta.gz"
 
 logging.basicConfig(
     level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s"
@@ -113,27 +113,47 @@ class GenesExplorer:
 
 
 def parse_genes_data(genes_file: str = "") -> List[Gene]:
-    genes = []
+    genes: List[Gene] = []
     try:
-        with open(genes_file) as File:
+        with gzip.open(genes_file, "rt", encoding="utf-8") as File:
             identifier = ""
             description = ""
             sequence = ""
             for line in File:
-                if line[0] == ">":
-                    if sequence:
-                        genes.append(Gene(identifier, description, sequence.upper()))
-                    identifier_and_description = line[1::].strip().split(" ")
-                    identifier = identifier_and_description[0]
-                    description = " ".join(identifier_and_description[1::])
-                    sequence = ""
+                stripped_line = line.strip()
+                if not stripped_line:
+                    pass
                 else:
-                    sequence += line.strip()
+                    if line_is_formatted_correctly(line):
+                        if line[0] == ">":
+                            if sequence:
+                                genes.append(
+                                    Gene(identifier, description, sequence.upper())
+                                )
+                            identifier_and_description = (
+                                stripped_line[1::].strip().split(" ")
+                            )
+                            identifier = identifier_and_description[0]
+                            description = " ".join(identifier_and_description[1::])
+                            sequence = ""
+                        else:
+                            sequence += stripped_line
             genes.append(Gene(identifier, description, sequence.upper()))
         return genes
     except FileNotFoundError as e:
         logging.error(f"Could not open {genes_file}: {e.strerror}")
         raise GenesFileParsingError(e)
+
+
+def line_is_formatted_correctly(line: str = "") -> bool:
+    if line[0] == "<":
+        return len(line) > 1
+    else:
+        fasta_letters = set("ACGTURYSWKMBDHVNACDEFGHIKLMNPQRSTVWYBXZ*")
+        for ch in line:
+            if ch not in fasta_letters:
+                return False
+        return True
 
 
 def cli_app() -> None:
