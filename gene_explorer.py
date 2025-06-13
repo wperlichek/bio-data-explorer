@@ -156,7 +156,8 @@ def line_is_formatted_correctly(line: str = "") -> bool:
             logging.warning(f"Line {line} is missing identifier")
             return False
     else:
-        fasta_letters = set("ACGTURYSWKMBDHVNACDEFGHIKLMNPQRSTVWYBXZ")
+        fasta_letters = set("ACGTURYSWKMBDHVNACDEFGHIKLMNPQRSTVWYBXZ*")
+        print(line)
         for ch in line:
             if ch not in fasta_letters:
                 logging.warning(f"Found non-FASTA character {ch} in {line}")
