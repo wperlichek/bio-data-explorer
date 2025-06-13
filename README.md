@@ -15,4 +15,11 @@ is the default distro for WSL and widely used.
 3.  Follow prompts to **create a Linux username and password.**
 4.  **Restart** your computer.
 
+### Using WSL & Basic Commands
+
+* **Open WSL Terminal:** Search "Ubuntu" (or your distro) in Start Menu.
+* **Access Windows Files:** Use `cd /mnt/c/Users/YourWindowsUsername/YourProjectFolder` (adjust path).
+* **Example Gzip:** `gzip -c my_file.fasta > my_file.fasta.gz`
+* **VS Code:** Install "WSL" extension. Use `Ctrl+Shift+P` -> `WSL: Connect to WSL`.
+
 ---
