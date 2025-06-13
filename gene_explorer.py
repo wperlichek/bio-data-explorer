@@ -140,12 +140,16 @@ def parse_genes_data(genes_file: str = "") -> List[Gene]:
                             identifier = identifier_and_description[0]
                             description = " ".join(identifier_and_description[1::])
                             sequence = ""
-                        elif not found_format_problem:
+                        else:
                             sequence += stripped_line
                     else:
                         logging.warning(
-                            f"{line} is not formatted correctly, skipping this FASTA entry"
+                            f"{line} is not formatted correctly, skipping this entire FASTA entry"
                         )
+                        if sequence and not found_format_problem:
+                            genes.append(
+                                Gene(identifier, description, sequence.upper())
+                            )
                         found_format_problem = True
             if not found_format_problem:
                 genes.append(Gene(identifier, description, sequence.upper()))
