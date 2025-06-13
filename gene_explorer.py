@@ -3,6 +3,8 @@ from typing import Dict, Optional, List
 
 GENES_FILE = "sample_genes.fasta.gz"
 
+FASTA_SEQUENCE_CHARS = set("ABCDEFGHIKLMNPQRSTUVWXYZ-")
+
 logging.basicConfig(
     level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s"
 )
@@ -168,9 +170,8 @@ def line_is_formatted_correctly(line: str = "") -> bool:
             logging.warning(f"Line {line} is missing identifier")
             return False
     else:
-        fasta_letters = set("ACGTURYSWKMBDHVNACDEFGHIKLMNPQRSTVWYBXZ*")
         for ch in line:
-            if ch not in fasta_letters:
+            if ch not in FASTA_SEQUENCE_CHARS:
                 logging.warning(f"Found non-FASTA character {ch} in {line}")
                 return False
         return True
