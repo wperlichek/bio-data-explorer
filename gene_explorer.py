@@ -108,9 +108,8 @@ class GenesExplorer:
         if nucleotide_counts is None:
             logging.warning("Must provide nucleotide count map to print")
         else:
-            pretty_printed = ""
-            for k, v in nucleotide_counts.items():
-                pretty_printed += f"{k}={v} "
+            parts = [f"{k}={v}" for k, v in nucleotide_counts.items()]
+            pretty_printed = " ".join(parts)
             print(f"{self.get_gene_name_original_casing(gene_name)}: {pretty_printed}")
 
 
