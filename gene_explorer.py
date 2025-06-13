@@ -25,15 +25,20 @@ class GenesExplorer:
         self.gene_to_sequence: Dict[str, str] = {}
         self.sequence_to_nucleotide_counts: Dict[str, Dict[str, int]] = {}
         self.gene_name_casing_map: Dict[str, str] = {}
+        self.gene_to_description: Dict[str, str] = {}
         if genes:
             for gene in genes:
-                self.add_gene_sequence(gene.gene_name, gene.sequence)
+                self.add_gene_sequence(gene.gene_name, gene.description, gene.sequence)
                 self.add_sequence_nucleotide_counts(gene.sequence)
 
-    def add_gene_sequence(self, gene_name: str = "", sequence: str = "") -> None:
-        if gene_name.lower() not in self.gene_to_sequence:
-            self.gene_to_sequence[gene_name.lower()] = sequence.upper()
-            self.gene_name_casing_map[gene_name.lower()] = gene_name
+    def add_gene_sequence(
+        self, gene_name: str = "", description: str = "", sequence: str = ""
+    ) -> None:
+        gene_name_lower = gene_name.lower()
+        if gene_name_lower not in self.gene_to_sequence:
+            self.gene_to_sequence[gene_name_lower] = sequence.upper()
+            self.gene_name_casing_map[gene_name_lower] = gene_name
+            self.gene_to_description[gene_name_lower] = description
         else:
             logging.warning(f"{gene_name} already exists, not adding it to genes data")
 
@@ -91,8 +96,8 @@ class GenesExplorer:
         # TODO :: print the description too
         print(f"There are {len(self.gene_name_casing_map)} genes loaded: ")
         number = 1
-        for _, v in self.gene_name_casing_map.items():
-            print(f"{number}: {v}")
+        for k, v in self.gene_name_casing_map.items():
+            print(f"{number}: {v} {self.gene_to_description[k]}")
             number += 1
 
     def pretty_print_count_nucleotides(
