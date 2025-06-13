@@ -97,7 +97,7 @@ class GenesExplorer:
         print(f"There are {len(self.gene_name_casing_map)} genes loaded: ")
         number = 1
         for k, v in self.gene_name_casing_map.items():
-            print(f"{number}: {v} {self.gene_to_description[k]}")
+            print(f"{number}. {v} | {self.gene_to_description[k]}")
             number += 1
 
     def pretty_print_count_nucleotides(
@@ -125,7 +125,7 @@ def parse_genes_data(genes_file: str = "") -> List[Gene]:
                         genes.append(Gene(identifier, description, sequence.upper()))
                     identifier_and_description = line[1::].strip().split(" ")
                     identifier = identifier_and_description[0]
-                    description = str(identifier_and_description[1::])
+                    description = " ".join(identifier_and_description[1::])
                     sequence = ""
                 else:
                     sequence += line.strip()
