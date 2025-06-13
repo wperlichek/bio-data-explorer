@@ -124,8 +124,8 @@ def parse_genes_data(genes_file: str = "") -> List[Gene]:
                 if not stripped_line:
                     pass
                 else:
-                    if line_is_formatted_correctly(line):
-                        if line[0] == ">":
+                    if line_is_formatted_correctly(stripped_line):
+                        if stripped_line[0] == ">":
                             if sequence:
                                 genes.append(
                                     Gene(identifier, description, sequence.upper())
@@ -138,6 +138,8 @@ def parse_genes_data(genes_file: str = "") -> List[Gene]:
                             sequence = ""
                         else:
                             sequence += stripped_line
+                    else:
+                        pass
             genes.append(Gene(identifier, description, sequence.upper()))
         return genes
     except FileNotFoundError as e:
@@ -146,12 +148,18 @@ def parse_genes_data(genes_file: str = "") -> List[Gene]:
 
 
 def line_is_formatted_correctly(line: str = "") -> bool:
-    if line[0] == "<":
-        return len(line) > 1
+    if line[0] == ">":
+        there_are_contents = len(line) > 1
+        if there_are_contents:
+            return True
+        else:
+            logging.warning(f"Line {line} is missing identifier")
+            return False
     else:
-        fasta_letters = set("ACGTURYSWKMBDHVNACDEFGHIKLMNPQRSTVWYBXZ*")
+        fasta_letters = set("ACGTURYSWKMBDHVNACDEFGHIKLMNPQRSTVWYBXZ")
         for ch in line:
             if ch not in fasta_letters:
+                logging.warning(f"Found non-FASTA character {ch} in {line}")
                 return False
         return True
 
