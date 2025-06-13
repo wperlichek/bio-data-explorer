@@ -1,7 +1,7 @@
 import logging, sys
 from typing import Dict, Optional, List
 
-GENES_FILE = "genes.txt"
+GENES_FILE = "sample_genes.fasta"
 
 logging.basicConfig(
     level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s"
@@ -13,8 +13,9 @@ class GenesFileParsingError(Exception):
 
 
 class Gene:
-    def __init__(self, gene_name: str = "", sequence: str = ""):
-        self.gene_name = gene_name
+    def __init__(self, identifier: str = "", description: str = "", sequence: str = ""):
+        self.gene_name = identifier  # for simplicity, assume identifier is a gene_name
+        self.description = description
         self.sequence = sequence
 
 
@@ -87,6 +88,7 @@ class GenesExplorer:
             return self.sequence_to_nucleotide_counts[sequence.upper()]
 
     def print_all_genes(self) -> None:
+        # TODO :: print the description too
         print(f"There are {len(self.gene_name_casing_map)} genes loaded: ")
         number = 1
         for _, v in self.gene_name_casing_map.items():
@@ -109,14 +111,20 @@ def parse_genes_data(genes_file: str = "") -> List[Gene]:
     genes = []
     try:
         with open(genes_file) as File:
+            identifier = ""
+            description = ""
+            sequence = ""
             for line in File:
-                gene_and_sequence = line.strip().split(":")
-
-                if len(gene_and_sequence) != 2:
-                    logging.warning(
-                        f"Line {line} in {genes_file} is incorrectly formatted, will not parse it"
-                    )
-                genes.append(Gene(gene_and_sequence[0], gene_and_sequence[1].upper()))
+                if line[0] == ">":
+                    if sequence:
+                        genes.append(Gene(identifier, description, sequence.upper()))
+                    identifier_and_description = line[1::].strip().split(" ")
+                    identifier = identifier_and_description[0]
+                    description = str(identifier_and_description[1::])
+                    sequence = ""
+                else:
+                    sequence += line.strip()
+            genes.append(Gene(identifier, description, sequence.upper()))
         return genes
     except FileNotFoundError as e:
         logging.error(f"Could not open {genes_file}: {e.strerror}")
