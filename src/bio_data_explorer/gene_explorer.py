@@ -1,5 +1,8 @@
 import logging, sys, gzip
 from typing import Dict, Optional, List
+from pathlib import Path
+
+data_directory_path = Path(__file__).resolve().parent.parent.parent / "data"
 
 GENES_FILE = "sample_genes.fasta.gz"
 
@@ -116,7 +119,11 @@ class GenesExplorer:
 def parse_genes_data(genes_file: str = "") -> List[Gene]:
     genes: List[Gene] = []
     try:
-        with gzip.open(genes_file, "rt", encoding="utf-8") as File:
+        with gzip.open(
+            f"{data_directory_path}/{genes_file}",
+            "rt",
+            encoding="utf-8",
+        ) as File:
             identifier = ""
             description = ""
             sequence = ""
