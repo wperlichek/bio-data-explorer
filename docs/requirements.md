@@ -1,3 +1,4 @@
+
 ---
 
 # Gene Sequence Explorer CLI Tool - Requirements
@@ -161,6 +162,17 @@ This set of requirements defines the desired outcome from a user and system pers
 7.  **Comprehensive Sequence Statistics Display:**
     * The `GenesExplorer` data structure **must** be updated to store the calculated **Length** and **GC Content** for each gene.
     * The CLI **must** provide a menu option to display a summary table for all loaded genes, including their ID, Length, GC %, and nucleotide counts (A, C, G, T).
+8.  **External BLAST Similarity Search:**
+    * **Action:** The CLI **must** provide a menu option allowing the user to submit a selected gene's sequence for a similarity search against a remote BLAST database.
+    * **Input:** Prompt the user for the gene name to search.
+    * **External API Interaction:** The application **must** utilize an external API (e.g., NCBI BLAST web service) to perform the search.
+    * **User Feedback:** The application **must** provide clear feedback to the user while the search is in progress (as it may take time) and handle potential network issues or API errors gracefully.
+    * **Output:** Upon completion, the application **must** display a concise summary of the top significant hits (e.g., Top 5-10 hits), including:
+        * Hit Title/Accession
+        * E-value
+        * Percentage Identity
+        * Query Coverage
+    * **Error Handling:** If no significant similarities are found or an error occurs during the API call, the application **must** provide an informative message.
 
 ---
 
