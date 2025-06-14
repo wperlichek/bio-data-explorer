@@ -11,3 +11,6 @@ authors = [
 ]
 readme = "README.md"
 requires-python = ">=3.11"
+
+[project.scripts]
+bio-data-explorer-cli = bio_data_explorer.cli:main
