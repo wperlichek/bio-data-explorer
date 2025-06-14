@@ -1,4 +1,3 @@
-
 ---
 
 # Gene Sequence Explorer CLI Tool - Requirements
@@ -141,20 +140,27 @@ This set of requirements defines the desired outcome from a user and system pers
 1.  **Nucleotide Counting (Refined):**
     * **Function:** Implement a `count_nucleotides(sequence: str)` function in `bio_functions.py` that returns a dictionary of A, C, G, T counts.
     * **Validation:** It **must** issue a warning (via logging) for any characters in the sequence that are not standard nucleotides (A, C, G, T, U, N) but still count the valid ones.
-2.  **GC Content Calculation:**
+2.  **Sequence Length Calculation:**
+    * **Function:** Implement `calculate_sequence_length(sequence: str)` in `bio_functions.py`.
+    * **Calculation:** The function **must** accurately return the total number of bases/residues in the given sequence.
+3.  **GC Content Calculation:**
     * **Function:** Implement `calculate_gc_content(sequence: str)` in `bio_functions.py`.
-    * **Calculation:** Calculate the percentage of Guanine (G) and Cytosine (C) nucleotides in a given sequence.
-    * **Output:** Display the GC content as a percentage (e.g., `GC Content: 45.2%`).
-3.  **DNA to RNA Transcription:**
+    * **Calculation:** The function **must** calculate the percentage of Guanine (G) and Cytosine (C) nucleotides in the given sequence. Calculation **must** be case-insensitive.
+    * **Edge Cases:** The function **must** gracefully handle empty sequences or sequences containing only non-ATGC characters (e.g., by returning `0.0`).
+    * **Output:** The CLI **must** display the GC content as a percentage (e.g., `GC Content: 45.2%`).
+4.  **DNA to RNA Transcription:**
     * **Function:** Implement `transcribe_dna_to_rna(dna_sequence: str)` in `bio_functions.py`.
     * **Transformation:** Convert a DNA sequence to an RNA sequence (replace all 'T's with 'U's).
-4.  **Reverse Complement:**
+5.  **Reverse Complement:**
     * **Function:** Implement `reverse_complement(dna_sequence: str)` in `bio_functions.py`.
     * **Transformation:** Generate the reverse complement of a given DNA sequence.
-5.  **Basic Open Reading Frame (ORF) Finding:**
+6.  **Basic Open Reading Frame (ORF) Finding:**
     * **Function:** Implement `find_orfs(dna_sequence: str)` in `bio_functions.py`.
     * **Logic:** For the forward strand, identify potential ORFs defined as starting with 'ATG' and ending with 'TAA', 'TAG', or 'TGA' in all three possible reading frames (frame 0, 1, 2).
     * **Output:** Display the found ORFs, indicating which reading frame they belong to.
+7.  **Comprehensive Sequence Statistics Display:**
+    * The `GenesExplorer` data structure **must** be updated to store the calculated **Length** and **GC Content** for each gene.
+    * The CLI **must** provide a menu option to display a summary table for all loaded genes, including their ID, Length, GC %, and nucleotide counts (A, C, G, T).
 
 ---
 
