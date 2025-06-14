@@ -85,11 +85,15 @@ class GenesExplorer:
 
     def get_gc_percentage(self, nucleotide_counts: Optional[Dict[str, int]]) -> float:
         if nucleotide_counts is None:
+            logger.warning("Must provide nucleotide counts to get GC percentage")
             return 0.0
         else:
             gc_count = nucleotide_counts["G"] + nucleotide_counts["C"]
-            total_count = gc_count + nucleotide_counts["T"] + nucleotide_counts["A"]
-            return round(float(gc_count)/float(total_count)) if gc_count > 0 else 0.0
+            return (
+                round(float(gc_count) / float(sum(nucleotide_counts.values())), 3) * 100
+                if gc_count > 0
+                else 0.0
+            )
 
     def print_all_genes(self) -> None:
         print(f"There are {len(self.gene_name_casing_map)} genes loaded: ")
@@ -107,3 +111,4 @@ class GenesExplorer:
             parts = [f"{k}={v}" for k, v in nucleotide_counts.items()]
             pretty_printed = " ".join(parts)
             print(f"{self.get_gene_name_original_casing(gene_name)}: {pretty_printed}")
+            print(f"GC percentage: {self.get_gc_percentage(nucleotide_counts)}%")
