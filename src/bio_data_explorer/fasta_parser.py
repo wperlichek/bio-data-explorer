@@ -1,7 +1,7 @@
 import logging, gzip
 from typing import List
 from pathlib import Path
-from gene_explorer import Gene
+from .gene_explorer import Gene
 
 data_directory_path = Path(__file__).resolve().parent.parent.parent / "data"
 

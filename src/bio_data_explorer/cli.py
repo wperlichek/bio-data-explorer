@@ -1,6 +1,6 @@
 import sys, logging
-from gene_explorer import GenesExplorer
-from fasta_parser import parse_genes_data, GenesFileParsingError
+from .gene_explorer import GenesExplorer
+from .fasta_parser import parse_genes_data, GenesFileParsingError
 
 logging.basicConfig(
     level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s"
