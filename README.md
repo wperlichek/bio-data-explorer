@@ -4,6 +4,12 @@
 
 ```python3 gene_explorer.py```
 
+# Virtual Env
+
+```.venv\Scripts\Activate.ps1```
+
+```pip install -e ".[dev]"```
+
 # Windows setup
 
 Bioinformatics involves a lot of Linux native command-line work. If you're on Windows, 
