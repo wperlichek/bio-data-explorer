@@ -3,11 +3,13 @@ from typing import Dict, Optional, List
 
 logger = logging.getLogger(__name__)
 
+
 class Gene:
     def __init__(self, identifier: str = "", description: str = "", sequence: str = ""):
         self.gene_name = identifier  # for simplicity, assume identifier is a gene_name
         self.description = description
         self.sequence = sequence
+
 
 class GenesExplorer:
     def __init__(self, genes: Optional[List[Gene]] = None):
@@ -97,5 +99,3 @@ class GenesExplorer:
             parts = [f"{k}={v}" for k, v in nucleotide_counts.items()]
             pretty_printed = " ".join(parts)
             print(f"{self.get_gene_name_original_casing(gene_name)}: {pretty_printed}")
-
-

@@ -8,7 +8,8 @@ logging.basicConfig(
 
 GENES_FILE = "sample_genes.fasta.gz"
 
-def main() -> None: 
+
+def main() -> None:
     logging.info("Starting app")
 
     try:
@@ -49,6 +50,7 @@ def main() -> None:
             break
         else:
             print("Invalid choice")
+
 
 if __name__ == "__main__":
     main()
