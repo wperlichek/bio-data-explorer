@@ -29,7 +29,7 @@ def parse_genes_data(genes_file: str = "") -> List[Gene]:
                 if not stripped_line:
                     pass
                 else:
-                    if line_is_formatted_correctly(stripped_line):
+                    if _line_is_formatted_correctly(stripped_line):
                         if stripped_line[0] == ">":
                             if sequence:
                                 if not found_format_problem:
@@ -62,7 +62,7 @@ def parse_genes_data(genes_file: str = "") -> List[Gene]:
         logging.error(f"Could not open {genes_file}: {e.strerror}")
         raise GenesFileParsingError(e)
 
-def line_is_formatted_correctly(line: str = "") -> bool:
+def _line_is_formatted_correctly(line: str = "") -> bool:
     if line[0] == ">":
         there_are_contents = len(line) > 1
         if there_are_contents:
