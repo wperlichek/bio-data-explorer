@@ -7,6 +7,8 @@ data_directory_path = Path(__file__).resolve().parent.parent.parent / "data"
 
 FASTA_SEQUENCE_CHARS_DNA = set("ACGT")
 
+logger = logging.getLogger(__name__)
+
 class GenesFileParsingError(Exception):
     pass
 

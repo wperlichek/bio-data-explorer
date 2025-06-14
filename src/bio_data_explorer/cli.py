@@ -1,5 +1,4 @@
-import sys
-import logging
+import sys, logging
 from gene_explorer import GenesExplorer
 from fasta_parser import parse_genes_data, GenesFileParsingError
 
