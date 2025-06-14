@@ -10,6 +10,8 @@
 
 ```pip install -e ".[dev]"```
 
+```bio-data-explorer-cli```
+
 # Windows setup
 
 Bioinformatics involves a lot of Linux native command-line work. If you're on Windows, 
