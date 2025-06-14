@@ -82,6 +82,9 @@ class GenesExplorer:
             return None
         else:
             return self.sequence_to_nucleotide_counts[sequence.upper()]
+        
+    def caclulate_gc_content(self, sequence: str = "") -> int:
+        return 0
 
     def print_all_genes(self) -> None:
         print(f"There are {len(self.gene_name_casing_map)} genes loaded: ")
