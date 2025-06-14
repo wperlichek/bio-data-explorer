@@ -82,9 +82,14 @@ class GenesExplorer:
             return None
         else:
             return self.sequence_to_nucleotide_counts[sequence.upper()]
-        
-    def caclulate_gc_content(self, sequence: str = "") -> int:
-        return 0
+
+    def get_gc_percentage(self, nucleotide_counts: Optional[Dict[str, int]]) -> float:
+        if nucleotide_counts is None:
+            return 0.0
+        else:
+            gc_count = nucleotide_counts["G"] + nucleotide_counts["C"]
+            total_count = gc_count + nucleotide_counts["T"] + nucleotide_counts["A"]
+            return round(float(gc_count)/float(total_count)) if gc_count > 0 else 0.0
 
     def print_all_genes(self) -> None:
         print(f"There are {len(self.gene_name_casing_map)} genes loaded: ")
