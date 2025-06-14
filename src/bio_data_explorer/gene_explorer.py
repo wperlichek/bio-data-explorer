@@ -1,6 +1,8 @@
 import logging
 from typing import Dict, Optional, List
 
+logger = logging.getLogger(__name__)
+
 class Gene:
     def __init__(self, identifier: str = "", description: str = "", sequence: str = ""):
         self.gene_name = identifier  # for simplicity, assume identifier is a gene_name
@@ -27,7 +29,7 @@ class GenesExplorer:
             self.gene_name_casing_map[gene_name_lower] = gene_name
             self.gene_to_description[gene_name_lower] = description
         else:
-            logging.warning(f"{gene_name} already exists, not adding it to genes data")
+            logger.warning(f"{gene_name} already exists, not adding it to genes data")
 
     def add_sequence_nucleotide_counts(self, sequence: str = "") -> None:
         if sequence.upper() not in self.sequence_to_nucleotide_counts:
@@ -37,10 +39,10 @@ class GenesExplorer:
 
     def get_gene_sequence(self, gene_name: str = "") -> Optional[str]:
         if gene_name == "":
-            logging.info("Must provide gene name to get its sequence")
+            logger.info("Must provide gene name to get its sequence")
             return None
         elif gene_name.lower() not in self.gene_to_sequence:
-            logging.warning(f"Gene not found: {gene_name}")
+            logger.warning(f"Gene not found: {gene_name}")
             return None
         else:
             return self.gene_to_sequence[gene_name.lower()]
@@ -49,7 +51,7 @@ class GenesExplorer:
         self, gene_name_case_insensitive: str = ""
     ) -> Optional[str]:
         if gene_name_case_insensitive.lower() not in self.gene_name_casing_map:
-            logging.warning(f"Gene not found: {gene_name_case_insensitive}")
+            logger.warning(f"Gene not found: {gene_name_case_insensitive}")
             return None
         else:
             return self.gene_name_casing_map[gene_name_case_insensitive.lower()]
@@ -57,24 +59,24 @@ class GenesExplorer:
     def count_nucleotides_in_sequence(self, sequence: str = "") -> Dict[str, int]:
         counts = {"A": 0, "C": 0, "T": 0, "G": 0}
         if sequence == "":
-            logging.warning("Must provide non-empty sequence to count nucleotides")
+            logger.warning("Must provide non-empty sequence to count nucleotides")
             return counts
         else:
             for nucleotide in sequence.upper():
                 if nucleotide in counts:
                     counts[nucleotide] += 1
                 else:
-                    logging.warning(
+                    logger.warning(
                         f"Unknown nucleotide present in sequence {sequence.upper()}: {nucleotide}"
                     )
             return counts
 
     def get_count_nucleotides(self, sequence: str = "") -> Optional[Dict[str, int]]:
         if sequence == "":
-            logging.warning("Must provide sequence to count nucleotides")
+            logger.warning("Must provide sequence to count nucleotides")
             return None
         elif sequence.upper() not in self.sequence_to_nucleotide_counts:
-            logging.warning("Sequence not found")
+            logger.warning("Sequence not found")
             return None
         else:
             return self.sequence_to_nucleotide_counts[sequence.upper()]
@@ -90,7 +92,7 @@ class GenesExplorer:
         self, gene_name: str = "", nucleotide_counts: Optional[Dict[str, int]] = None
     ) -> None:
         if nucleotide_counts is None:
-            logging.warning("Must provide nucleotide count map to print")
+            logger.warning("Must provide nucleotide count map to print")
         else:
             parts = [f"{k}={v}" for k, v in nucleotide_counts.items()]
             pretty_printed = " ".join(parts)

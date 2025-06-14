@@ -47,7 +47,7 @@ def parse_genes_data(genes_file: str = "") -> List[Gene]:
                         else:
                             sequence += stripped_line
                     else:
-                        logging.warning(
+                        logger.warning(
                             f"{line} is not formatted correctly, skipping this entire FASTA entry"
                         )
                         if sequence and not found_format_problem:
@@ -59,7 +59,7 @@ def parse_genes_data(genes_file: str = "") -> List[Gene]:
                 genes.append(Gene(identifier, description, sequence.upper()))
         return genes
     except FileNotFoundError as e:
-        logging.error(f"Could not open {genes_file}: {e.strerror}")
+        logger.error(f"Could not open {genes_file}: {e.strerror}")
         raise GenesFileParsingError(e)
 
 def _line_is_formatted_correctly(line: str = "") -> bool:
@@ -68,11 +68,11 @@ def _line_is_formatted_correctly(line: str = "") -> bool:
         if there_are_contents:
             return True
         else:
-            logging.warning(f"Line {line} is missing identifier")
+            logger.warning(f"Line {line} is missing identifier")
             return False
     else:
         for ch in line:
             if ch not in FASTA_SEQUENCE_CHARS_DNA:
-                logging.warning(f"Found non-FASTA character {ch} in {line}")
+                logger.warning(f"Found non-FASTA character {ch} in {line}")
                 return False
         return True
