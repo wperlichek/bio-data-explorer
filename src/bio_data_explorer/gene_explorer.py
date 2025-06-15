@@ -58,12 +58,30 @@ class GenesExplorer:
         else:
             return self.gene_name_casing_map[gene_name_case_insensitive.lower()]
 
-    def get_sequence_length(self, sequence: str = "") -> int:
+    def get_sequence_length(self, sequence: str = "") -> Optional[int]:
         if sequence == "":
-            logger.info("Must provide sequence to get its length")
-            return 0
+            logger.warning("Must provide sequence to get its length")
+            return None
         else:
             return len(sequence)
+
+    def get_reverse_compliment(self, sequence: str = "") -> Optional[str]:
+        if sequence == "":
+            logger.warning("Must provide sequence to get its reverse compliment")
+            return None
+        else:
+            compliment = ""
+            for ch in sequence.upper():
+                if ch == "T":
+                    compliment += "A"
+                elif ch == "A":
+                    compliment += "T"
+                elif ch == "C":
+                    compliment += "G"
+                else:
+                    compliment += "C"
+            return compliment[::-1]
+
 
     def count_nucleotides_in_sequence(self, sequence: str = "") -> Dict[str, int]:
         counts = {"A": 0, "C": 0, "T": 0, "G": 0}
