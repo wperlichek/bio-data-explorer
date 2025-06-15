@@ -1,6 +1,7 @@
 from Bio.Blast import NCBIWWW
 from enum import Enum
 from typing import Optional, cast
+from io import StringIO
 import logging
 
 logger = logging.getLogger(__name__)
