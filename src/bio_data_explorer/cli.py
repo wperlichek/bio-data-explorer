@@ -6,14 +6,15 @@ logging.basicConfig(
     level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s"
 )
 
-GENES_FILE = "sample_genes.fasta.gz"
+DEFAULT_GENES_FILE = "sample_genes.fasta.gz"
 
 
 def main() -> None:
     logging.info("Starting app")
 
     try:
-        genes = parse_genes_data(GENES_FILE)
+        genes_file = sys.argv[1] if len(sys.argv) else DEFAULT_GENES_FILE
+        genes = parse_genes_data(genes_file)
     except GenesFileParsingError as e:
         logging.critical(f"Application can't start due to {e}, exiting application")
         sys.exit(1)
