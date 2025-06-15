@@ -62,7 +62,8 @@ def main() -> None:
         elif menu_choice == "4":
             sequence = input("Input sequence: ").strip().lower()
             logging.info("Processing BLAST call, this takes some time...")
-            make_blast_call(BlastProgram.BLASTN, BlastDatabase.NT, sequence)
+            hits = make_blast_call(BlastProgram.BLASTN, BlastDatabase.NT, sequence)
+            print(f"Hits found: {hits}")
         elif menu_choice == "5":
             logging.info("Exiting app")
             break
