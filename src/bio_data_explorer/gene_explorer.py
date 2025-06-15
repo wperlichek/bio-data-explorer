@@ -58,6 +58,13 @@ class GenesExplorer:
         else:
             return self.gene_name_casing_map[gene_name_case_insensitive.lower()]
 
+    def get_sequence_length(self, sequence: str = "") -> int:
+        if sequence == "":
+            logger.info("Must provide sequence to get its length")
+            return 0
+        else:
+            return len(sequence)
+
     def count_nucleotides_in_sequence(self, sequence: str = "") -> Dict[str, int]:
         counts = {"A": 0, "C": 0, "T": 0, "G": 0}
         if sequence == "":

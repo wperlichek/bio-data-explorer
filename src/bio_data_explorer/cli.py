@@ -34,18 +34,19 @@ def main() -> None:
             genes_explorer.print_all_genes()
         elif menu_choice == "2":
             gene_name = input("Enter gene name: ").strip().lower()
-            result = genes_explorer.get_gene_sequence(gene_name)
-            if result:
+            sequence = genes_explorer.get_gene_sequence(gene_name)
+            if sequence:
                 print(
-                    f"{genes_explorer.get_gene_name_original_casing(gene_name)}: {result}"
+                    f"{genes_explorer.get_gene_name_original_casing(gene_name)}: {sequence}"
                 )
+                print(f"Sequence length: {genes_explorer.get_sequence_length(sequence)}")
         elif menu_choice == "3":
             gene_name = input("Enter gene name: ").strip().lower()
             sequence = genes_explorer.get_gene_sequence(gene_name)
             if sequence:
-                result = genes_explorer.get_count_nucleotides(sequence)
-                if result:
-                    genes_explorer.pretty_print_count_nucleotides(gene_name, result)
+                count_nucleotides = genes_explorer.get_count_nucleotides(sequence)
+                if count_nucleotides:
+                    genes_explorer.pretty_print_count_nucleotides(gene_name, count_nucleotides)
         elif menu_choice == "4":
             logging.info("Exiting app")
             break
