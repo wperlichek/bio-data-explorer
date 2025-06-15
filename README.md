@@ -6,11 +6,16 @@
 
 # Virtual Env
 
-```.venv\Scripts\Activate.ps1```
+```.venv\Scripts\Activate.ps1``` or ```source .venv/bin/activate```
 
 ```pip install -e ".[dev]"```
 
 ```bio-data-explorer-cli```
+
+# BLAST API
+
+```from Bio import Blast```
+```help(Blast.qblast)```
 
 # Windows setup
 

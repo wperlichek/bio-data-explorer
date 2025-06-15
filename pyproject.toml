@@ -11,6 +11,9 @@ authors = [
 ]
 readme = "README.md"
 requires-python = ">=3.11"
+dependencies = [
+    "biopython",
+]
 
 [project.scripts]
 bio-data-explorer-cli = "bio_data_explorer.cli:main"
