@@ -1,4 +1,4 @@
-from Bio.Blast import NCBIWWW
+from Bio.Blast import NCBIWWW, NCBIXML
 from enum import Enum
 from typing import Optional
 import logging
@@ -19,14 +19,17 @@ def make_blast_call(
     program: Optional[BlastProgram] = None,
     database: Optional[BlastDatabase] = None,
     sequence: str = "",
-) -> str:
+) -> Optional[str]:
     if sequence == "":
         logger.warning("Must provide sequence to make a BLAST call")
+        return None
     if program is None:
         program = BlastProgram.BLASTN
     if database is None:
         database = BlastDatabase.NT
     result_handle = NCBIWWW.qblast(program.value, database.value, sequence)  # type: ignore[reportUnknownMemberType]
-    output = result_handle.read()
-    print(f"BLAST results: {output}")
+    blast_records = NCBIXML.parse(result_handle) # type: ignore
+    for record in blast_records: # type: ignore
+        for alignment in record.alignments: # type: ignore
+            print(f"  Hit: {alignment.title}") # type: ignore
     return ""
