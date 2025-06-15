@@ -1,4 +1,5 @@
 import sys, logging
+from typing import Any
 from .gene_explorer import GenesExplorer
 from .fasta_parser import parse_genes_data, GenesFileParsingError
 from .blast_client import make_blast_call, BlastDatabase, BlastProgram
@@ -62,13 +63,26 @@ def main() -> None:
         elif menu_choice == "4":
             sequence = input("Input sequence: ").strip().lower()
             logging.info("Processing BLAST call, this takes some time...")
-            hits = make_blast_call(BlastProgram.BLASTN, BlastDatabase.NT, sequence)
-            print(f"Hits found: {hits}")
+            records = make_blast_call(BlastProgram.BLASTN, BlastDatabase.NT, sequence)
+            print_blast_record(records)
         elif menu_choice == "5":
             logging.info("Exiting app")
             break
         else:
             print("Invalid choice")
+
+
+def print_blast_record(blast_records: Any = None) -> None:
+    for record in blast_records:
+        print("****")
+        print("Record alignments: ")
+        for alignment in record.alignments:
+            print(f"{alignment.title}")
+            print("Alignment hsps:")
+            for hsp in alignment.hsps:
+                print(f"Score: {hsp.score}")
+                print(f"E-Value: {hsp.expect}")
+        print("****")
 
 
 if __name__ == "__main__":
