@@ -1,6 +1,9 @@
-from Bio import Blast
+from Bio.Blast import NCBIWWW
 from enum import Enum
 from typing import Optional
+import logging
+
+logger = logging.getLogger(__name__)
 
 
 class BlastProgram(Enum):
@@ -16,5 +19,11 @@ def make_blast_call(
     database: Optional[BlastDatabase] = None,
     sequence: str = "",
 ) -> None:
-    
-    print("hello")
+    if sequence == "":
+        logger.warning("Must provide sequence to make a BLAST call")
+    if program is None:
+        program = BlastProgram.BLASTN
+    if database is None:
+        database = BlastDatabase.NT
+
+    result = cast(StringIO, NCBIWWW.qblast(program.value, database.value, sequence))  # type: ignore[reportUnknownMemberType]
