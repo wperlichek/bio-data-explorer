@@ -53,8 +53,7 @@ def main() -> None:
                     genes_explorer.pretty_print_count_nucleotides(gene_name, count_nucleotides)
         elif menu_choice == "4":
             sequence = input("Input sequence: ").strip().lower()
-            blast_result = make_blast_call(BlastProgram.BLASTN, BlastDatabase.NT, sequence)
-            print(f"Result: {blast_result}")
+            make_blast_call(BlastProgram.BLASTN, BlastDatabase.NT, "ATGGCAGATTAGTGCAATGGGAGCCTTCGGAGCCATGGCCAACCTCCTCCTAGC")
         elif menu_choice == "5":
             logging.info("Exiting app")
             break
