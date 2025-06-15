@@ -6,7 +6,7 @@
 
 # Virtual Env
 
-```.venv\Scripts\Activate.ps1```
+```.venv\Scripts\Activate.ps1``` or ```source .venv/bin/activate```
 
 ```pip install -e ".[dev]"```
 

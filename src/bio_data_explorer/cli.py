@@ -41,19 +41,28 @@ def main() -> None:
                 print(
                     f"{genes_explorer.get_gene_name_original_casing(gene_name)}: {sequence}"
                 )
-                print(f"Sequence length: {genes_explorer.get_sequence_length(sequence)}")
-                print(f"Reverse compliment: {genes_explorer.get_reverse_compliment(sequence)}")
-                print(f"DNA to RNA transcription: {genes_explorer.get_dna_to_rna_transcription(sequence)}")
+                print(
+                    f"Sequence length: {genes_explorer.get_sequence_length(sequence)}"
+                )
+                print(
+                    f"Reverse compliment: {genes_explorer.get_reverse_compliment(sequence)}"
+                )
+                print(
+                    f"DNA to RNA transcription: {genes_explorer.get_dna_to_rna_transcription(sequence)}"
+                )
         elif menu_choice == "3":
             gene_name = input("Enter gene name: ").strip().lower()
             sequence = genes_explorer.get_gene_sequence(gene_name)
             if sequence:
                 count_nucleotides = genes_explorer.get_count_nucleotides(sequence)
                 if count_nucleotides:
-                    genes_explorer.pretty_print_count_nucleotides(gene_name, count_nucleotides)
+                    genes_explorer.pretty_print_count_nucleotides(
+                        gene_name, count_nucleotides
+                    )
         elif menu_choice == "4":
             sequence = input("Input sequence: ").strip().lower()
-            make_blast_call(BlastProgram.BLASTN, BlastDatabase.NT, "ATGGCAGATTAGTGCAATGGGAGCCTTCGGAGCCATGGCCAACCTCCTCCTAGC")
+            logging.info("Processing BLAST call, this takes some time...")
+            make_blast_call(BlastProgram.BLASTN, BlastDatabase.NT, sequence)
         elif menu_choice == "5":
             logging.info("Exiting app")
             break

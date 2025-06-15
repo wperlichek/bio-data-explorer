@@ -12,7 +12,6 @@ class BlastProgram(Enum):
 
 class BlastDatabase(Enum):
     NT = "nt"
-    CORE_NOT = "Core_nt"
 
 
 def make_blast_call(
@@ -28,8 +27,8 @@ def make_blast_call(
     if database is None:
         database = BlastDatabase.NT
     result_handle = NCBIWWW.qblast(program.value, database.value, sequence)  # type: ignore[reportUnknownMemberType]
-    blast_records = NCBIXML.parse(result_handle) # type: ignore
-    for record in blast_records: # type: ignore
-        for alignment in record.alignments: # type: ignore
-            print(f"  Hit: {alignment.title}") # type: ignore
+    blast_records = NCBIXML.parse(result_handle)  # type: ignore
+    for record in blast_records:  # type: ignore
+        for alignment in record.alignments:  # type: ignore
+            print(f"  Hit: {alignment.title}")  # type: ignore
     return ""
