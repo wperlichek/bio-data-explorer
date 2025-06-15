@@ -80,6 +80,8 @@ def print_blast_record(blast_records: Any = None) -> None:
             print(f"{alignment.title}")
             print("Alignment hsps:")
             for hsp in alignment.hsps:
+                # TODO :: percentage identity and coverage calculations
+                # TODO :: should printing and calculating for in a util file?
                 print(f"Score: {hsp.score}")
                 print(f"E-Value: {hsp.expect}")
         print("****")
