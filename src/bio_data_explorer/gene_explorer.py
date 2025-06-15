@@ -82,6 +82,18 @@ class GenesExplorer:
                     compliment += "C"
             return compliment[::-1]
 
+    def get_dna_to_rna_transcription(self, sequence: str = "") -> Optional[str]:
+        if sequence == "":
+            logger.warning("Must provide sequence to get its DNA to RNA transcription")
+            return None
+        else:
+            rna = ""
+            for ch in sequence.upper():
+                if ch == "T":
+                    rna += "U"
+                else:
+                    rna += ch
+            return rna
 
     def count_nucleotides_in_sequence(self, sequence: str = "") -> Dict[str, int]:
         counts = {"A": 0, "C": 0, "T": 0, "G": 0}

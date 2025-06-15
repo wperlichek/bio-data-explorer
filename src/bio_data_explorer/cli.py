@@ -40,6 +40,8 @@ def main() -> None:
                     f"{genes_explorer.get_gene_name_original_casing(gene_name)}: {sequence}"
                 )
                 print(f"Sequence length: {genes_explorer.get_sequence_length(sequence)}")
+                print(f"Reverse compliment: {genes_explorer.get_reverse_compliment(sequence)}")
+                print(f"DNA to RNA transcription: {genes_explorer.get_dna_to_rna_transcription(sequence)}")
         elif menu_choice == "3":
             gene_name = input("Enter gene name: ").strip().lower()
             sequence = genes_explorer.get_gene_sequence(gene_name)
