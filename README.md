@@ -12,6 +12,11 @@
 
 ```bio-data-explorer-cli```
 
+# BLAST API
+
+```from Bio import Blast```
+```help(Blast.qblast)```
+
 # Windows setup
 
 Bioinformatics involves a lot of Linux native command-line work. If you're on Windows, 
