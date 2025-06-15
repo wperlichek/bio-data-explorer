@@ -1,7 +1,6 @@
 from Bio.Blast import NCBIWWW
 from enum import Enum
-from typing import Optional, cast
-from io import StringIO
+from typing import Optional
 import logging
 
 logger = logging.getLogger(__name__)
@@ -13,6 +12,7 @@ class BlastProgram(Enum):
 
 class BlastDatabase(Enum):
     NT = "nt"
+    CORE_NOT = "Core_nt"
 
 
 def make_blast_call(
@@ -26,5 +26,7 @@ def make_blast_call(
         program = BlastProgram.BLASTN
     if database is None:
         database = BlastDatabase.NT
-    
-    return cast(StringIO, NCBIWWW.qblast(program.value, database.value, sequence))  # type: ignore[reportUnknownMemberType]
+    result_handle = NCBIWWW.qblast(program.value, database.value, sequence)  # type: ignore[reportUnknownMemberType]
+    output = result_handle.read()
+    print(f"BLAST results: {output}")
+    return ""
