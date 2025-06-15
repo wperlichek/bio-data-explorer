@@ -1,6 +1,7 @@
 import sys, logging
 from .gene_explorer import GenesExplorer
 from .fasta_parser import parse_genes_data, GenesFileParsingError
+from .blast_client import make_blast_call, BlastDatabase, BlastProgram
 
 logging.basicConfig(
     level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s"
@@ -26,7 +27,8 @@ def main() -> None:
         print("1. List all genes")
         print("2. View sequence of gene")
         print("3. Count nucleotides of gene")
-        print("4. Exit application")
+        print("4. Make BLAST call")
+        print("5. Exit application")
 
         menu_choice = input("Enter choice (1-4): ").strip()
 
@@ -50,6 +52,10 @@ def main() -> None:
                 if count_nucleotides:
                     genes_explorer.pretty_print_count_nucleotides(gene_name, count_nucleotides)
         elif menu_choice == "4":
+            sequence = input("Input sequence: ").strip().lower()
+            blast_result = make_blast_call(BlastProgram.BLASTN, BlastDatabase.NT, sequence)
+            print(f"Result: {blast_result}")
+        elif menu_choice == "5":
             logging.info("Exiting app")
             break
         else:
