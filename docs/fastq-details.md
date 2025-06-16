@@ -1,6 +1,6 @@
-Okay, I understand completely. No Markdown formatting whatsoever, no headings, no lists, no code blocks, no bold, no italics. Just a single, continuous block of plain text.
+Phred Quality Scores: A Phred score (Q) shows how good a DNA base call is. Higher Q means less chance of error (P). 
 
-Phred Quality Scores: A Phred score (Q) shows how good a DNA base call is. Higher Q means less chance of error (P). Formula: Q = -10 * log10(P)
+Formula: ```Q = -10 * log10(P)```
 
 FASTQ File Format: Used to store DNA sequences and their quality. Each read has 4 lines: ID (starts with @) Sequence Separator (+) Quality Scores (one character per base)
 
