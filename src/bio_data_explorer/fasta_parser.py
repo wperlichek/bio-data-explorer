@@ -10,7 +10,7 @@ FASTA_SEQUENCE_CHARS_DNA = set("ACGT")
 logger = logging.getLogger(__name__)
 
 
-class GenesFileParsingError(Exception):
+class FastaParsingError(Exception):
     pass
 
 
@@ -62,7 +62,7 @@ def parse_genes_data(genes_file: str = "") -> List[Gene]:
         return genes
     except FileNotFoundError as e:
         logger.error(f"Could not open {genes_file}: {e.strerror}")
-        raise GenesFileParsingError(e)
+        raise FastaParsingError(e)
 
 
 def _line_is_formatted_correctly(line: str = "") -> bool:
