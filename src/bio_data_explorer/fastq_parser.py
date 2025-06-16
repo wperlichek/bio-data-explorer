@@ -8,6 +8,8 @@ data_directory_path = Path(__file__).resolve().parent.parent.parent / "data"
 
 FILE_TYPE_FASTQ = "fastq"
 
+UNKNOWN_BASES_THRESHOLD_PERCENTAGE_TO_OMIT_READ = 5
+
 logger = logging.getLogger(__name__)
 
 
@@ -24,10 +26,26 @@ def parse_fastq_file(fastq_file_name: str = "") -> List[Gene]:
             try:
                 # https://biopython.org/wiki/SeqIO
                 for record in SeqIO.parse(fastq_file, FILE_TYPE_FASTQ):  # type: ignore
-                    genes.append(Gene(record.id, record.description, record.seq, record.letter_annotations["phred_quality"]))  # type: ignore
+                    if not should_discard_read_due_to_high_unknown_base_count(record.seq):  # type: ignore
+                        genes.append(Gene(record.id, record.description, record.seq, record.letter_annotations["phred_quality"]))  # type: ignore
             except Exception as e:
                 logger.error(f"Could not parse fastq file: {e}")
             return genes
     except FileNotFoundError as e:
         logger.error(f"Could not open {fastq_file_name}: {e.strerror}")
         raise FastqParsingError(e)
+
+
+def should_discard_read_due_to_high_unknown_base_count(sequence: str = "") -> bool:
+    if sequence == "":
+        logger.warning(
+            "Must provide a sequence to check its unknown base count, returning False without analysis"
+        )
+        return False
+    unknown_base_count = 0
+    for ch in sequence.upper():
+        if ch == "N":
+            unknown_base_count += 1
+    percentage_unknowns = round(unknown_base_count / len(sequence), 3) * 100
+
+    return percentage_unknowns < UNKNOWN_BASES_THRESHOLD_PERCENTAGE_TO_OMIT_READ

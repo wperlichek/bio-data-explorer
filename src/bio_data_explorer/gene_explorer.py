@@ -10,12 +10,12 @@ class Gene:
         identifier: str = "",
         description: Optional[str] = "",
         sequence: str = "",
-        quality: Optional[List[int]] = None,
+        phred_quality: Optional[List[int]] = None,
     ):
         self.gene_name = identifier  # for simplicity, assume identifier is a gene_name
         self.description = description
         self.sequence = sequence
-        self.quality = quality
+        self.phred_quality = phred_quality
 
 
 class GenesExplorer:
