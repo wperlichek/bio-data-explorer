@@ -66,14 +66,9 @@ def should_discard_read_due_to_high_unknown_base_count(sequence: str = "") -> bo
 def quality_trim_sequence_end(
     sequence: str = "", phred_qualities: List[int] = []
 ) -> str:
-    idx_for_trim = len(phred_qualities) - 1
-    while idx_for_trim >= 0:
-        if (
-            phred_qualities[idx_for_trim]
-            >= MIN_PHRED_QUALITY_TO_KEEP_WHILE_TRIMMING_END
-        ):
-            idx_for_trim -= 1
-        else:
+    first_bad_read_idx = -1
+    for idx in range(len(phred_qualities)):
+        if phred_qualities[idx] < MIN_PHRED_QUALITY_TO_KEEP_WHILE_TRIMMING_END:
+            first_bad_read_idx = idx
             break
-    # AGXGC
-    return sequence if idx_for_trim < 0 else sequence[0::idx_for_trim]
+    return sequence if first_bad_read_idx == -1 else sequence[0:first_bad_read_idx]
