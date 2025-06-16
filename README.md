@@ -15,6 +15,7 @@
 # BLAST API
 
 ```from Bio import Blast```
+
 ```help(Blast.qblast)```
 
 # Windows setup

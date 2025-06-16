@@ -166,7 +166,6 @@ As a bioinformatics data explorer, understanding and being able to work with the
 * **FASTQ (`.fastq`, `.fq`)**: The standard output for raw reads from modern sequencing machines. It stores both the biological sequence and its associated quality scores, which are crucial for assessing data reliability.
 * **SAM / BAM (`.sam`, `.bam`)**: These formats store sequence alignments. SAM is a human-readable text format, while BAM is its compressed, binary equivalent. They detail how sequencing reads map to a reference genome, providing information critical for downstream analysis like variant calling.
 * **VCF (Variant Call Format) (`.vcf`)**: This specialized format is used to store genetic variations (like SNPs and indels) between samples and a reference genome. It's central to studies involving genetic differences, disease associations, or population genetics.
-* **TSV / CSV (Tab/Comma Separated Values)**: While general-purpose, these tabular text formats are universally used in bioinformatics for processed, summarized, and annotated data. You'll frequently find gene expression tables, variant summaries, or functional annotations provided in these formats, making them vital for data exploration and analysis in tools like Python's Pandas.
 
 ---
 
