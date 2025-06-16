@@ -78,9 +78,6 @@ def should_discard_read_due_to_high_unknown_base_count(sequence: str = "") -> bo
         if ch == "N":
             unknown_base_count += 1
     percentage_unknowns = round(unknown_base_count / len(sequence), 3) * 100
-    logger.info(
-        f"Percentage of unknown bases in sequence {sequence}: {percentage_unknowns}%"
-    )
     return percentage_unknowns >= UNKNOWN_BASES_THRESHOLD_PERCENTAGE_TO_OMIT_READ
 
 
