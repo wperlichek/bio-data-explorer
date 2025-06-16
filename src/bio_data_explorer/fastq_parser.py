@@ -46,13 +46,13 @@ def valid_sequence(sequence: str = "", phred_qualities: List[int] = []) -> bool:
 
     if len(sequence) < MIN_SEQUENCE_READ_LEN:
         logger.warning(
-            f"Discarding sequence {sequence} due to it not being >= min sequence length {MIN_SEQUENCE_READ_LEN}"
+            f"Discarding sequence {sequence} because its length is < min sequence length {MIN_SEQUENCE_READ_LEN}"
         )
         return False
 
     if should_discard_read_due_to_high_unknown_base_count(sequence):
         logger.warning(
-            f"Discarding sequence {sequence} due to high % of unknown bases, max threshold is {UNKNOWN_BASES_THRESHOLD_PERCENTAGE_TO_OMIT_READ}%"
+            f"Discarding sequence {sequence} because high % of unknown bases, max threshold is {UNKNOWN_BASES_THRESHOLD_PERCENTAGE_TO_OMIT_READ}%"
         )
         return False
 
@@ -60,7 +60,7 @@ def valid_sequence(sequence: str = "", phred_qualities: List[int] = []) -> bool:
 
     if len(trimmed_sequence) < MIN_SEQUENCE_READ_LEN:
         logger.warning(
-            f"Discarding trimmed sequence {sequence} due to it not being >= min sequence length {MIN_SEQUENCE_READ_LEN}"
+            f"Discarding trimmed sequence {sequence} because its length is < min sequence length {MIN_SEQUENCE_READ_LEN}"
         )
         return False
 
