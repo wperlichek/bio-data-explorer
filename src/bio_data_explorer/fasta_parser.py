@@ -14,7 +14,7 @@ class FastaParsingError(Exception):
     pass
 
 
-def parse_genes_data(genes_file: str = "") -> List[Gene]:
+def parse_fasta_file(genes_file: str = "") -> List[Gene]:
     genes: List[Gene] = []
     try:
         with gzip.open(
