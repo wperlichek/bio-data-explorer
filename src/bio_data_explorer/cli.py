@@ -17,7 +17,7 @@ def main() -> None:
 
     try:
         genes_file = sys.argv[1] if len(sys.argv) > 1 else DEFAULT_GENES_FILE
-        if "fasta" in genes_file: # TODO :: stricter parsing requirements
+        if "fasta" in genes_file:  # TODO :: stricter parsing requirements
             genes = parse_fasta_file(genes_file)
         else:
             genes = parse_fastq_file(genes_file)
@@ -25,7 +25,7 @@ def main() -> None:
         logging.critical(f"Application can't start due to {e}, exiting application")
         sys.exit(1)
 
-    genes_explorer = GenesExplorer(genes) # TODO :: needs to accept different types? or consolidate types
+    genes_explorer = GenesExplorer(genes)
 
     while True:
         print("** Gene Sequence Explorer **")
