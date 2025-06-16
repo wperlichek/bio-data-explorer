@@ -10,6 +10,10 @@ FILE_TYPE_FASTQ = "fastq"
 
 UNKNOWN_BASES_THRESHOLD_PERCENTAGE_TO_OMIT_READ = 5
 
+MIN_PHRED_QUALITY_TO_KEEP_WHILE_TRIMMING_END = 20
+
+MIN_SEQUENCE_READ_LEN = 50
+
 logger = logging.getLogger(__name__)
 
 
@@ -27,8 +31,9 @@ def parse_fastq_file(fastq_file_name: str = "") -> List[Gene]:
                 # https://biopython.org/wiki/SeqIO
                 for record in SeqIO.parse(fastq_file, FILE_TYPE_FASTQ):  # type: ignore
                     seq = str(record.seq)  # type: ignore
+                    phred_qualities: List[int] = record.letter_annotations["phred_quality"]  # type: ignore
                     if not should_discard_read_due_to_high_unknown_base_count(seq):
-                        genes.append(Gene(record.id, record.description, seq, record.letter_annotations["phred_quality"]))  # type: ignore
+                        genes.append(Gene(record.id, record.description, seq, phred_qualities))  # type: ignore
                     else:
                         logger.warning(
                             f"Discarding sequence {seq} due to high % of unknown bases, max threshold is {UNKNOWN_BASES_THRESHOLD_PERCENTAGE_TO_OMIT_READ}%"
@@ -56,3 +61,19 @@ def should_discard_read_due_to_high_unknown_base_count(sequence: str = "") -> bo
         f"Percentage of unknown bases in sequence {sequence}: {percentage_unknowns}%"
     )
     return percentage_unknowns >= UNKNOWN_BASES_THRESHOLD_PERCENTAGE_TO_OMIT_READ
+
+
+def quality_trim_sequence_end(
+    sequence: str = "", phred_qualities: List[int] = []
+) -> str:
+    idx_for_trim = len(phred_qualities) - 1
+    while idx_for_trim >= 0:
+        if (
+            phred_qualities[idx_for_trim]
+            >= MIN_PHRED_QUALITY_TO_KEEP_WHILE_TRIMMING_END
+        ):
+            idx_for_trim -= 1
+        else:
+            break
+    # AGXGC
+    return sequence if idx_for_trim < 0 else sequence[0::idx_for_trim]
