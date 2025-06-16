@@ -26,8 +26,13 @@ def parse_fastq_file(fastq_file_name: str = "") -> List[Gene]:
             try:
                 # https://biopython.org/wiki/SeqIO
                 for record in SeqIO.parse(fastq_file, FILE_TYPE_FASTQ):  # type: ignore
-                    if not should_discard_read_due_to_high_unknown_base_count(record.seq):  # type: ignore
-                        genes.append(Gene(record.id, record.description, record.seq, record.letter_annotations["phred_quality"]))  # type: ignore
+                    seq = str(record.seq)  # type: ignore
+                    if not should_discard_read_due_to_high_unknown_base_count(seq):
+                        genes.append(Gene(record.id, record.description, seq, record.letter_annotations["phred_quality"]))  # type: ignore
+                    else:
+                        logger.warning(
+                            f"Discarding sequence {seq} due to high % of unknown bases, max threshold is {UNKNOWN_BASES_THRESHOLD_PERCENTAGE_TO_OMIT_READ}%"
+                        )
             except Exception as e:
                 logger.error(f"Could not parse fastq file: {e}")
             return genes
@@ -47,5 +52,7 @@ def should_discard_read_due_to_high_unknown_base_count(sequence: str = "") -> bo
         if ch == "N":
             unknown_base_count += 1
     percentage_unknowns = round(unknown_base_count / len(sequence), 3) * 100
-
-    return percentage_unknowns < UNKNOWN_BASES_THRESHOLD_PERCENTAGE_TO_OMIT_READ
+    logger.info(
+        f"Percentage of unknown bases in sequence {sequence}: {percentage_unknowns}%"
+    )
+    return percentage_unknowns >= UNKNOWN_BASES_THRESHOLD_PERCENTAGE_TO_OMIT_READ
