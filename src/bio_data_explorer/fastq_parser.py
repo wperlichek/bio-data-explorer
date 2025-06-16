@@ -32,18 +32,39 @@ def parse_fastq_file(fastq_file_name: str = "") -> List[Gene]:
                 for record in SeqIO.parse(fastq_file, FILE_TYPE_FASTQ):  # type: ignore
                     seq = str(record.seq)  # type: ignore
                     phred_qualities: List[int] = record.letter_annotations["phred_quality"]  # type: ignore
-                    if not should_discard_read_due_to_high_unknown_base_count(seq):
+                    if valid_sequence(seq, phred_qualities):  # type: ignore
                         genes.append(Gene(record.id, record.description, seq, phred_qualities))  # type: ignore
-                    else:
-                        logger.warning(
-                            f"Discarding sequence {seq} due to high % of unknown bases, max threshold is {UNKNOWN_BASES_THRESHOLD_PERCENTAGE_TO_OMIT_READ}%"
-                        )
             except Exception as e:
                 logger.error(f"Could not parse fastq file: {e}")
             return genes
     except FileNotFoundError as e:
         logger.error(f"Could not open {fastq_file_name}: {e.strerror}")
         raise FastqParsingError(e)
+
+
+def valid_sequence(sequence: str = "", phred_qualities: List[int] = []) -> bool:
+
+    if len(sequence) < MIN_SEQUENCE_READ_LEN:
+        logger.warning(
+            f"Discarding sequence {sequence} due to it not being >= min sequence length {MIN_SEQUENCE_READ_LEN}"
+        )
+        return False
+
+    if should_discard_read_due_to_high_unknown_base_count(sequence):
+        logger.warning(
+            f"Discarding sequence {sequence} due to high % of unknown bases, max threshold is {UNKNOWN_BASES_THRESHOLD_PERCENTAGE_TO_OMIT_READ}%"
+        )
+        return False
+
+    trimmed_sequence = quality_trim_sequence_end(sequence, phred_qualities)
+
+    if len(trimmed_sequence) < MIN_SEQUENCE_READ_LEN:
+        logger.warning(
+            f"Discarding trimmed sequence {sequence} due to it not being >= min sequence length {MIN_SEQUENCE_READ_LEN}"
+        )
+        return False
+
+    return True
 
 
 def should_discard_read_due_to_high_unknown_base_count(sequence: str = "") -> bool:
