@@ -169,3 +169,23 @@ As a bioinformatics data explorer, understanding and being able to work with the
 * **TSV / CSV (Tab/Comma Separated Values)**: While general-purpose, these tabular text formats are universally used in bioinformatics for processed, summarized, and annotated data. You'll frequently find gene expression tables, variant summaries, or functional annotations provided in these formats, making them vital for data exploration and analysis in tools like Python's Pandas.
 
 ---
+
+### FASTQ Quality Control (QC) & Trimming Pipeline:
+
+* **Purpose:** Implement essential pre-processing steps for raw Next-Generation Sequencing (NGS) reads to improve data quality for downstream analysis.
+* **Input:** Raw FASTQ file(s).
+* **Output:** Cleaned FASTQ file(s) and a comprehensive processing summary report.
+* **Functional Requirements:**
+    * Programmatically parse FASTQ records (sequence and quality scores) using Biopython (`Bio.SeqIO`).
+    * Filter reads based on a user-defined minimum length threshold.
+    * Filter reads containing an excessive proportion of 'N' (unknown) bases.
+    * Implement quality-based trimming: remove low-quality bases from the 5' and 3' ends of reads based on a user-specified Phred quality score threshold (e.g., using a sliding window approach).
+    * (Future Enhancement) Implement adapter sequence trimming.
+    * Generate a detailed summary report including:
+        * Total number of reads processed (input vs. output).
+        * Number of reads filtered (by length, by 'N' content).
+        * Average read length before and after trimming.
+        * Overall quality statistics (e.g., average quality score per base position) before and after processing.
+* **User Interface:** Support configurable parameters (e.g., input/output file paths, quality threshold, min length, N-content threshold) via command-line arguments.
+
+---
