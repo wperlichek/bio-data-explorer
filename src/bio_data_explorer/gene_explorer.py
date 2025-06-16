@@ -5,10 +5,17 @@ logger = logging.getLogger(__name__)
 
 
 class Gene:
-    def __init__(self, identifier: str = "", description: str = "", sequence: str = ""):
+    def __init__(
+        self,
+        identifier: str = "",
+        description: Optional[str] = "",
+        sequence: str = "",
+        quality: Optional[str] = "",
+    ):
         self.gene_name = identifier  # for simplicity, assume identifier is a gene_name
         self.description = description
         self.sequence = sequence
+        self.quality = quality
 
 
 class GenesExplorer:
@@ -23,13 +30,14 @@ class GenesExplorer:
                 self.add_sequence_nucleotide_counts(gene.sequence)
 
     def add_gene_sequence(
-        self, gene_name: str = "", description: str = "", sequence: str = ""
+        self, gene_name: str = "", description: Optional[str] = "", sequence: str = ""
     ) -> None:
         gene_name_lower = gene_name.lower()
         if gene_name_lower not in self.gene_to_sequence:
             self.gene_to_sequence[gene_name_lower] = sequence.upper()
             self.gene_name_casing_map[gene_name_lower] = gene_name
-            self.gene_to_description[gene_name_lower] = description
+            if description:
+                self.gene_to_description[gene_name_lower] = description
         else:
             logger.warning(f"{gene_name} already exists, not adding it to genes data")
 
