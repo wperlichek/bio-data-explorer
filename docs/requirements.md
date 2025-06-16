@@ -169,3 +169,74 @@ As a bioinformatics data explorer, understanding and being able to work with the
 * **TSV / CSV (Tab/Comma Separated Values)**: While general-purpose, these tabular text formats are universally used in bioinformatics for processed, summarized, and annotated data. You'll frequently find gene expression tables, variant summaries, or functional annotations provided in these formats, making them vital for data exploration and analysis in tools like Python's Pandas.
 
 ---
+
+### FASTQ Quality Control (QC) & Trimming Pipeline:
+
+* **Purpose:** Implement essential pre-processing steps for raw Next-Generation Sequencing (NGS) reads to improve data quality for downstream analysis.
+* **Input:** Raw FASTQ file(s).
+* **Output:** Cleaned FASTQ file(s) and a comprehensive processing summary report.
+* **Functional Requirements:**
+    * Programmatically parse FASTQ records (sequence and quality scores) using Biopython (`Bio.SeqIO`).
+    * Filter reads based on a user-defined minimum length threshold.
+    * Filter reads containing an excessive proportion of 'N' (unknown) bases.
+    * Implement quality-based trimming: remove low-quality bases from the 5' and 3' ends of reads based on a user-specified Phred quality score threshold (e.g., using a sliding window approach).
+    * (Future Enhancement) Implement adapter sequence trimming.
+    * Generate a detailed summary report including:
+        * Total number of reads processed (input vs. output).
+        * Number of reads filtered (by length, by 'N' content).
+        * Average read length before and after trimming.
+        * Overall quality statistics (e.g., average quality score per base position) before and after processing.
+* **User Interface:** Support configurable parameters (e.g., input/output file paths, quality threshold, min length, N-content threshold) via command-line arguments.
+
+### 2. FASTQ Quality Control (QC) & Trimming Pipeline:
+
+* **Purpose:** Implement essential pre-processing steps for raw Next-Generation Sequencing (NGS) reads to improve data quality for downstream analysis.
+
+    * **Why in real life:** Raw sequencing data, straight off the machine, is rarely perfect. It often contains errors, low-quality bases (especially at the ends of reads), or non-biological sequences (like adapters). Using this raw data directly can lead to inaccurate alignment, unreliable variant calls, or misleading gene expression quantification. QC and trimming are the crucial first steps to clean up the data.
+    * **Core Concept:** **Data Fidelity and Pre-processing.** This phase aims to remove noise and artifacts, ensuring that subsequent computational analyses are performed on the highest quality, most biologically relevant data possible.
+
+* **Input:** Raw FASTQ file(s).
+* **Output:** Cleaned FASTQ file(s) and a comprehensive processing summary report.
+
+    * **Why in real life:** The input is your direct download from the sequencing facility. The output is what you'll feed into alignment tools (like BWA or Bowtie2). The report is your dashboard to quickly assess the quality of your sequencing run and the effectiveness of your cleaning process.
+
+---
+
+#### **Functional Requirements (with IRL explanation & Concepts):**
+
+1.  **Programmatically parse FASTQ records (sequence and quality scores) using Biopython (`Bio.SeqIO`).**
+    * **Why in real life:** FASTQ is the universal format for raw sequencing data. To do anything with it programmatically, you first need to be able to read and correctly interpret its structure (ID line, sequence line, separator line, quality line).
+    * **Core Concept:** **File Format Parsing.** This is the foundational step. `Bio.SeqIO` acts as a robust interpreter, converting the text file format into usable Python objects (`Bio.SeqRecord` objects) that encapsulate all the information for each read. This saves you from writing complex, error-prone parsing logic yourself.
+
+2.  **Filter reads based on a user-defined minimum length threshold.**
+    * **Why in real life:** After trimming low-quality bases or adapter sequences (see point 4 and 5), some reads might become extremely short. Very short reads are often uninformative (e.g., they might not uniquely map to a genome) or can even cause issues for downstream tools.
+    * **Core Concept:** **Read Filtering and Informational Content.** This step ensures that only reads with sufficient length to provide meaningful biological information (and to be accurately aligned) proceed in the pipeline. It's about removing noise and improving computational efficiency.
+    * **Benefit:** Reduces computational burden on alignment and analysis tools, as they don't waste time trying to process tiny, unmappable reads. Can also reduce ambiguous alignments.
+
+3.  **Filter reads containing an excessive proportion of 'N' (unknown) bases.**
+    * **Why in real life:** An 'N' indicates that the sequencing machine couldn't confidently call a base at that position. A read with many 'N's suggests a problematic sequencing event or a region of low quality on the original DNA/RNA fragment.
+    * **Core Concept:** **Data Ambiguity and Confidence.** 'N's introduce uncertainty. If a read has too many 'N's, it's less likely to align uniquely or accurately, and any variant calls within or near these 'N's would be unreliable.
+    * **Benefit:** Removes ambiguous reads that could lead to false positives during alignment or variant calling, thus increasing the confidence in your remaining data.
+
+4.  **Implement quality-based trimming: remove low-quality bases from the 5' and 3' ends of reads based on a user-specified Phred quality score threshold (e.g., using a sliding window approach).**
+    * **Why in real life:** Sequencing accuracy often degrades towards the ends of reads. These low-quality bases are prone to errors and can directly introduce inaccuracies into downstream analyses (e.g., a low-quality base appearing as a false variant).
+    * **Core Concept:** **Phred Quality Scores, Base Calling Accuracy, and Trade-off.** Phred scores (Q scores) quantify the probability of a base call being wrong ($Q = -10 \log_{10} P$, where $P$ is the error probability). Trimming means deciding to sacrifice potentially correct bases to remove highly probable errors, thereby improving the overall accuracy of the *remaining* sequence. A Q20 (1 in 100 chance of error) or Q30 (1 in 1000 chance of error) threshold are common benchmarks.
+    * **Benefit:** Significantly improves the accuracy of alignments and downstream analyses by ensuring that only high-confidence base calls are retained. This is often one of the most impactful QC steps.
+
+5.  **(Future Enhancement) Implement adapter sequence trimming.**
+    * **Why in real life:** During sequencing library preparation, short synthetic DNA sequences called "adapters" are ligated to the DNA/RNA fragments. If the original biological fragment is shorter than the sequencing read length, the sequencer will read through the end of the fragment and into the adapter sequence.
+    * **Core Concept:** **Artifact Removal.** Adapter sequences are not part of the biological sample. If left in, they will either fail to align to the genome or (worse) align non-specifically or to other adapter sequences, leading to spurious results.
+    * **Benefit:** Ensures that only true biological sequence data is used for alignment and analysis, leading to cleaner, more accurate, and more interpretable results.
+
+6.  **Generate a detailed summary report.**
+    * **Why in real life (and why it's critical for a "data explorer"):** You're dealing with millions or billions of reads; you cannot eyeball them. A summary report is your **dashboard for quality assessment.** It provides immediate, high-level feedback on the quality of your sequencing run and the effectiveness of your QC process. It's essential for deciding if your data is good enough to proceed, identifying issues, and for comparing quality across different samples or sequencing runs.
+    * **Core Concept:** **Data Summarization, Visualization (implied), and Quality Assurance.** This is about extracting actionable insights from raw data, transforming overwhelming detail into comprehensible metrics.
+    * **Key Metrics in the Report:**
+        * **Total reads processed (input vs. output):** This is your most basic measure of data loss due to QC. It tells you the overall yield.
+        * **Number/percentage of reads filtered (by length, by 'N' content):** Quantifies specific problems in the raw data and the impact of your filtering.
+        * **Average read length before and after trimming:** Shows how trimming affects the length distribution of your reads. You often expect a slight decrease, but ideally, the remaining reads are more uniform in quality.
+        * **Overall quality statistics (e.g., average quality score per base position) before and after processing:** This is the most crucial part. You'd typically visualize this as a plot (like FastQC's per-base quality plot) showing the average/median quality score at each base position along the read. You should clearly see an improvement (higher average qualities, less drop-off at the ends) after trimming, demonstrating your tool's effectiveness.
+
+7.  **User Interface: Support configurable parameters via command-line arguments.**
+    * **Why in real life:** Bioinformatics pipelines are rarely run manually for each step. Scripts need to be automated and reusable. Different experiments or datasets might require different quality thresholds or minimum lengths. Hardcoding these values would make your script inflexible.
+    * **Core Concept:** **Automation, Reusability, and Parameterization.** Using `argparse` allows users to easily provide input/output file paths and adjust parameters without modifying the code itself, making your script a proper, versatile command-line tool suitable for integration into larger automated workflows. This is a hallmark of good scientific software development.

@@ -1,7 +1,8 @@
 import sys, logging
 from typing import Any
 from .gene_explorer import GenesExplorer
-from .fasta_parser import parse_genes_data, GenesFileParsingError
+from .fasta_parser import FastaParsingError, parse_fasta_file
+from .fastq_parser import parse_fastq_file
 from .blast_client import make_blast_call, BlastDatabase, BlastProgram
 
 logging.basicConfig(
@@ -16,8 +17,11 @@ def main() -> None:
 
     try:
         genes_file = sys.argv[1] if len(sys.argv) > 1 else DEFAULT_GENES_FILE
-        genes = parse_genes_data(genes_file)
-    except GenesFileParsingError as e:
+        if "fasta" in genes_file:  # TODO :: stricter parsing requirements
+            genes = parse_fasta_file(genes_file)
+        else:
+            genes = parse_fastq_file(genes_file)
+    except FastaParsingError as e:
         logging.critical(f"Application can't start due to {e}, exiting application")
         sys.exit(1)
 
