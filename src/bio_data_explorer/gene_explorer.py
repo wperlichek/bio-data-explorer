@@ -10,7 +10,7 @@ class Gene:
         identifier: str = "",
         description: Optional[str] = "",
         sequence: str = "",
-        quality: Optional[str] = "",
+        quality: Optional[List[int]] = None,
     ):
         self.gene_name = identifier  # for simplicity, assume identifier is a gene_name
         self.description = description
