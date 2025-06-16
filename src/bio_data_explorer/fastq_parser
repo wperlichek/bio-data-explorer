@@ -14,9 +14,11 @@ class FastqParsingError(Exception):
 
 def parse_fastq_file(fastq_file_name: str = "") -> Optional[Dict[str, str]]:
     try:
-        with gzip.open(fastq_file_name) as File:
+        with gzip.open(fastq_file_name) as fastq_file:
             try:
-                SeqIO.parse(File, FILE_TYPE_FASTQ)
+                # https://biopython.org/wiki/SeqIO
+                for record in SeqIO.parse(fastq_file, FILE_TYPE_FASTQ): # type: ignore
+                    logger.info(f"Parsed record: {record.name}") # type: ignore
             except Exception as e:
                 logger.error(f"Could not parse fastq file: {e}")
             sequence_to_qualities: Dict[str, str] = {}
