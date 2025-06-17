@@ -37,7 +37,7 @@ def main() -> None:
         print("5. VCF Analysis")
         print("6. Exit application")
 
-        menu_choice = input("Enter choice (1-6): ").strip()
+        menu_choice = input("Enter choice (1-4): ").strip()
 
         if menu_choice == "1":
             genes_explorer.print_all_genes()

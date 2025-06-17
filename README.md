@@ -6,11 +6,25 @@
 
 # Virtual Env
 
-```.venv\Scripts\Activate.ps1``` or ```source .venv/bin/activate```
+## Clear previous if needed:
+
+```deactivate```
+
+```cd ~/python-gene-tool/```
+
+```rm -rf .venv```
+
+## Basic venv setup:
+
+```python3.12 -m venv .venv```
+
+```source ./.venv/bin/activate```
 
 ```pip install -e ".[dev]"```
 
-```bio-data-explorer-cli```
+## Run app in venv:
+
+```bio-data-explorer-cli Optional[file_name]```
 
 # BLAST API
 

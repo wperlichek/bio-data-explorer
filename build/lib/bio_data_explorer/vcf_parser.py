@@ -1,5 +1,4 @@
 from pathlib import Path
-import cyvcf2
 
 data_directory_path = Path(__file__).resolve().parent.parent.parent / "data"
 
