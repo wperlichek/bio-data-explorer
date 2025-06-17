@@ -1,21 +1,26 @@
-```
 ##fileformat=VCFv4.3
 ##fileDate=20250617
-##source=SimulatedVCFGenerator
-##reference=file:///path/to/human_g38.fasta
+##source=GeneratedByAI
+##reference=file:///path/to/your/reference_genome.fasta
 ##INFO=<ID=DP,Number=1,Type=Integer,Description="Total Depth at locus (number of reads covering the position)">
 ##INFO=<ID=AF,Number=A,Type=Float,Description="Allele Frequency for ALT allele in the sample cohort (based on AC and AN)">
-##INFO=<ID=MQ,Number=1,Type=Float,Description="Root Mean Square (RMS) Mapping Quality of reads covering the site)">
+##INFO=<ID=MQ,Number=1,Type=Float,Description="Root Mean Square (RMS) Mapping Quality of reads covering the site">
+##INFO=<ID=QD,Number=1,Type=Float,Description="Variant Quality by Depth">
 ##FILTER=<ID=LowQual,Description="Variant quality (QUAL field) below 20">
 ##FILTER=<ID=DepthFilter,Description="Total depth (DP INFO field) below 10">
+##FILTER=<ID=FS,Description="Fisher Strand score > 60 (strand bias)">
 ##FORMAT=<ID=GT,Number=1,Type=String,Description="Genotype (0=REF, 1=ALT1, 2=ALT2, etc.)">
 ##FORMAT=<ID=AD,Number=R,Type=Integer,Description="Allelic depths for the REF and ALT alleles in the order listed">
 ##FORMAT=<ID=GQ,Number=1,Type=Integer,Description="Genotype Quality (Phred-scaled confidence that the genotype is correct)">
+##FORMAT=<ID=DP,Number=1,Type=Integer,Description="Approximate read depth (reads with MQ=255 or with bad mates are filtered)">
 ##contig=<ID=chr1,length=248956422,assembly=GRCh38>
+##contig=<ID=chr2,length=242193529,assembly=GRCh38>
 ##contig=<ID=chrX,length=156040895,assembly=GRCh38>
-#CHROM  POS     ID       REF  ALT    QUAL  FILTER               INFO                        FORMAT     SampleA       SampleB       SampleC
-chr1    1000    rs12345  A    G      50.0  PASS                 DP=120;AF=0.5;MQ=60.0       GT:AD:GQ   0/1:60,60:99  0/0:120,0:99  0/1:55,65:99
-chr1    1005    .        TA   T      25.0  PASS                 DP=80;AF=0.5;MQ=58.0        GT:AD:GQ   1/1:0,80:99   0/1:40,40:99  0/0:80,0:99
-chr1    2050    rs67890  C    T,G    99.0  PASS                 DP=150;AF=0.33,0.33;MQ=60.0 GT:AD:GQ   1/2:50,50,50:99 0/0:150,0,0:99  0/1:100,50,0:99
-chrX    500     .        A    C      15.0  LowQual;DepthFilter  DP=8;AF=0.1;MQ=30.0         GT:AD:GQ   0/0:8,0:10    ./.:.:.       0/0:8,0:10
-chrX    1500    rs98765  G    C      60.0  PASS                 DP=110;AF=0.5;MQ=60.0       GT:AD:GQ   0/1:55,55:99  0/1:60,50:99  1/1:0,110:99
+#CHROM	POS	ID	REF	ALT	QUAL	FILTER	INFO	FORMAT	SampleA	SampleB	SampleC	SampleD
+chr1	1000	.	A	G	50.0	PASS	DP=120;AF=0.5;MQ=60.0;QD=15.0	GT:AD:GQ:DP	0/1:60,60:99:120	0/0:120,0:99:120	0/1:55,65:99:120	1/1:0,100:99:100
+chr1	1005	rs123	TA	T	25.0	PASS	DP=80;AF=0.5;MQ=58.0;QD=10.0	GT:AD:GQ:DP	1/1:0,80:99:80	0/1:40,40:99:80	0/0:80,0:99:80	0/1:38,42:99:80
+chr1	2050	rs678	C	T,G	99.0	PASS	DP=150;AF=0.33,0.33;MQ=60.0;QD=20.0	GT:AD:GQ:DP	1/2:50,50,50:99:150	0/0:150,0,0:99:150	0/1:100,50,0:99:150	1/1:0,120,0:99:120
+chrX	500	.	A	C	15.0	LowQual;DepthFilter	DP=8;AF=0.1;MQ=30.0;QD=5.0	GT:AD:GQ:DP	0/0:8,0:10:8	./.:.:.:.	0/0:8,0:10:8	0/1:4,4:10:8
+chrX	1500	rs987	G	C	60.0	PASS	DP=110;AF=0.5;MQ=60.0;QD=18.0	GT:AD:GQ:DP	0/1:55,55:99:110	0/1:60,50:99:110	1/1:0,110:99:110	0/0:90,0:99:90
+chr2	5000	.	G	A,T	40.0	PASS	DP=90;AF=0.2,0.3;MQ=55.0;QD=12.0	GT:AD:GQ:DP	0/2:40,0,50:90:90	0/1:45,45,0:99:90	1/2:0,45,45:90:90	./.:.:.:.
+chr2	5005	.	AT	A	80.0	PASS	DP=15;AF=0.5;MQ=59.0;QD=25.0	GT:AD:GQ:DP	0/1:50,50:99:100	0/0:100,0:99:100	1/1:0,100:99:100	0/1:48,52:99:100
