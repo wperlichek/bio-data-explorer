@@ -1,8 +1,7 @@
-from pathlib import Path
 import cyvcf2
-
-data_directory_path = Path(__file__).resolve().parent.parent.parent / "data"
+from cyvcf2 import VCF
 
 
 def parse_vcf_file(vcf_file_name: str = ""):
-    print(vcf_file_name)
+    print("cyvcf2 version:", cyvcf2.__version__)
+    # rest of your code...
