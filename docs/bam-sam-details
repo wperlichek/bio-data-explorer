@@ -5,6 +5,8 @@ SAM (Sequence Alignment/Map) and BAM (Binary Alignment/Map) files are fundamenta
 ## Convert between .sam and .bam files
 Use Samtools https://www.htslib.org/
 
+``` samtools view -bS -o sample_alignments.bam sample_alignments.sam ```
+
 ## Details
 
 The SAM file's header section, marked by lines starting with `@`, contains essential metadata about the reference genome, tools, and samples, and while technically optional, it is practically required for functional use and compatibility with bioinformatics tools.
