@@ -261,3 +261,49 @@ As a bioinformatics data explorer, understanding and being able to work with the
     * **Why:** Low read depth means there isn't enough sequencing data covering that specific genomic position, making the variant call unreliable. A minimum of 20 reads provides reasonable confidence.
 
 ---
+
+# Bioinformatics CLI Tool - Requirements (Part 4 - Concise)
+
+## I. Aligned Read Analysis (SAM/BAM Support)
+
+* **Objective:** Load, analyze, and display crucial information from aligned sequencing reads to understand mapping quality and coverage.
+
+### Functional Requirements:
+
+1.  **BAM/SAM File Loading:**
+    * **What:** Read and parse both `.sam` (text) and `.bam` (compressed binary) files.
+    * **Why it's Useful:** These are the standard outputs of sequencing alignment. You need to read them to do anything with mapped reads. BAM is for speed/storage; SAM for inspection.
+    * **Core Concept:** **Alignment Data Ingestion.** (`pysam` library is key here.)
+
+2.  **BAM Indexing (`.bai`):**
+    * **What:** Automatically create a `.bai` index for `.bam` files if missing.
+    * **Why it's Useful:** Essential for *fast* access to specific genomic regions in huge BAM files (otherwise, you read the whole thing!).
+    * **Core Concept:** **Efficient Data Access.**
+
+3.  **Alignment Statistics Summary:**
+    * **What:** Report total reads, mapped reads, unmapped reads, and the mapping rate (%).
+    * **Why it's Useful:** Quick "health check" after alignment to spot major issues (e.g., low mapping).
+    * **Core Concept:** **Alignment Quality Control.**
+
+4.  **Region-Specific Alignment View:**
+    * **What:** Display core alignment details (Read Name, Flags, Position, Mapping Quality, CIGAR string) for reads within a user-specified genomic region (`CHROM:START-END`).
+    * **Why it's Useful:** Allows "eyeballing" reads in an area of interest, like a simplified genome browser view.
+    * **Core Concept:** **Targeted Data Exploration.**
+
+5.  **Alignment Filtering:**
+    * **What:** Filter displayed/extracted reads by minimum Mapping Quality (`MAPQ`) and common flags (e.g., remove unmapped, secondary, or PCR duplicates).
+    * **Why it's Useful:** Improves downstream analysis reliability by removing low-confidence or artifactual reads.
+    * **Core Concept:** **Alignment Data Quality Improvement.**
+
+6.  **Read Sequence Extraction & Analysis:**
+    * **What:** Extract the full sequence of a specific aligned read (by name or selection) and then allow existing `bio_functions` (e.g., nucleotide counting, GC content) to be applied to it.
+    * **Why it's Useful:** Lets you dig into the properties of individual reads after they've been aligned.
+    * **Core Concept:** **Integration & Granular Sequence Analysis.**
+
+### Error Management (Implicitly applies across all above):
+
+* **What:** Gracefully handle missing/corrupt files, index creation failures, and regions with no data.
+* **Why it's Useful:** Makes your tool robust and user-friendly, preventing crashes and guiding the user.
+* **Core Concept:** **Robustness and User Experience.**
+
+---
