@@ -18,8 +18,9 @@ def parse_sam_file(sam_file_name: str = ""):
         logger.error(f"Could not open {sam_file_name}: {e}")
         raise SamBamParsingError(e)
 
-    for read in sam_file.fetch("chr1", 100, 120):
+    for read in sam_file:
         print(read)
+
     sam_file.close()
     return
 
