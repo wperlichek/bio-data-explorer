@@ -141,7 +141,7 @@ def print_alignment_core_details(
             print(f"CIGAR: {read.cigarstring}")
             print("***")
     else:
-        for read in alignment_file.fetch():
+        for read in alignment_file.fetch(until_eof=True):
             print("***")
             print(f"QNAME: {read.query_name}")
             print(f"FLAG: {read.flag}")
