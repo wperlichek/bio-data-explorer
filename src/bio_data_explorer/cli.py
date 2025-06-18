@@ -100,6 +100,7 @@ def main() -> None:
             end = None
 
             if Path(bam_or_same_file_input).suffix == ".bam":
+                # TODO :: this is too brittle, e.g. putting empty for int causes exception
                 chrom = input("Enter chromosome (e.g. chr1):").strip().lower()
                 start = int(input("Enter start (1-based):").strip())
                 end = int(input("Enter end:").strip())
