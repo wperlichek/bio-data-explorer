@@ -11,9 +11,10 @@ class SamBamParsingError(Exception):
     pass
 
 
-def parse_sam_file(sam_file_name: str = ""):
+def parse_sam_bam_file(sam_file_name: str = ""):
+    mode = "r" if Path(sam_file_name).suffix == ".sam" else "rb"
     try:
-        sam_file = pysam.AlignmentFile(f"{data_directory_path}/{sam_file_name}", "r")
+        sam_file = pysam.AlignmentFile(f"{data_directory_path}/{sam_file_name}", mode)
     except Exception as e:
         logger.error(f"Could not open {sam_file_name}: {e}")
         raise SamBamParsingError(e)
@@ -22,8 +23,4 @@ def parse_sam_file(sam_file_name: str = ""):
         print(read)
 
     sam_file.close()
-    return
-
-
-def parse_bam_file():
     return
