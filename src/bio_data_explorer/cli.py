@@ -6,6 +6,7 @@ from .fastq_parser import parse_fastq_file
 from .vcf_parser import show_low_confidence_variants
 from .blast_client import make_blast_call, BlastDatabase, BlastProgram
 from .sam_bam_parser import parse_sam_or_bam_file, get_read_alignment_stats_summary
+from pysam import AlignmentFile
 
 logging.basicConfig(
     level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s"
@@ -91,6 +92,8 @@ def main() -> None:
             alignment_file = parse_sam_or_bam_file(bam_or_same_file_input)
             alignment_stats = get_read_alignment_stats_summary(alignment_file)
             print_alignment_summary(alignment_stats)
+            alignment_file.reset()
+            print_alignment_core_details(alignment_file)
         elif menu_choice == "7":
             logging.info("Exiting app")
             break
@@ -119,6 +122,17 @@ def print_alignment_summary(alignment_stats: Dict[str, int]):
     for k, v in alignment_stats.items():
         print(f"{k}: {v}")
     return
+
+
+def print_alignment_core_details(alignment_file: AlignmentFile):
+    print("Core aligment details for each read:")
+    for read in alignment_file.fetch():
+        print("***")
+        print(f"QNAME: {read.query_name}")
+        print(f"FLAG: {read.flag}")
+        print(f"MAPQ: {read.mapping_quality}")
+        print(f"CIGAR: {read.cigarstring}")
+        print("***")
 
 
 if __name__ == "__main__":
