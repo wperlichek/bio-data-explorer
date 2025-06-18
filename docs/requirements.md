@@ -260,13 +260,4 @@ As a bioinformatics data explorer, understanding and being able to work with the
     * **Action:** Filter out variants where the total depth (`DP` in the `INFO` field) is **less than 20**.
     * **Why:** Low read depth means there isn't enough sequencing data covering that specific genomic position, making the variant call unreliable. A minimum of 20 reads provides reasonable confidence.
 
-* **Output:**
-    * Generate a **new VCF file** containing only the variants that satisfy *all three* of the above criteria. Ensure the full header from the original VCF is copied to the new file.
-
-**Deliverable:**
-* The `filtered_variants.vcf` file.
-* A brief summary (2-3 sentences) explaining:
-    * How many variants were in the original file vs. the filtered file.
-    * Your understanding of *why* each filter was applied.
-
 ---
