@@ -21,10 +21,13 @@ def open_alignment_file(sam_or_bam_file_name: str = "") -> AlignmentFile:
             f"{data_directory_path}/{sam_or_bam_file_name}", mode
         )
         logger.info(f"Opened {sam_or_bam_file_name}")
-        if mode == "rb" and not alignment_file.check_index():  # a .bam file
+        if mode == "rb" and not alignment_file.has_index():  # a .bam file
             create_bai_from_bam_file(
                 sam_or_bam_file_name
             )  # TODO :: probably move this function somewhere, sep concerns
+            alignment_file = AlignmentFile(
+                f"{data_directory_path}/{sam_or_bam_file_name}", mode
+            )
     except Exception as e:
         logger.error(f"Could not open {sam_or_bam_file_name}: {e}")
         raise SamBamParsingError(e)

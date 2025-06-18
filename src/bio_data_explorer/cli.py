@@ -1,5 +1,5 @@
 import sys, logging
-from typing import Any, Dict
+from typing import Any, Dict, Optional
 from .gene_explorer import GenesExplorer
 from .fasta_parser import FastaParsingError, parse_fasta_file
 from .fastq_parser import parse_fastq_file
@@ -124,15 +124,30 @@ def print_alignment_summary(alignment_stats: Dict[str, int]):
     return
 
 
-def print_alignment_core_details(alignment_file: AlignmentFile):
+def print_alignment_core_details(
+    alignment_file: AlignmentFile,
+    chrom: Optional[str] = None,
+    start: Optional[int] = None,
+    end: Optional[int] = None,
+):
     print("Core aligment details for each read:")
-    for read in alignment_file.fetch():
-        print("***")
-        print(f"QNAME: {read.query_name}")
-        print(f"FLAG: {read.flag}")
-        print(f"MAPQ: {read.mapping_quality}")
-        print(f"CIGAR: {read.cigarstring}")
-        print("***")
+    if alignment_file.has_index() and chrom and start and end:
+        logging.info(f"Using region-specific alignment view at {chrom}:{start}:{end}")
+        for read in alignment_file.fetch(chrom, start, end):
+            print("***")
+            print(f"QNAME: {read.query_name}")
+            print(f"FLAG: {read.flag}")
+            print(f"MAPQ: {read.mapping_quality}")
+            print(f"CIGAR: {read.cigarstring}")
+            print("***")
+    else:
+        for read in alignment_file.fetch():
+            print("***")
+            print(f"QNAME: {read.query_name}")
+            print(f"FLAG: {read.flag}")
+            print(f"MAPQ: {read.mapping_quality}")
+            print(f"CIGAR: {read.cigarstring}")
+            print("***")
 
 
 if __name__ == "__main__":
