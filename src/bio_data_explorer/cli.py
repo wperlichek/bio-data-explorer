@@ -85,8 +85,10 @@ def main() -> None:
                 for variant in low_confidence_variants:
                     print(variant)
         elif menu_choice == "6":
-            parse_sam_or_bam_file("sample_alignments.bam")
-            create_bai_from_bam_file("sample_alignments.bam")
+            bam_or_same_file_input = (
+                input("Enter .sam or .bam file name: ").strip().lower()
+            )
+            parse_sam_or_bam_file(bam_or_same_file_input)
         elif menu_choice == "7":
             logging.info("Exiting app")
             break
