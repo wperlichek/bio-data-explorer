@@ -5,7 +5,7 @@ from .fasta_parser import FastaParsingError, parse_fasta_file
 from .fastq_parser import parse_fastq_file
 from .vcf_parser import show_low_confidence_variants
 from .blast_client import make_blast_call, BlastDatabase, BlastProgram
-from .sam_bam_parser import parse_sam_or_bam_file, get_read_alignment_stats_summary
+from .sam_bam_parser import open_alignment_file, get_read_alignment_stats_summary
 from pysam import AlignmentFile
 
 logging.basicConfig(
@@ -89,10 +89,10 @@ def main() -> None:
             bam_or_same_file_input = (
                 input("Enter .sam or .bam file name: ").strip().lower()
             )
-            alignment_file = parse_sam_or_bam_file(bam_or_same_file_input)
+            alignment_file = open_alignment_file(bam_or_same_file_input)
             alignment_stats = get_read_alignment_stats_summary(alignment_file)
             print_alignment_summary(alignment_stats)
-            alignment_file.reset()
+            alignment_file = open_alignment_file(bam_or_same_file_input)
             print_alignment_core_details(alignment_file)
         elif menu_choice == "7":
             logging.info("Exiting app")

@@ -13,16 +13,18 @@ class SamBamParsingError(Exception):
     pass
 
 
-def parse_sam_or_bam_file(sam_or_bam_file_name: str = "") -> AlignmentFile:
-    logger.info(f"Parsing {sam_or_bam_file_name}...")
+def open_alignment_file(sam_or_bam_file_name: str = "") -> AlignmentFile:
+    logger.info(f"Opening {sam_or_bam_file_name}...")
     mode = "r" if Path(sam_or_bam_file_name).suffix == ".sam" else "rb"
     try:
         alignment_file = AlignmentFile(
             f"{data_directory_path}/{sam_or_bam_file_name}", mode
         )
-        logger.info(f"Succesfully parsed {sam_or_bam_file_name}")
-        if mode == "rb":  # a .bam file
-            create_bai_from_bam_file(sam_or_bam_file_name)
+        logger.info(f"Opened {sam_or_bam_file_name}")
+        if mode == "rb" and not alignment_file.check_index():  # a .bam file
+            create_bai_from_bam_file(
+                sam_or_bam_file_name
+            )  # TODO :: probably move this function somewhere, sep concerns
     except Exception as e:
         logger.error(f"Could not open {sam_or_bam_file_name}: {e}")
         raise SamBamParsingError(e)
