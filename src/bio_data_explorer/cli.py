@@ -3,6 +3,7 @@ from typing import Any
 from .gene_explorer import GenesExplorer
 from .fasta_parser import FastaParsingError, parse_fasta_file
 from .fastq_parser import parse_fastq_file
+from .vcf_parser import show_low_confidence_variants
 from .blast_client import make_blast_call, BlastDatabase, BlastProgram
 
 logging.basicConfig(
@@ -28,14 +29,15 @@ def main() -> None:
     genes_explorer = GenesExplorer(genes)
 
     while True:
-        print("** Gene Sequence Explorer **")
+        print("** Bio Data Explorer **")
         print("1. List all genes")
         print("2. View sequence of gene")
         print("3. Count nucleotides of gene")
         print("4. Make BLAST call")
-        print("5. Exit application")
+        print("5. Show low confidence variants in VCF file")
+        print("6. Exit application")
 
-        menu_choice = input("Enter choice (1-4): ").strip()
+        menu_choice = input("Enter choice (1-6): ").strip()
 
         if menu_choice == "1":
             genes_explorer.print_all_genes()
@@ -70,6 +72,17 @@ def main() -> None:
             records = make_blast_call(BlastProgram.BLASTN, BlastDatabase.NT, sequence)
             print_blast_record(records)
         elif menu_choice == "5":
+            variant_file = input(
+                "Enter file_name of compressed .vcf file in data/, ex: file_name.vcf.gz:"
+            )
+            low_confidence_variants = show_low_confidence_variants(variant_file)
+            if len(low_confidence_variants) > 0:
+                print(
+                    "These are the low confidence variants in format CHROM:POS_REF>ALT(s):"
+                )
+                for variant in low_confidence_variants:
+                    print(variant)
+        elif menu_choice == "6":
             logging.info("Exiting app")
             break
         else:

@@ -6,11 +6,47 @@
 
 # Virtual Env
 
-```.venv\Scripts\Activate.ps1``` or ```source .venv/bin/activate```
+## Clear previous if needed:
+
+```deactivate```
+
+```cd ~/python-gene-tool/```
+
+```rm -rf .venv```
+
+## Basic venv setup:
+
+```python3.12 -m venv .venv```
+
+```source ./.venv/bin/activate```
 
 ```pip install -e ".[dev]"```
 
-```bio-data-explorer-cli```
+## cyvcf2
+
+### Installing `cyvcf2` on WSL Ubuntu with Python 3.12
+
+Getting `cyvcf2` to work requires installing several system-level build dependencies because it includes native C extensions that need to compile against libraries like `htslib` and compression libraries. Without these, you’ll run into errors related to missing build tools (`autoreconf`) or binary incompatibility with numpy.
+
+Install essential build tools and development libraries via `apt`:
+
+  ```bash
+  sudo apt update && sudo apt install -y build-essential libhts-dev libz-dev libbz2-dev liblzma-dev python3-dev autoconf automake libtool
+  ```
+
+```python3 -m venv .venv```
+
+```source .venv/bin/activate```
+
+```pip install --no-binary cyvcf2 cyvcf2```
+
+```import cyvcf2```
+
+```print(cyvcf2.__version__)```
+
+## Run app in venv:
+
+```bio-data-explorer-cli Optional[file_name]```
 
 # BLAST API
 

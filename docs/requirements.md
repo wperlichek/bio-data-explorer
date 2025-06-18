@@ -238,4 +238,26 @@ As a bioinformatics data explorer, understanding and being able to work with the
 
 7.  **User Interface: Support configurable parameters via command-line arguments.**
     * **Why in real life:** Bioinformatics pipelines are rarely run manually for each step. Scripts need to be automated and reusable. Different experiments or datasets might require different quality thresholds or minimum lengths. Hardcoding these values would make your script inflexible.
-    * **Core Concept:** **Automation, Reusability, and Parameterization.** Using `argparse` allows users to easily provide input/output file paths and adjust parameters without modifying the code itself, making your script a proper, versatile command-line tool suitable for integration into larger automated workflows. This is a hallmark of good scientific software development.
+    * **Core Concept:** **Automation, Reusability, and Parameterization.** Using `argparse` allows users to easily provide input/output file paths and adjust parameters without modifying the code itself, making your script a proper, versatile command-line tool suitable for integration into larger automated workflows. This is a hallmark of good scientific software development
+    
+---
+
+**Project: VCF Quality Control & Initial Filtering**
+
+**Objective:** Produce a clean, high-confidence VCF file suitable for downstream analysis by applying standard quality filters. This phase ensures we only proceed with the most reliable variant calls.
+
+**Requirements:**
+
+* **Filter 1: Passed Filters Only**
+    * **Action:** Exclude any variant explicitly marked in the `FILTER` column (i.e., keep only `PASS` variants or those with an empty `FILTER` field).
+    * **Why:** These flags indicate the variant caller itself identified issues with the call quality or evidence, so we remove them as a first pass.
+
+* **Filter 2: Minimum Variant Quality (QUAL)**
+    * **Action:** Retain only variants with a `QUAL` score of **at least 30.0**.
+    * **Why:** A `QUAL` score of 30 implies a 1 in 1000 chance of the variant call being wrong. This threshold is common for high-confidence variants.
+
+* **Filter 3: Minimum Read Depth (INFO DP)**
+    * **Action:** Filter out variants where the total depth (`DP` in the `INFO` field) is **less than 20**.
+    * **Why:** Low read depth means there isn't enough sequencing data covering that specific genomic position, making the variant call unreliable. A minimum of 20 reads provides reasonable confidence.
+
+---
