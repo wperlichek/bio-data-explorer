@@ -26,14 +26,14 @@ def show_low_confidence_variants(vcf_file_name: str = "") -> List[str]:
         qual = float(variant.QUAL)  # type: ignore
         info_dp = int(variant.INFO.get("DP"))  # type: ignore
         variant_identifer = f"{variant.CHROM}:{variant.POS}_{variant.REF}>{" ".join(variant.ALT)}"  # type: ignore
-        if low_confidence_variant(filter, qual, info_dp, variant_identifer):  # type: ignore
+        if is_low_confidence_variant(filter, qual, info_dp, variant_identifer):  # type: ignore
             logger.warning(f"Filtering out variant {variant_identifer}")
             low_confidence_variants.append(variant_identifer)
 
     return low_confidence_variants
 
 
-def low_confidence_variant(
+def is_low_confidence_variant(
     filter: str = "", qual: float = 0.0, info_dp: int = 0, variant_identifer: str = ""
 ) -> bool:
     if filter != "None":
