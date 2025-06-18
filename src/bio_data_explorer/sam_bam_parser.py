@@ -1,4 +1,4 @@
-import logging
+import logging, os
 from pathlib import Path
 from typing import Dict
 import pysam
@@ -35,15 +35,14 @@ def open_alignment_file(sam_or_bam_file_name: str = "") -> AlignmentFile:
 
 
 def create_bai_from_bam_file(bam_file_name: str = ""):
-    bai_index_file = f"{data_directory_path}/sorted_{bam_file_name}"
-    logger.info(f"Creating index for {bam_file_name} at {bai_index_file}")
-    pysam.sort(
-        "-o",
-        bai_index_file,
-        f"{data_directory_path}/{bam_file_name}",
-    )
-    pysam.index(bai_index_file)
-    logger.info(f"Created index {bai_index_file}")
+    bam_file_full_location = f"{data_directory_path}/{bam_file_name}"
+    temp_sorted_file = f"{bam_file_full_location}.tmp_sorted.bam"
+    logger.info(f"Sorting {bam_file_name}")
+    pysam.sort("-o", temp_sorted_file, bam_file_full_location)
+    os.replace(temp_sorted_file, bam_file_full_location)
+    logger.info(f"Creating index {bam_file_full_location}.bai")
+    pysam.index(bam_file_full_location)
+    logger.info(f"Created index {bam_file_full_location}.bai")
 
 
 def get_read_alignment_stats_summary(alignment_file: AlignmentFile):

@@ -144,7 +144,9 @@ def print_alignment_core_details(
     print("Core aligment details for each read:")
     print(f"Has index: {alignment_file.has_index()}")
     if alignment_file.has_index() and chrom and start and end:
-        logging.info(f"Using region-specific alignment view at {chrom}:{start}:{end}")
+        logging.info(
+            f"Using region-specific alignment view at {chrom} in range {start}:{end}"
+        )
         for read in alignment_file.fetch(chrom, start, end):
             print("***")
             print(f"QNAME: {read.query_name}")
