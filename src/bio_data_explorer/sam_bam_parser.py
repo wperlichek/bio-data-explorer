@@ -11,7 +11,7 @@ class SamBamParsingError(Exception):
     pass
 
 
-def parse_sam_bam_file(sam_file_name: str = ""):
+def parse_sam_or_bam_file(sam_file_name: str = ""):
     mode = "r" if Path(sam_file_name).suffix == ".sam" else "rb"
     try:
         sam_file = pysam.AlignmentFile(f"{data_directory_path}/{sam_file_name}", mode)
