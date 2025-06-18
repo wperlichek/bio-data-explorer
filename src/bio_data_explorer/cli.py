@@ -151,6 +151,7 @@ def print_alignment_core_details(
         for read in alignment_file.fetch(chrom, start, end):
             print("***")
             print(f"QNAME: {read.query_name}")
+            print(f"SEQ: {read.query_sequence}")
             print(f"FLAG: {read.flag}")
             print(f"MAPQ: {read.mapping_quality}")
             print(f"CIGAR: {read.cigarstring}")
@@ -159,6 +160,7 @@ def print_alignment_core_details(
         for read in alignment_file.fetch(until_eof=True):
             print("***")
             print(f"QNAME: {read.query_name}")
+            print(f"SEQ: {read.query_sequence}")
             print(f"FLAG: {read.flag}")
             print(f"MAPQ: {read.mapping_quality}")
             print(f"CIGAR: {read.cigarstring}")
