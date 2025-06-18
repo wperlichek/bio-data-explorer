@@ -19,3 +19,27 @@ The SAM file's header section, marked by lines starting with `@`, contains essen
 @RG: Read Group line detailing the source of reads (e.g., sample, library, platform).
 @PG: Program line describing the software and command used to process the file.
 ```
+
+The alignment section below the header section has 11 mandatory fields:
+
+``````
+read_A001_1	99	chr1	1000	60	100M	=	1150	250	TGGAGGTGCCTTCAGGATTGAAGGGGCCGTGTTGTATGTGGGTTTTTCTGAATCTAGGAGGGAAAGTAGAATAAAAGGCTGAGATTTATTTCCAGCTTCTCCCAGA	JJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJ	NM:i:1	MD:Z:99G0	AS:i:95	NH:i:1	RG:Z:sample1_lib1
+
+QNAME: The name of the sequencing read.
+FLAG: A numerical flag encoding various properties of the alignment.
+RNAME: The name of the reference sequence (e.g., chromosome) the read mapped to.
+POS: The 1-based leftmost mapping position of the read on the reference.
+MAPQ: Mapping Quality, indicating how confidently the read mapped to this location.
+CIGAR: A string describing the alignment operations (matches, mismatches, indels, clipping).
+MRNM: Reference name of the mate read (or '=' if same as RNAME).
+MPOS: 1-based leftmost mapping position of the mate read.
+TLEN: Inferred template length (insert size) for paired-end reads.
+SEQ: The actual nucleotide sequence of the read.
+QUAL: Base quality scores for each nucleotide in the sequence.
+NM: Number of mismatches or edit distance. (Optional)
+MD: Mismatch/deletion description against the reference sequence.  (Optional)
+AS: Aligner's calculated alignment score.  (Optional)
+NH: Number of genomic locations this read mapped to (number of hits).  (Optional)
+RG: Read group identifier linking to an @RG header record.  (Optional)
+```
+
