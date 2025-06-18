@@ -262,7 +262,7 @@ As a bioinformatics data explorer, understanding and being able to work with the
 
 ---
 
-# Bioinformatics CLI Tool - Requirements (Part 4 - Concise)
+# Bioinformatics CLI Tool - Requirements
 
 ## I. Aligned Read Analysis (SAM/BAM Support)
 
