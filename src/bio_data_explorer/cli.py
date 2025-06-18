@@ -1,5 +1,6 @@
 import sys, logging
 from typing import Any, Dict, Optional
+from pathlib import Path
 from .gene_explorer import GenesExplorer
 from .fasta_parser import FastaParsingError, parse_fasta_file
 from .fastq_parser import parse_fastq_file
@@ -93,7 +94,17 @@ def main() -> None:
             alignment_stats = get_read_alignment_stats_summary(alignment_file)
             print_alignment_summary(alignment_stats)
             alignment_file = open_alignment_file(bam_or_same_file_input)
-            print_alignment_core_details(alignment_file)
+
+            chrom = None
+            start = None
+            end = None
+
+            if Path(bam_or_same_file_input).suffix == ".bam":
+                chrom = input("Enter chromosome (e.g. chr1):").strip().lower()
+                start = int(input("Enter start (1-based):").strip())
+                end = int(input("Enter end:").strip())
+
+            print_alignment_core_details(alignment_file, chrom, start, end)
         elif menu_choice == "7":
             logging.info("Exiting app")
             break
@@ -131,6 +142,7 @@ def print_alignment_core_details(
     end: Optional[int] = None,
 ):
     print("Core aligment details for each read:")
+    print(f"Has index: {alignment_file.has_index()}")
     if alignment_file.has_index() and chrom and start and end:
         logging.info(f"Using region-specific alignment view at {chrom}:{start}:{end}")
         for read in alignment_file.fetch(chrom, start, end):
