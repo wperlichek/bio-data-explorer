@@ -1,11 +1,11 @@
 import sys, logging
-from typing import Any
+from typing import Any, Dict
 from .gene_explorer import GenesExplorer
 from .fasta_parser import FastaParsingError, parse_fasta_file
 from .fastq_parser import parse_fastq_file
 from .vcf_parser import show_low_confidence_variants
 from .blast_client import make_blast_call, BlastDatabase, BlastProgram
-from .sam_bam_parser import parse_sam_or_bam_file
+from .sam_bam_parser import parse_sam_or_bam_file, get_read_alignment_stats_summary
 
 logging.basicConfig(
     level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s"
@@ -88,7 +88,9 @@ def main() -> None:
             bam_or_same_file_input = (
                 input("Enter .sam or .bam file name: ").strip().lower()
             )
-            parse_sam_or_bam_file(bam_or_same_file_input)
+            alignment_file = parse_sam_or_bam_file(bam_or_same_file_input)
+            alignment_stats = get_read_alignment_stats_summary(alignment_file)
+            print_alignment_summary(alignment_stats)
         elif menu_choice == "7":
             logging.info("Exiting app")
             break
@@ -96,6 +98,7 @@ def main() -> None:
             print("Invalid choice")
 
 
+# TODO :: these "print" functions should probably be in utils
 def print_blast_record(blast_records: Any = None) -> None:
     for record in blast_records:
         print("****")
@@ -109,6 +112,13 @@ def print_blast_record(blast_records: Any = None) -> None:
                 print(f"Score: {hsp.score}")
                 print(f"E-Value: {hsp.expect}")
         print("****")
+
+
+def print_alignment_summary(alignment_stats: Dict[str, int]):
+    print("Alignment stats:")
+    for k, v in alignment_stats.items():
+        print(f"{k}: {v}")
+    return
 
 
 if __name__ == "__main__":

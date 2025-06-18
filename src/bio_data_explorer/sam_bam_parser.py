@@ -54,7 +54,7 @@ def get_read_alignment_stats_summary(alignment_file: AlignmentFile):
 
         reads_count += 1
 
-    mapping_rate_percentage = int(round(mapped_reads / reads_count) * 100)
+    mapping_rate_percentage = int(round(mapped_reads / reads_count, 2) * 100)
 
     alignment_stats: Dict[str, int] = {}
 
