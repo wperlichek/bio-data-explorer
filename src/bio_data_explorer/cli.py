@@ -5,7 +5,7 @@ from .fasta_parser import FastaParsingError, parse_fasta_file
 from .fastq_parser import parse_fastq_file
 from .vcf_parser import show_low_confidence_variants
 from .blast_client import make_blast_call, BlastDatabase, BlastProgram
-from .sam_bam_parser import parse_sam_or_bam_file, create_bai_from_bam_file
+from .sam_bam_parser import parse_sam_or_bam_file
 
 logging.basicConfig(
     level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s"
