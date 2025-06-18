@@ -5,6 +5,7 @@ from .fasta_parser import FastaParsingError, parse_fasta_file
 from .fastq_parser import parse_fastq_file
 from .vcf_parser import show_low_confidence_variants
 from .blast_client import make_blast_call, BlastDatabase, BlastProgram
+from .sam_bam_parser import parse_sam_file
 
 logging.basicConfig(
     level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s"
@@ -35,9 +36,10 @@ def main() -> None:
         print("3. Count nucleotides of gene")
         print("4. Make BLAST call")
         print("5. Show low confidence variants in VCF file")
-        print("6. Exit application")
+        print("6. Sam analysis")
+        print("7. Exit application")
 
-        menu_choice = input("Enter choice (1-6): ").strip()
+        menu_choice = input("Enter choice (1-7): ").strip()
 
         if menu_choice == "1":
             genes_explorer.print_all_genes()
@@ -83,6 +85,8 @@ def main() -> None:
                 for variant in low_confidence_variants:
                     print(variant)
         elif menu_choice == "6":
+            parse_sam_file("sample_alignments.sam")
+        elif menu_choice == "7":
             logging.info("Exiting app")
             break
         else:
