@@ -14,8 +14,9 @@ class FastaParsingError(Exception):
 
 def parse_fasta_file(fasta_file_name: str = "") -> List[Gene]:
     """
-    Manually parses a FASTA file, assuming only DNA bases, and returns a list of Genes.
-    For production, use Biopython's SeqIO (see fastq_parser.py). This implementation is to learn the format.
+    Manually parses a FASTA file, assuming only DNA bases.
+    For production, use Biopython's SeqIO (see fastq_parser.py).
+    This implementation is to learn the format.
     """
 
     try:
