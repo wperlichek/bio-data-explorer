@@ -1,6 +1,12 @@
-from bio_data_explorer import fastq_parser as fqp
+from bio_data_explorer import fastq_parser as fp
+from .config import path_config as test_path_config
 
-# def test_test_parse_fastq_file_keeps_good_reads():
+
+def test_test_parse_fastq_file_keeps_good_reads():
+    file_name = "sample_genes_good_format.fastq.gz"
+    expected_genes_parsed = 5
+    genes = fp.parse_fastq_file(f"{test_path_config.FASTQ_PATH}/{file_name}")
+    assert len(genes) == expected_genes_parsed
 
 
 # def test_quality_trim_sequence_end_retains_original_for_good_reads():
