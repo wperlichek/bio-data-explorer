@@ -3,8 +3,6 @@ from Bio import SeqIO
 import logging, gzip
 from .gene_explorer import Gene
 
-FILE_TYPE_FASTQ = "fastq"
-
 UNKNOWN_BASES_THRESHOLD_PERCENTAGE_TO_OMIT_READ = 5
 
 MIN_PHRED_QUALITY_TO_KEEP_WHILE_TRIMMING_END = 20
@@ -24,7 +22,7 @@ def parse_fastq_file(fastq_file_name: str = "") -> List[Gene]:
             genes: List[Gene] = []
             try:
                 # https://biopython.org/wiki/SeqIO
-                for record in SeqIO.parse(fastq_file, FILE_TYPE_FASTQ):  # type: ignore
+                for record in SeqIO.parse(fastq_file, "fastq"):  # type: ignore
                     seq = str(record.seq)  # type: ignore
                     phred_qualities: List[int] = record.letter_annotations["phred_quality"]  # type: ignore
                     if valid_sequence(seq, phred_qualities):  # type: ignore
