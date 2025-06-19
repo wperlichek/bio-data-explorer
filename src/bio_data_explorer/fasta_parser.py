@@ -12,11 +12,11 @@ class FastaParsingError(Exception):
     pass
 
 
-def parse_fasta_file(genes_file: str = "") -> List[Gene]:
+def parse_fasta_file(fasta_file_name: str = "") -> List[Gene]:
     genes: List[Gene] = []
     try:
         with gzip.open(
-            f"{path_config.DATA_DIR}/{genes_file}",
+            f"{path_config.DATA_DIR}/{fasta_file_name}",
             "rt",
             encoding="utf-8",
         ) as File:
@@ -59,7 +59,7 @@ def parse_fasta_file(genes_file: str = "") -> List[Gene]:
                 genes.append(Gene(identifier, description, sequence.upper()))
         return genes
     except FileNotFoundError as e:
-        logger.error(f"Could not open {genes_file}: {e.strerror}")
+        logger.error(f"Could not open {fasta_file_name}: {e.strerror}")
         raise FastaParsingError(e)
 
 
