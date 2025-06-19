@@ -20,9 +20,9 @@ def main() -> None:
     try:
         genes_file = sys.argv[1] if len(sys.argv) > 1 else DEFAULT_GENES_FILE
         if "fasta" in genes_file:  # TODO :: stricter parsing requirements
-            genes = parse_fasta_file(f"{path_config.DATA_DIR}/{genes_file}")
+            genes = parse_fasta_file(f"{path_config.FASTA_PATH}/{genes_file}")
         else:
-            genes = parse_fastq_file(f"{path_config.DATA_DIR}/{genes_file}")
+            genes = parse_fastq_file(f"{path_config.FASTQ_PATH}/{genes_file}")
     except FastaParsingError as e:
         logging.critical(f"Application can't start due to {e}, exiting application")
         sys.exit(1)
@@ -77,7 +77,9 @@ def main() -> None:
             variant_file = input(
                 "Enter file_name of compressed .vcf file in data/, ex: file_name.vcf.gz:"
             )
-            low_confidence_variants = show_low_confidence_variants(variant_file)
+            low_confidence_variants = show_low_confidence_variants(
+                f"{path_config.VCF_PATH}/{variant_file}"
+            )
             if len(low_confidence_variants) > 0:
                 print(
                     "These are the low confidence variants in format CHROM:POS_REF>ALT(s):"
@@ -88,10 +90,14 @@ def main() -> None:
             bam_or_same_file_input = (
                 input("Enter .sam or .bam file name: ").strip().lower()
             )
-            alignment_file = open_alignment_file(bam_or_same_file_input)
+            alignment_file = open_alignment_file(
+                f"{path_config.SAM_BAM_PATH}/{bam_or_same_file_input}"
+            )
             alignment_stats = get_read_alignment_stats_summary(alignment_file)
             print_alignment_summary(alignment_stats)
-            alignment_file = open_alignment_file(bam_or_same_file_input)
+            alignment_file = open_alignment_file(
+                f"{path_config.SAM_BAM_PATH}/{bam_or_same_file_input}"
+            )
 
             chrom = None
             start = None

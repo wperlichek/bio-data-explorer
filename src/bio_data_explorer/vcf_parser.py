@@ -1,9 +1,6 @@
 import logging
-from pathlib import Path
 from typing import List
 from cyvcf2 import VCF  # type: ignore
-
-data_directory_path = Path(__file__).resolve().parent.parent.parent / "data"
 
 logger = logging.getLogger(__name__)
 
@@ -13,7 +10,7 @@ MIN_INFO_DP = 20
 
 def show_low_confidence_variants(vcf_file_name: str = "") -> List[str]:
     try:
-        vcf = VCF(f"{data_directory_path}/{vcf_file_name}")  # type: ignore
+        vcf = VCF(vcf_file_name)  # type: ignore
     except Exception as e:
         logger.error(f"Could not open {vcf_file_name}: {e}")
 
