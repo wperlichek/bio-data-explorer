@@ -1,5 +1,6 @@
 import pytest
 from bio_data_explorer import fasta_parser as fp
+from config import path_config as test_path_config
 
 
 def test_parse_fasta_file_missing_file():
