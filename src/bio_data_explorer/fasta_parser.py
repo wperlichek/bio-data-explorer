@@ -56,7 +56,11 @@ def parse_fasta_file(fasta_file_name: str = "") -> List[Gene]:
                         logger.warning(
                             f"{line} is not formatted correctly, skipping this entire FASTA record"
                         )
-                        if sequence and not found_format_problem:
+                        if (
+                            stripped_line[0] == ">"
+                            and sequence
+                            and not found_format_problem
+                        ):
                             genes.append(
                                 Gene(identifier, description, sequence.upper())
                             )
