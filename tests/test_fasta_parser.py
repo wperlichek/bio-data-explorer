@@ -8,6 +8,13 @@ def test_parse_fasta_file_missing_file():
         fp.parse_fasta_file("file_doesnt_exist.txt")
 
 
+def test_parse_fasta_file_returns_all_records_if_formatted_correctly():
+    file_name = "sample_genes_good_format.fasta.gz"
+    expected_genes_parsed = 11
+    genes = fp.parse_fasta_file(f"{test_path_config.DATA_DIR}/{file_name}")
+    assert len(genes) == expected_genes_parsed
+
+
 def test_parse_fasta_file_exludes_records_missing_identifier():
     file_name = "sample_genes_bad_header.fasta.gz"
     original_record_count = 11
