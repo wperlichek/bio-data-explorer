@@ -71,6 +71,11 @@ def parse_fasta_file(fasta_file_name: str = "") -> List[Gene]:
 
 
 def _line_is_formatted_correctly(line: str = "") -> bool:
+    """
+    Basic validation function to check FASTA formatting for this app
+    Returns false if there is not at least an identifier in header line
+    Returns false if any non-DNA base found in sequence
+    """
     if line[0] == ">":
         there_are_contents = len(line) > 1
         if there_are_contents:
