@@ -17,6 +17,11 @@ class FastqParsingError(Exception):
 
 
 def parse_fastq_file(fastq_file_name: str = "") -> List[Gene]:
+    """
+    Uses Biopython to parse the fastq file and return Genes
+    Excludes low-quality reads based on sequence length and base composition
+    """
+
     try:
         with gzip.open(fastq_file_name, "rt", encoding="utf-8") as fastq_file:
             try:
