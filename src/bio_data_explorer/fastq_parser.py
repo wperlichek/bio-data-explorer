@@ -26,7 +26,7 @@ def parse_fastq_file(fastq_file_name: str = "") -> List[Gene]:
         with gzip.open(fastq_file_name, "rt", encoding="utf-8") as fastq_file:
             try:
                 genes: List[Gene] = []
-                # See https://biopython.org/wiki/SeqIO for SeqRecord fields
+                # See https://biopython.org/wiki/SeqIO for seq_record fields
                 for seq_record in SeqIO.parse(fastq_file, "fastq"):  # type: ignore
                     seq = str(seq_record.seq)  # type: ignore
                     phred_qualities: List[int] = seq_record.letter_annotations["phred_quality"]  # type: ignore
