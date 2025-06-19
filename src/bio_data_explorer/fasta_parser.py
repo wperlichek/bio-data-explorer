@@ -22,7 +22,7 @@ def parse_fasta_file(fasta_file_name: str = "") -> List[Gene]:
 
     try:
         with gzip.open(
-            f"{path_config.DATA_DIR}/{fasta_file_name}",
+            fasta_file_name,
             "rt",
             encoding="utf-8",
         ) as fasta_file:

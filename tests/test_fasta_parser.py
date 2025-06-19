@@ -1,5 +1,4 @@
 import pytest
-from .config import path_config as test_path_config
 from bio_data_explorer import fasta_parser as fp
 
 
