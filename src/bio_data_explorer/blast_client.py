@@ -1,6 +1,7 @@
 from Bio.Blast import NCBIWWW, NCBIXML, Record
 from enum import Enum
 from typing import Iterator, Optional
+from unittest.mock import patch
 import logging
 
 logger = logging.getLogger(__name__)
