@@ -89,4 +89,9 @@ def _quality_trim_sequence_end(
         if phred_qualities[idx] < MIN_PHRED_QUALITY_TO_KEEP_WHILE_TRIMMING_END:
             first_bad_read_idx = idx
             break
-    return sequence if first_bad_read_idx == -1 else sequence[0:first_bad_read_idx]
+    final_sequence = (
+        sequence if first_bad_read_idx == -1 else sequence[0:first_bad_read_idx]
+    )
+    if len(final_sequence) < len(sequence):
+        logger.warning(f"Trimmed sequence {sequence} down to {final_sequence}")
+    return final_sequence
