@@ -10,4 +10,19 @@ def test_parse_fasta_file_missing_file():
 
 def test_parse_fasta_file_exludes_records_missing_identifier():
     file_name = "sample_genes_bad_header.fasta.gz"
-    fp.parse_fasta_file(f"{test_path_config.DATA_DIR}/{file_name}")
+    original_record_count = 11
+    expected_genes_parsed = (
+        original_record_count - 1
+    )  # contains 1 record with missing identifier
+    genes = fp.parse_fasta_file(f"{test_path_config.DATA_DIR}/{file_name}")
+    assert len(genes) == expected_genes_parsed
+
+
+def test_parse_fasta_file_exludes_records_with_non_dna_bases():
+    file_name = "sample_genes_bad_bases.fasta.gz"
+    original_record_count = 11
+    expected_genes_parsed = (
+        original_record_count - 3
+    )  # contains 3 records with bases that are non-DNA bases
+    genes = fp.parse_fasta_file(f"{test_path_config.DATA_DIR}/{file_name}")
+    assert len(genes) == expected_genes_parsed
