@@ -16,4 +16,6 @@ def test_make_blast_uses_qblast():
         seq = "AGCTAG"
         mock_call.return_value = "mock_handle"
         result = bc.make_blast_call(bc.BlastProgram.BLASTN, bc.BlastDatabase.NT, seq)
-        mock_call.assert_called_once_with("blastn", "nt", seq)
+        mock_call.assert_called_once_with(
+            bc.BlastProgram.BLASTN, bc.BlastDatabase.NT, seq
+        )
