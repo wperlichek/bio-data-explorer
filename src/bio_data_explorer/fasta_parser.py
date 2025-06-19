@@ -3,7 +3,7 @@ from typing import List
 from .gene_explorer import Gene
 from .config import path_config
 
-FASTA_SEQUENCE_CHARS_DNA = {"ACGT"}
+FASTA_SEQUENCE_CHARS_DNA_ONLY = {"ACGT"}
 
 logger = logging.getLogger(__name__)
 
@@ -73,7 +73,7 @@ def _line_is_formatted_correctly(line: str = "") -> bool:
             return False
     else:
         for ch in line:
-            if ch not in FASTA_SEQUENCE_CHARS_DNA:
-                logger.warning(f"Found non-FASTA character {ch} in {line}")
+            if ch not in FASTA_SEQUENCE_CHARS_DNA_ONLY:
+                logger.warning(f"Found non-DNA FASTA character {ch} in {line}")
                 return False
         return True
