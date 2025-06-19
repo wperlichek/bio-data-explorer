@@ -19,18 +19,18 @@ class FastqParsingError(Exception):
 def parse_fastq_file(fastq_file_name: str = "") -> List[Gene]:
     try:
         with gzip.open(fastq_file_name, "rt", encoding="utf-8") as fastq_file:
-            genes: List[Gene] = []
             try:
+                genes: List[Gene] = []
                 # https://biopython.org/wiki/SeqIO
                 for record in SeqIO.parse(fastq_file, "fastq"):  # type: ignore
                     seq = str(record.seq)  # type: ignore
                     phred_qualities: List[int] = record.letter_annotations["phred_quality"]  # type: ignore
                     if valid_sequence(seq, phred_qualities):  # type: ignore
                         genes.append(Gene(record.id, record.description, seq, phred_qualities))  # type: ignore
+                return genes
             except Exception as e:
                 logger.error(f"Could not parse fastq file: {e}")
                 raise (FastqParsingError(e))
-            return genes
     except FileNotFoundError as e:
         logger.error(f"Could not open {fastq_file_name}: {e.strerror}")
         raise FastqParsingError(e)
