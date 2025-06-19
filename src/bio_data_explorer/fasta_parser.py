@@ -1,7 +1,6 @@
 import logging, gzip
 from typing import List
 from .gene_explorer import Gene
-from .config import path_config
 
 FASTA_SEQUENCE_CHARS_DNA_ONLY = {"A", "C", "G", "T"}
 
