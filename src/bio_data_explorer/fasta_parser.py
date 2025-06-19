@@ -3,7 +3,7 @@ from typing import List
 from .gene_explorer import Gene
 from .config import path_config
 
-FASTA_SEQUENCE_CHARS_DNA_ONLY = {"ACGT"}
+FASTA_SEQUENCE_CHARS_DNA_ONLY = {"A", "C", "G", "T"}
 
 logger = logging.getLogger(__name__)
 
