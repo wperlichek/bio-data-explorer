@@ -35,7 +35,7 @@ def parse_fastq_file(fastq_file_name: str = "") -> List[Gene]:
                         genes.append(Gene(seq_record.id, seq_record.description, trimmed_seq, phred_qualities[0 : len(trimmed_seq)]))  # type: ignore
                 return genes
             except Exception as e:
-                logger.error(f"Could not parse fastq file: {e}")
+                logger.error(f"Could not parse {fastq_file_name}: {e}")
                 raise (FastqParsingError(e))
     except FileNotFoundError as e:
         logger.error(f"Could not open {fastq_file_name}: {e.strerror}")
