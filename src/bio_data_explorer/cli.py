@@ -22,7 +22,7 @@ def main() -> None:
         if "fasta" in genes_file:  # TODO :: stricter parsing requirements
             genes = parse_fasta_file(f"{path_config.DATA_DIR}/{genes_file}")
         else:
-            genes = parse_fastq_file(genes_file)
+            genes = parse_fastq_file(f"{path_config.DATA_DIR}/{genes_file}")
     except FastaParsingError as e:
         logging.critical(f"Application can't start due to {e}, exiting application")
         sys.exit(1)

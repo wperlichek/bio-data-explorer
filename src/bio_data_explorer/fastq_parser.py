@@ -1,10 +1,7 @@
 from typing import List
 from Bio import SeqIO
-from pathlib import Path
 import logging, gzip
 from .gene_explorer import Gene
-
-data_directory_path = Path(__file__).resolve().parent.parent.parent / "data"
 
 FILE_TYPE_FASTQ = "fastq"
 
@@ -23,9 +20,7 @@ class FastqParsingError(Exception):
 
 def parse_fastq_file(fastq_file_name: str = "") -> List[Gene]:
     try:
-        with gzip.open(
-            f"{data_directory_path}/{fastq_file_name}", "rt", encoding="utf-8"
-        ) as fastq_file:
+        with gzip.open(fastq_file_name, "rt", encoding="utf-8") as fastq_file:
             genes: List[Gene] = []
             try:
                 # https://biopython.org/wiki/SeqIO
