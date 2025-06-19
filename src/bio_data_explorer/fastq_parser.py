@@ -19,6 +19,7 @@ class FastqParsingError(Exception):
 def parse_fastq_file(fastq_file_name: str = "") -> List[Gene]:
     """
     Uses Biopython to parse the fastq file
+    Trims low-quality bases from 3' end of each sequence
     Excludes low-quality reads based on sequence length and base composition
     """
 
