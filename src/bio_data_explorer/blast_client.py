@@ -26,6 +26,7 @@ def make_blast_call(
         program = BlastProgram.BLASTN
     if database is None:
         database = BlastDatabase.NT
+
     try:
         result_handle = NCBIWWW.qblast(program.value, database.value, sequence)
     except Exception as e:
