@@ -25,7 +25,7 @@ def parse_fastq_file(fastq_file_name: str = "") -> List[Gene]:
                 for record in SeqIO.parse(fastq_file, "fastq"):  # type: ignore
                     seq = str(record.seq)  # type: ignore
                     phred_qualities: List[int] = record.letter_annotations["phred_quality"]  # type: ignore
-                    if valid_sequence(seq, phred_qualities):  # type: ignore
+                    if _valid_sequence(seq, phred_qualities):  # type: ignore
                         genes.append(Gene(record.id, record.description, seq, phred_qualities))  # type: ignore
                 return genes
             except Exception as e:
@@ -36,7 +36,7 @@ def parse_fastq_file(fastq_file_name: str = "") -> List[Gene]:
         raise FastqParsingError(e)
 
 
-def valid_sequence(sequence: str = "", phred_qualities: List[int] = []) -> bool:
+def _valid_sequence(sequence: str = "", phred_qualities: List[int] = []) -> bool:
 
     if len(sequence) < MIN_SEQUENCE_READ_LEN:
         logger.warning(
@@ -44,13 +44,13 @@ def valid_sequence(sequence: str = "", phred_qualities: List[int] = []) -> bool:
         )
         return False
 
-    if should_discard_read_due_to_high_unknown_base_count(sequence):
+    if _should_discard_read_due_to_high_unknown_base_count(sequence):
         logger.warning(
             f"Discarding sequence {sequence} because high % of unknown bases, max threshold is {UNKNOWN_BASES_THRESHOLD_PERCENTAGE_TO_OMIT_READ}%"
         )
         return False
 
-    trimmed_sequence = quality_trim_sequence_end(sequence, phred_qualities)
+    trimmed_sequence = _quality_trim_sequence_end(sequence, phred_qualities)
 
     if len(trimmed_sequence) < MIN_SEQUENCE_READ_LEN:
         logger.warning(
@@ -61,7 +61,7 @@ def valid_sequence(sequence: str = "", phred_qualities: List[int] = []) -> bool:
     return True
 
 
-def should_discard_read_due_to_high_unknown_base_count(sequence: str = "") -> bool:
+def _should_discard_read_due_to_high_unknown_base_count(sequence: str = "") -> bool:
     if sequence == "":
         logger.warning(
             "Must provide a sequence to check its unknown base count, returning False without analysis"
@@ -75,7 +75,7 @@ def should_discard_read_due_to_high_unknown_base_count(sequence: str = "") -> bo
     return percentage_unknowns >= UNKNOWN_BASES_THRESHOLD_PERCENTAGE_TO_OMIT_READ
 
 
-def quality_trim_sequence_end(
+def _quality_trim_sequence_end(
     sequence: str = "", phred_qualities: List[int] = []
 ) -> str:
     first_bad_read_idx = -1
