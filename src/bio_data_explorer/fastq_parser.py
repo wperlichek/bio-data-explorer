@@ -18,7 +18,7 @@ class FastqParsingError(Exception):
 
 def parse_fastq_file(fastq_file_name: str = "") -> List[Gene]:
     """
-    Uses Biopython to parse the fastq file and return Genes
+    Uses Biopython to parse the fastq file
     Excludes low-quality reads based on sequence length and base composition
     """
 
@@ -27,12 +27,21 @@ def parse_fastq_file(fastq_file_name: str = "") -> List[Gene]:
             try:
                 genes: List[Gene] = []
                 # See https://biopython.org/wiki/SeqIO for seq_record fields
-                for seq_record in SeqIO.parse(fastq_file, "fastq"):  # type: ignore
-                    seq = str(seq_record.seq)  # type: ignore
-                    phred_qualities: List[int] = seq_record.letter_annotations["phred_quality"]  # type: ignore
-                    if _valid_sequence(seq, phred_qualities):  # type: ignore
+                for seq_record in SeqIO.parse(fastq_file, "fastq"):
+                    seq = str(seq_record.seq)
+                    phred_qualities: List[int] = seq_record.letter_annotations[
+                        "phred_quality"
+                    ]
+                    if _valid_sequence(seq, phred_qualities):
                         trimmed_seq = _quality_trim_sequence_end(seq)
-                        genes.append(Gene(seq_record.id, seq_record.description, trimmed_seq, phred_qualities[0 : len(trimmed_seq)]))  # type: ignore
+                        genes.append(
+                            Gene(
+                                seq_record.id,
+                                seq_record.description,
+                                trimmed_seq,
+                                phred_qualities[0 : len(trimmed_seq)],
+                            )
+                        )
                 return genes
             except Exception as e:
                 logger.error(f"Could not parse {fastq_file_name}: {e}")
@@ -43,7 +52,6 @@ def parse_fastq_file(fastq_file_name: str = "") -> List[Gene]:
 
 
 def _valid_sequence(sequence: str = "", phred_qualities: List[int] = []) -> bool:
-
     if len(sequence) < MIN_SEQUENCE_READ_LEN:
         logger.warning(
             f"Discarding sequence {sequence} because its length is < min sequence length {MIN_SEQUENCE_READ_LEN}"
