@@ -25,13 +25,13 @@ def parse_fasta_file(fasta_file_name: str = "") -> List[Gene]:
             f"{path_config.DATA_DIR}/{fasta_file_name}",
             "rt",
             encoding="utf-8",
-        ) as File:
+        ) as fasta_file:
             genes: List[Gene] = []
             identifier = ""
             description = ""
             sequence = ""
             found_format_problem = False
-            for line in File:
+            for line in fasta_file:
                 stripped_line = line.strip()
                 if not stripped_line:
                     pass
