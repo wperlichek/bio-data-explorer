@@ -9,9 +9,6 @@ from .blast_client import make_blast_call, BlastDatabase, BlastProgram
 from .sam_bam_parser import open_alignment_file, get_read_alignment_stats_summary
 from pysam import AlignmentFile
 
-logging.basicConfig(
-    level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s"
-)
 
 DEFAULT_GENES_FILE = "sample_genes.fasta.gz"
 
