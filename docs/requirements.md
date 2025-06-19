@@ -307,3 +307,9 @@ As a bioinformatics data explorer, understanding and being able to work with the
 * **Core Concept:** **Robustness and User Experience.**
 
 ---
+
+
+## Cleanup backlog
+
+1. Consider changing name of GeneExplorer to BioDataExplorer as it doesn't just work on Genes
+2. Consider changing name of Gene to SequenceRecord because it's not always a Gene
