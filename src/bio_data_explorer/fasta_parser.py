@@ -1,9 +1,7 @@
 import logging, gzip
 from typing import List
-from pathlib import Path
 from .gene_explorer import Gene
-
-data_directory_path = Path(__file__).resolve().parent.parent.parent / "data"
+from .utils import path_utils
 
 FASTA_SEQUENCE_CHARS_DNA = set("ACGT")
 
@@ -18,7 +16,7 @@ def parse_fasta_file(genes_file: str = "") -> List[Gene]:
     genes: List[Gene] = []
     try:
         with gzip.open(
-            f"{data_directory_path}/{genes_file}",
+            f"{path_utils.DATA_DIR}/{genes_file}",
             "rt",
             encoding="utf-8",
         ) as File:
