@@ -26,13 +26,13 @@ def parse_fastq_file(fastq_file_name: str = "") -> List[Gene]:
         with gzip.open(fastq_file_name, "rt", encoding="utf-8") as fastq_file:
             try:
                 genes: List[Gene] = []
-                # https://biopython.org/wiki/SeqIO
-                for record in SeqIO.parse(fastq_file, "fastq"):  # type: ignore
-                    seq = str(record.seq)  # type: ignore
-                    phred_qualities: List[int] = record.letter_annotations["phred_quality"]  # type: ignore
+                # See https://biopython.org/wiki/SeqIO for SeqRecord fields
+                for seq_record in SeqIO.parse(fastq_file, "fastq"):  # type: ignore
+                    seq = str(seq_record.seq)  # type: ignore
+                    phred_qualities: List[int] = seq_record.letter_annotations["phred_quality"]  # type: ignore
                     if _valid_sequence(seq, phred_qualities):  # type: ignore
                         trimmed_seq = _quality_trim_sequence_end(seq)
-                        genes.append(Gene(record.id, record.description, trimmed_seq, phred_qualities[0 : len(trimmed_seq)]))  # type: ignore
+                        genes.append(Gene(seq_record.id, seq_record.description, trimmed_seq, phred_qualities[0 : len(trimmed_seq)]))  # type: ignore
                 return genes
             except Exception as e:
                 logger.error(f"Could not parse fastq file: {e}")
