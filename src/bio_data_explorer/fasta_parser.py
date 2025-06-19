@@ -3,7 +3,7 @@ from typing import List
 from .gene_explorer import Gene
 from .config import path_config
 
-FASTA_SEQUENCE_CHARS_DNA = set("ACGT")
+FASTA_SEQUENCE_CHARS_DNA = {"ACGT"}
 
 logger = logging.getLogger(__name__)
 
