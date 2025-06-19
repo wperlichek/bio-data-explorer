@@ -14,3 +14,10 @@ def test_parse_fastq_file_discards_reads_with_len_too_short():
     expected_genes_parsed = 1
     genes = fp.parse_fastq_file(f"{test_path_config.FASTQ_PATH}/{file_name}")
     assert len(genes) == expected_genes_parsed
+
+
+def test_parse_fastq_file_discards_reads_with_high_unknown_base_count():
+    file_name = "sample_genes_high_unknown_bases.fastq.gz"
+    expected_genes_parsed = 1
+    genes = fp.parse_fastq_file(f"{test_path_config.FASTQ_PATH}/{file_name}")
+    assert len(genes) == expected_genes_parsed
