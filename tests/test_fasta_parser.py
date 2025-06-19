@@ -8,4 +8,5 @@ def test_parse_fasta_file_missing_file():
 
 
 def test_parse_fasta_file_exludes_records_missing_identifier():
+    fp.parse_fasta_file
     return
