@@ -31,7 +31,8 @@ def parse_fastq_file(fastq_file_name: str = "") -> List[Gene]:
                     seq = str(record.seq)  # type: ignore
                     phred_qualities: List[int] = record.letter_annotations["phred_quality"]  # type: ignore
                     if _valid_sequence(seq, phred_qualities):  # type: ignore
-                        genes.append(Gene(record.id, record.description, seq, phred_qualities))  # type: ignore
+                        trimmed_seq = _quality_trim_sequence_end(seq)
+                        genes.append(Gene(record.id, record.description, trimmed_seq, phred_qualities[0 : len(trimmed_seq)]))  # type: ignore
                 return genes
             except Exception as e:
                 logger.error(f"Could not parse fastq file: {e}")
