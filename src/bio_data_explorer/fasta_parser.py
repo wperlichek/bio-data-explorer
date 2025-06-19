@@ -55,7 +55,7 @@ def parse_fasta_file(fasta_file_name: str = "") -> List[Gene]:
                             sequence += stripped_line
                     else:
                         logger.warning(
-                            f"{line} is not formatted correctly, skipping this entire FASTA entry"
+                            f"{line} is not formatted correctly, skipping this entire FASTA record"
                         )
                         if sequence and not found_format_problem:
                             genes.append(
