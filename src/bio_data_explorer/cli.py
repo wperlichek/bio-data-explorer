@@ -1,7 +1,7 @@
 import sys, logging
-from typing import Any, Dict, Optional
+from typing import Dict, Iterator, Optional
 from pathlib import Path
-from .config import path_config
+from .config import path_config, logging_config
 from .gene_explorer import GenesExplorer
 from .fasta_parser import FastaParsingError, parse_fasta_file
 from .fastq_parser import parse_fastq_file
@@ -9,13 +9,17 @@ from .vcf_parser import show_low_confidence_variants
 from .blast_client import make_blast_call, BlastDatabase, BlastProgram
 from .sam_bam_parser import open_alignment_file, get_read_alignment_stats_summary
 from pysam import AlignmentFile
+from Bio.Blast import Record
 
+logging_config.setup_logging()
 
 DEFAULT_GENES_FILE = "sample_genes.fasta.gz"
 
+logger = logging.getLogger(__name__)
+
 
 def main() -> None:
-    logging.info("Starting app")
+    logger.info("Starting app")
 
     try:
         genes_file = sys.argv[1] if len(sys.argv) > 1 else DEFAULT_GENES_FILE
@@ -24,7 +28,7 @@ def main() -> None:
         else:
             genes = parse_fastq_file(f"{path_config.FASTQ_PATH}/{genes_file}")
     except FastaParsingError as e:
-        logging.critical(f"Application can't start due to {e}, exiting application")
+        logger.critical(f"Application can't start due to {e}, exiting application")
         sys.exit(1)
 
     genes_explorer = GenesExplorer(genes)
@@ -70,9 +74,11 @@ def main() -> None:
                     )
         elif menu_choice == "4":
             sequence = input("Input sequence: ").strip().lower()
-            logging.info("Processing BLAST call, this takes some time...")
-            records = make_blast_call(BlastProgram.BLASTN, BlastDatabase.NT, sequence)
-            print_blast_record(records)
+            print("Processing BLAST call, this takes some time...")
+            blast_record = make_blast_call(
+                BlastProgram.BLASTN, BlastDatabase.NT, sequence
+            )
+            print_blast_record(blast_record)
         elif menu_choice == "5":
             variant_file = input(
                 "Enter file_name of compressed .vcf file in data/, ex: file_name.vcf.gz:"
@@ -111,18 +117,21 @@ def main() -> None:
 
             print_alignment_core_details(alignment_file, chrom, start, end)
         elif menu_choice == "7":
-            logging.info("Exiting app")
+            logger.info("Exiting app")
             break
         else:
             print("Invalid choice")
 
 
 # TODO :: these "print" functions should probably be in utils
-def print_blast_record(blast_records: Any = None) -> None:
-    for record in blast_records:
+def print_blast_record(blast_record: Optional[Iterator[Record]] = None) -> None:
+    if not blast_record:
+        logger.warning("Blast record is empty can't print it")
+        return
+    for hit in blast_record:
         print("****")
         print("Record alignments: ")
-        for alignment in record.alignments:
+        for alignment in hit.alignments:
             print(f"{alignment.title}")
             print("Alignment hsps:")
             for hsp in alignment.hsps:
@@ -149,7 +158,7 @@ def print_alignment_core_details(
     print("Core aligment details for each read:")
     print(f"Has index: {alignment_file.has_index()}")
     if alignment_file.has_index() and chrom and start and end:
-        logging.info(
+        logger.info(
             f"Using region-specific alignment view at {chrom} in range {start}:{end}"
         )
         for read in alignment_file.fetch(chrom, start, end):
