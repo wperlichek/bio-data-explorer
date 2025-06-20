@@ -13,26 +13,25 @@ class SamBamParsingError(Exception):
     pass
 
 
-def open_alignment_file(sam_or_bam_file_name: str = "") -> AlignmentFile:
-    mode = "r" if Path(sam_or_bam_file_name).suffix == ".sam" else "rb"
+def open_alignment_file(sam_or_bam_file: str = "") -> AlignmentFile:
+    mode = "r" if Path(sam_or_bam_file).suffix == ".sam" else "rb"
     try:
-        alignment_file = AlignmentFile(sam_or_bam_file_name, mode)
+        alignment_file = AlignmentFile(sam_or_bam_file, mode)
         if mode == "rb" and not alignment_file.has_index():
-            create_index_for_bam_file(sam_or_bam_file_name)
-            alignment_file = AlignmentFile(sam_or_bam_file_name, mode)
+            create_index_for_bam_file(sam_or_bam_file)
+            alignment_file = AlignmentFile(sam_or_bam_file, mode)
     except Exception as e:
-        logger.error(f"Could not open {sam_or_bam_file_name}: {e}")
+        logger.error(f"Could not open {sam_or_bam_file}: {e}")
         raise SamBamParsingError(e)
     return alignment_file
 
 
-def create_index_for_bam_file(bam_file_name: str = ""):
-    bam_file_full_location = bam_file_name
-    temp_sorted_file = f"{bam_file_full_location}.tmp_sorted.bam"
-    pysam.sort("-o", temp_sorted_file, bam_file_full_location)
-    os.replace(temp_sorted_file, bam_file_full_location)
-    pysam.index(bam_file_full_location)
-    logger.info(f"Created index {bam_file_full_location}.bai")
+def create_index_for_bam_file(bam_file: str = ""):
+    temp_sorted_bam_file = f"{bam_file}.tmp_sorted.bam"
+    pysam.sort("-o", temp_sorted_bam_file, bam_file)
+    os.replace(temp_sorted_bam_file, bam_file)
+    pysam.index(bam_file)
+    logger.info(f"Created index {bam_file}.bai")
 
 
 def get_read_alignment_stats_summary(alignment_file: AlignmentFile):
