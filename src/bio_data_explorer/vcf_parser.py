@@ -1,6 +1,6 @@
 import logging
 from typing import List
-from cyvcf2 import VCF  # type: ignore
+from cyvcf2 import VCF
 
 logger = logging.getLogger(__name__)
 
@@ -8,23 +8,23 @@ MIN_QUAL_SCORE = 30.0
 MIN_INFO_DP = 20
 
 
-def show_low_confidence_variants(vcf_file_name: str = "") -> List[str]:
+def show_low_confidence_variants(vcf_file: str = "") -> List[str]:
     try:
-        vcf = VCF(vcf_file_name)  # type: ignore
+        vcf = VCF(vcf_file)
     except Exception as e:
-        logger.error(f"Could not open {vcf_file_name}: {e}")
+        logger.error(f"Could not open {vcf_file}: {e}")
 
     low_confidence_variants: List[str] = []
 
-    for variant in vcf:  # type: ignore
-        # https://brentp.github.io/cyvcf2/
-        # https://brentp.github.io/cyvcf2/docstrings.html#api
-        filter = str(variant.FILTER)  # type: ignore
-        qual = float(variant.QUAL)  # type: ignore
-        info_dp = int(variant.INFO.get("DP"))  # type: ignore
-        variant_identifer = f"{variant.CHROM}:{variant.POS}_{variant.REF}>{" ".join(variant.ALT)}"  # type: ignore
-        if is_low_confidence_variant(filter, qual, info_dp, variant_identifer):  # type: ignore
-            logger.warning(f"Filtering out variant {variant_identifer}")
+    for variant in vcf:
+        # See https://brentp.github.io/cyvcf2/
+        filter = str(variant.FILTER)
+        qual = float(variant.QUAL)
+        info_dp = int(variant.INFO.get("DP"))
+        alts = " ".join(variant.ALT)
+        variant_identifer = f"{variant.CHROM}:{variant.POS}_{variant.REF}>{alts}"
+        if is_low_confidence_variant(filter, qual, info_dp, variant_identifer):
+            logger.warning(f"Found low confidence variant: {variant_identifer}")
             low_confidence_variants.append(variant_identifer)
 
     return low_confidence_variants
