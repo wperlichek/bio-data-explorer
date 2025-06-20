@@ -6,6 +6,7 @@ logger = logging.getLogger(__name__)
 
 MIN_QUAL_SCORE = 30.0
 MIN_INFO_DP = 20
+PASSING_FILTER_VAL = "None"
 
 
 def show_low_confidence_variants(vcf_file: str = "") -> List[str]:
@@ -33,7 +34,7 @@ def show_low_confidence_variants(vcf_file: str = "") -> List[str]:
 def _is_low_confidence_variant(
     filter: str = "", qual: float = 0.0, info_dp: int = 0, variant_identifer: str = ""
 ) -> bool:
-    if filter != "None":
+    if filter != PASSING_FILTER_VAL:
         logger.warning(
             f"Variant {variant_identifer} did not PASS in filter, filter value: {filter}"
         )
