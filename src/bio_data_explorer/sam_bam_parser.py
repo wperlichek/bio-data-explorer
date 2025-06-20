@@ -4,8 +4,6 @@ from typing import Dict
 import pysam
 from pysam import AlignmentFile
 
-data_directory_path = Path(__file__).resolve().parent.parent.parent / "data"
-
 logger = logging.getLogger(__name__)
 
 MIN_MAPPING_QUALITY_THRESHOLD = 30
@@ -33,7 +31,7 @@ def open_alignment_file(sam_or_bam_file_name: str = "") -> AlignmentFile:
 
 
 def create_bai_from_bam_file(bam_file_name: str = ""):
-    bam_file_full_location = f"{data_directory_path}/{bam_file_name}"
+    bam_file_full_location = bam_file_name
     temp_sorted_file = f"{bam_file_full_location}.tmp_sorted.bam"
     logger.info(f"Sorting {bam_file_name}")
     pysam.sort("-o", temp_sorted_file, bam_file_full_location)
