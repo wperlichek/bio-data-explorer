@@ -31,6 +31,10 @@ def open_alignment_file(sam_or_bam_file: str = "") -> AlignmentFile:
 
 
 def create_index_for_bam_file(bam_file: str = ""):
+    """
+    Sorting the .bam file is required to create the index
+    The input .bam file is sorted in-place and .bai index is created
+    """
     temp_sorted_bam_file = f"{bam_file}.tmp_sorted.bam"
     pysam.sort("-o", temp_sorted_bam_file, bam_file)
     os.replace(temp_sorted_bam_file, bam_file)
