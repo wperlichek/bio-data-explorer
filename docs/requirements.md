@@ -314,3 +314,4 @@ As a bioinformatics data explorer, understanding and being able to work with the
 1. Consider changing name of GeneExplorer to BioDataExplorer as it doesn't just work on Genes
 2. Consider changing name of Gene to SequenceRecord because it's not always a Gene
 3. .toml check
+4. We should test the API not the private function in vcf_parser
