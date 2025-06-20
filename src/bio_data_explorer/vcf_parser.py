@@ -23,14 +23,14 @@ def show_low_confidence_variants(vcf_file: str = "") -> List[str]:
         info_dp = int(variant.INFO.get("DP"))
         alts = " ".join(variant.ALT)
         variant_identifer = f"{variant.CHROM}:{variant.POS}_{variant.REF}>{alts}"
-        if is_low_confidence_variant(filter, qual, info_dp, variant_identifer):
+        if _is_low_confidence_variant(filter, qual, info_dp, variant_identifer):
             logger.warning(f"Found low confidence variant: {variant_identifer}")
             low_confidence_variants.append(variant_identifer)
 
     return low_confidence_variants
 
 
-def is_low_confidence_variant(
+def _is_low_confidence_variant(
     filter: str = "", qual: float = 0.0, info_dp: int = 0, variant_identifer: str = ""
 ) -> bool:
     if filter != "None":
