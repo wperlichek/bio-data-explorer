@@ -45,26 +45,23 @@ def get_read_alignment_stats_summary(alignment_file: AlignmentFile):
     for read in alignment_file:
         if read.is_mapped:
             mapped_reads += 1
+            if read.mapping_quality < MIN_MAPPING_QUALITY_THRESHOLD:
+                low_quality_reads += 1
+                logger.warning(
+                    f"Read {read.query_name} map quality of {read.mapping_quality} is less than threshold of {MIN_MAPPING_QUALITY_THRESHOLD}"
+                )
+            if read.is_duplicate:
+                duplicate_reads += 1
+            if read.is_supplementary:
+                supplimentary_reads += 1
         else:
             unmapped_reads += 1
-
-        if read.mapping_quality < MIN_MAPPING_QUALITY_THRESHOLD:
-            low_quality_reads += 1
-            logger.warning(
-                f"Read {read.query_name} map quality of {read.mapping_quality} is less than threshold of {MIN_MAPPING_QUALITY_THRESHOLD}"
-            )
-
-        if read.is_duplicate:
-            duplicate_reads += 1
-        if read.is_supplementary:
-            supplimentary_reads += 1
 
         reads_count += 1
 
     mapping_rate_percentage = int(round(mapped_reads / reads_count, 2) * 100)
 
     alignment_stats: Dict[str, int] = {}
-
     alignment_stats["reads_count"] = reads_count
     alignment_stats["mapped_reads"] = mapped_reads
     alignment_stats["unmapped_reads"] = unmapped_reads
