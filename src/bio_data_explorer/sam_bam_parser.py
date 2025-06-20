@@ -14,6 +14,10 @@ class SamBamParsingError(Exception):
 
 
 def open_alignment_file(sam_or_bam_file: str = "") -> AlignmentFile:
+    """
+    This function also creates a .bai index
+    if sam_or_bam_file is .bam and an index doesn't already exist
+    """
     mode = "r" if Path(sam_or_bam_file).suffix == ".sam" else "rb"
     try:
         alignment_file = AlignmentFile(sam_or_bam_file, mode)
