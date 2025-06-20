@@ -157,6 +157,3 @@ class GenesExplorer:
             pretty_printed = " ".join(parts)
             print(f"{self.get_gene_name_original_casing(gene_name)}: {pretty_printed}")
             print(f"GC percentage: {self.get_gc_percentage(nucleotide_counts)}%")
-
-
-__all__ = ["GenesExplorer"]
