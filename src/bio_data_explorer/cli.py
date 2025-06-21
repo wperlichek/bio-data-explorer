@@ -54,9 +54,7 @@ def main() -> None:
         elif menu_choice == "2":
             gene_name = input("Enter gene name: ").strip().lower()
             sequence = genes_explorer.get_gene_sequence(gene_name)
-            if not sequence:
-                return
-            else:
+            if sequence:
                 print_sequence_info(genes_explorer, gene_name, sequence)
         elif menu_choice == "3":
             gene_name = input("Enter gene name: ").strip().lower()
