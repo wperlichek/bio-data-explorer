@@ -95,3 +95,24 @@ def validate_file_input(file: str = "", acceptable_extensions: List[str] = []) -
         f"{file} does not have one of extension(s) {" ".join(acceptable_extensions)}"
     )
     return False
+
+
+def sequence_input_range_is_valid(start: str = "", end: str = ""):
+    if not start or not end:
+        logger.warning(f"Either start or end in sequence input is empty")
+        return False
+    elif not start.isdigit() or not end.isdigit():
+        logger.warning(
+            f"Start or end values {start}:{end} invalid, must must be numbers > 0"
+        )
+        return False
+    else:
+        start_int = int(start)
+        end_int = int(end)
+        if start_int < 0 or end_int < 0:
+            logger.warning(
+                f"Start or end values {start}:{end} invalid, must must be numbers > 0"
+            )
+            return False
+        else:
+            return True

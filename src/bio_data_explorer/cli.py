@@ -103,12 +103,13 @@ def main() -> None:
                 end = None
 
                 if Path(bam_or_same_file_input).suffix == ".bam":
-                    # TODO :: this is too brittle, e.g. putting empty for int causes exception
+                    print("Region-specific exploration for .bam file...")
                     chrom = input("Enter chromosome (e.g. chr1):").strip()
-                    start = int(input("Enter start (1-based):").strip())
-                    end = int(input("Enter end:").strip())
-
-                cli_util.print_alignment_core_details(alignment_file, chrom, start, end)
+                    start = input("Enter start (1-based):").strip()
+                    end = input("Enter end:").strip()
+                    cli_util.print_alignment_core_details(
+                        alignment_file, chrom, start, end
+                    )
         elif menu_choice == "7":
             logger.info("Exiting app")
             break
