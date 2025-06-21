@@ -25,7 +25,7 @@ Run the CLI and use the default FASTA file:
 
 Or run the CLI with your own input file (compressed FASTA or FASTQ):
 
-    bio-data-explorer-cli path/to/file.fastq.gz
+    bio-data-explorer-cli data/fasta/your_file.fasta.gz
 
 The app comes with sample files for each format, but you can also place your own data in the following folders:
 
