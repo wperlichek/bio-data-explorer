@@ -76,13 +76,14 @@ def main() -> None:
             variant_file = input(
                 "Enter file_name of compressed .vcf file in data/vcf, ex: file_name.vcf.gz:"
             )
-            low_confidence_variants = show_low_confidence_variants(
-                f"{path_config.VCF_PATH}/{variant_file}"
-            )
-            if len(low_confidence_variants) > 0:
-                cli_util.print_low_confidence_variants(low_confidence_variants)
-            else:
-                print(f"{variant_file} had no low confidence variants")
+            if cli_util.validate_file_input(variant_file, ["vcf.gz"]):
+                low_confidence_variants = show_low_confidence_variants(
+                    f"{path_config.VCF_PATH}/{variant_file}"
+                )
+                if len(low_confidence_variants) > 0:
+                    cli_util.print_low_confidence_variants(low_confidence_variants)
+                else:
+                    print(f"{variant_file} had no low confidence variants")
         elif menu_choice == "6":
             bam_or_same_file_input = (
                 input(

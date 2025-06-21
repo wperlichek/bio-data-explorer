@@ -86,8 +86,12 @@ def print_alignment_core_details(
 
 def validate_file_input(file: str = "", acceptable_extensions: List[str] = []) -> bool:
     if not str or len(acceptable_extensions) == 0:
+        logger.warning("File name or extensions empty, can't validate file input")
         return False
     for ext in acceptable_extensions:
         if file.endswith(ext):
             return True
+    logger.warning(
+        f"{file} does not have one of extension(s) {" ".join(acceptable_extensions)}"
+    )
     return False
