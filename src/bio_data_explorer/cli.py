@@ -29,6 +29,7 @@ def main() -> None:
             print(
                 f"Unaccepted file format in {genes_file}. Accepted file formats: .fasta, .fasta.gz, .fastq, .fastq.gz"
             )
+            return
     except FastaParsingError as e:
         logger.critical(f"Problem parsing {genes_file}: {e}, exiting application")
         sys.exit(1)
