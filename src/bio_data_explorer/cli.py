@@ -1,5 +1,5 @@
 import sys, logging
-from typing import Dict, Iterator, Optional
+from typing import Dict, Iterator, List, Optional
 from pathlib import Path
 from .config import path_config, logging_config
 from .gene_explorer import GenesExplorer
@@ -66,7 +66,7 @@ def main() -> None:
                         gene_name, count_nucleotides
                     )
         elif menu_choice == "4":
-            sequence = input("Input sequence: ").strip().lower()
+            sequence = input("Enter sequence: ").strip().lower()
             print("Processing BLAST call, this takes some time...")
             blast_record = make_blast_call(
                 BlastProgram.BLASTN, BlastDatabase.NT, sequence
@@ -80,11 +80,7 @@ def main() -> None:
                 f"{path_config.VCF_PATH}/{variant_file}"
             )
             if len(low_confidence_variants) > 0:
-                print(
-                    "These are the low confidence variants in format CHROM:POS_REF>ALT(s):"
-                )
-                for variant in low_confidence_variants:
-                    print(variant)
+                print_low_confidence_variants(low_confidence_variants)
         elif menu_choice == "6":
             bam_or_same_file_input = (
                 input("Enter .sam or .bam file name: ").strip().lower()
@@ -150,6 +146,12 @@ def print_sequence_info(
         print(
             f"DNA to RNA transcription: {genes_explorer.get_dna_to_rna_transcription(sequence)}"
         )
+
+
+def print_low_confidence_variants(low_confidence_variants: List[str]):
+    print("These are the low confidence variants in format CHROM:POS_REF>ALT(s):")
+    for variant in low_confidence_variants:
+        print(variant)
 
 
 def print_alignment_summary(alignment_stats: Dict[str, int]):
