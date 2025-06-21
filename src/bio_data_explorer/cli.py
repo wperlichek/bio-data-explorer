@@ -43,8 +43,8 @@ def main() -> None:
         print("2. View sequence info of gene")
         print("3. Count nucleotides of gene")
         print("4. Run BLAST search")
-        print("5. Filter variants (VCF)")
-        print("6. Read alignment analysis (SAM/BAM)")
+        print("5. Read alignment analysis (SAM/BAM)")
+        print("6. Filter variants (VCF)")
         print("7. Exit application")
 
         menu_choice = input("Enter choice (1-7): ").strip()
@@ -73,18 +73,6 @@ def main() -> None:
             )
             cli_util.print_blast_record(blast_record)
         elif menu_choice == "5":
-            variant_file = input(
-                "Enter file_name of compressed .vcf file in data/vcf, ex: file_name.vcf.gz:"
-            ).strip()
-            if cli_util.validate_file_input(variant_file, ["vcf.gz"]):
-                low_confidence_variants = show_low_confidence_variants(
-                    f"{path_config.VCF_PATH}/{variant_file}"
-                )
-                if len(low_confidence_variants) > 0:
-                    cli_util.print_low_confidence_variants(low_confidence_variants)
-                else:
-                    print(f"{variant_file} had no low confidence variants")
-        elif menu_choice == "6":
             bam_or_same_file_input = input(
                 "Enter file name of alignment file in data/sam-bam/, ex: align.sam or align.bam : "
             ).strip()
@@ -111,6 +99,18 @@ def main() -> None:
                         cli_util.print_alignment_core_details(
                             alignment_file, chrom, int(start), int(end)
                         )
+        elif menu_choice == "6":
+            variant_file = input(
+                "Enter file_name of compressed .vcf file in data/vcf, ex: file_name.vcf.gz:"
+            ).strip()
+            if cli_util.validate_file_input(variant_file, ["vcf.gz"]):
+                low_confidence_variants = show_low_confidence_variants(
+                    f"{path_config.VCF_PATH}/{variant_file}"
+                )
+                if len(low_confidence_variants) > 0:
+                    cli_util.print_low_confidence_variants(low_confidence_variants)
+                else:
+                    print(f"{variant_file} had no low confidence variants")
         elif menu_choice == "7":
             logger.info("Exiting app")
             break
