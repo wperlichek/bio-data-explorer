@@ -32,7 +32,7 @@ def main() -> None:
                 f"Unaccepted file format in {genes_file}. Accepted file formats: .fasta, .fasta.gz, .fastq, .fastq.gz"
             )
     except FastaParsingError as e:
-        logger.critical(f"Application can't start due to {e}, exiting application")
+        logger.critical(f"Problem parsing {genes_file}: {e}, exiting application")
         sys.exit(1)
 
     genes_explorer = GenesExplorer(genes)
