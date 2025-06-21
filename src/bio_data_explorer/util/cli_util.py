@@ -82,3 +82,12 @@ def print_alignment_core_details(
             print(f"MAPQ: {read.mapping_quality}")
             print(f"CIGAR: {read.cigarstring}")
             print("***")
+
+
+def validate_file_input(file: str = "", acceptable_extensions: List[str] = []) -> bool:
+    if not str or len(acceptable_extensions) == 0:
+        return False
+    for ext in acceptable_extensions:
+        if file.endswith(ext):
+            return True
+    return False
