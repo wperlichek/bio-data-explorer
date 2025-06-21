@@ -42,9 +42,9 @@ def main() -> None:
         print("1. List all genes")
         print("2. View sequence of gene")
         print("3. Count nucleotides of gene")
-        print("4. Make BLAST call")
-        print("5. Show low confidence variants in VCF file")
-        print("6. Sam analysis")
+        print("4. Run BLAST search")
+        print("5. Filter variants (VCF)")
+        print("6. Read alignment analysis (SAM/BAM)")
         print("7. Exit application")
 
         menu_choice = input("Enter choice (1-7): ").strip()
