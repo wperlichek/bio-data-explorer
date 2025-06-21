@@ -28,7 +28,7 @@ def print_sequence_info(
 ):
     if genes_explorer is None or not gene_name or not sequence:
         logger.warning(
-            "Must provide valid genes_explorer, gene_name, and sequence to print sequence info"
+            "Must provide genes_explorer, gene_name, and sequence to print sequence info"
         )
         return
     else:
