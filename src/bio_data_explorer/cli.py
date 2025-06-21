@@ -74,7 +74,7 @@ def main() -> None:
             cli_util.print_blast_record(blast_record)
         elif menu_choice == "5":
             bam_or_same_file_input = input(
-                "Enter file name of alignment file in data/sam-bam/, ex: align.sam or align.bam : "
+                "Enter file name of alignment file in data/sam-bam/, ex: align.sam or align.bam: "
             ).strip()
             if cli_util.validate_file_input(bam_or_same_file_input, [".sam", ".bam"]):
                 alignment_file = open_alignment_file(

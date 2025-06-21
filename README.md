@@ -1,79 +1,67 @@
 # bio-data-explorer
 
-# Running locally
+bio-data-explorer is a basic command-line tool for interactively exploring common bioinformatics file formats, including FASTA, FASTQ, SAM/BAM, and VCF. It also includes a built-in client for running BLAST searches against the NCBI database.
 
-```python3 gene_explorer.py```
+This project uses these bioinformatics libraries to help handle the data formats:
 
-# Virtual Env
+[pysam](https://pysam.readthedocs.io/en/latest/): SAM/BAM file processing and indexing  
+[cyvcf2](https://github.com/brentp/cyvcf2): Fast parsing of compressed VCF files  
+[Biopython](https://biopython.org/): BLAST result calls/parsing and FASTQ handling  
 
-## Clear previous if needed:
+## Running locally
 
-```deactivate```
+Create a virtual environment and activate it:
 
-```cd ~/python-gene-tool/```
+    python -m venv .venv
+    source .venv/bin/activate
 
-```rm -rf .venv```
+Install the package:
 
-## Basic venv setup:
+    pip install .
 
-```python3.12 -m venv .venv```
+Run the CLI and use the default FASTA file:
 
-```source ./.venv/bin/activate```
+    bio-data-explorer-cli
 
-```pip install -e ".[dev]"```
+Or run the CLI with your own input file (compressed FASTA or FASTQ):
 
-## cyvcf2
+    bio-data-explorer-cli path/to/file.fastq.gz
 
-### Installing `cyvcf2` on WSL Ubuntu with Python 3.12
+The app comes with sample files for each format, but you can also place your own data in the following folders:
 
-Getting `cyvcf2` to work requires installing several system-level build dependencies because it includes native C extensions that need to compile against libraries like `htslib` and compression libraries. Without these, you’ll run into errors related to missing build tools (`autoreconf`) or binary incompatibility with numpy.
+- data/fasta/ → .fasta.gz
+- data/fastq/ → .fastq.gz
+- data/sam-bam/ → .sam / .bam
+- data/vcf/ → .vcf.gz
 
-Install essential build tools and development libraries via `apt`:
+## Testing
 
-  ```bash
-  sudo apt update && sudo apt install -y build-essential libhts-dev libz-dev libbz2-dev liblzma-dev python3-dev autoconf automake libtool
-  ```
+### Run all unit tests
 
-```python3 -m venv .venv```
+```pytest```
 
-```source .venv/bin/activate```
+## Example Screenshots
 
-```pip install --no-binary cyvcf2 cyvcf2```
+### Main CLI Menu
 
-```import cyvcf2```
+![CLI Menu](docs/images/cli-menu.png)
 
-```print(cyvcf2.__version__)```
+### List all genes
 
-## Run app in venv:
+![all genes](docs/images/list-genes.png)
 
-```bio-data-explorer-cli Optional[file_name]```
+### View sequence info of gene
 
-# BLAST API
+![sequence of gene](docs/images/view-sequence.png)
 
-```from Bio import Blast```
+### Run BLAST search
 
-```help(Blast.qblast)```
+![blast search](docs/images/blast.png)
 
-# Windows setup
+### Read alignment analysis (SAM/BAM)
 
-Bioinformatics involves a lot of Linux native command-line work. If you're on Windows, 
-it's best to install WSL for full access to the native Linux env and tools. Ubuntu 
-is the default distro for WSL and widely used.
+![read alignments](docs/images/align.png)
 
----
+### Filter variants (VCF)
 
-### Installing Windows Subsystem for Linux (WSL)
-
-1.  **Open PowerShell or Command Prompt as Administrator.**
-2.  Run: `wsl --install`
-3.  Follow prompts to **create a Linux username and password.**
-4.  **Restart** your computer.
-
-### Using WSL & Basic Commands
-
-* **Open WSL Terminal:** Search "Ubuntu" (or your distro) in Start Menu.
-* **Access Windows Files:** Use `cd /mnt/c/Users/YourWindowsUsername/YourProjectFolder` (adjust path).
-* **Example Gzip:** `gzip -c my_file.fasta > my_file.fasta.gz`
-* **VS Code:** Install "WSL" extension. Use `Ctrl+Shift+P` -> `WSL: Connect to WSL`.
-
----
+![variant analysis](docs/images/vcf.png)
