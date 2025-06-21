@@ -74,7 +74,7 @@ def main() -> None:
             print_blast_record(blast_record)
         elif menu_choice == "5":
             variant_file = input(
-                "Enter file_name of compressed .vcf file in data/, ex: file_name.vcf.gz:"
+                "Enter file_name of compressed .vcf file in data/vcf, ex: file_name.vcf.gz:"
             )
             low_confidence_variants = show_low_confidence_variants(
                 f"{path_config.VCF_PATH}/{variant_file}"
@@ -83,7 +83,11 @@ def main() -> None:
                 print_low_confidence_variants(low_confidence_variants)
         elif menu_choice == "6":
             bam_or_same_file_input = (
-                input("Enter .sam or .bam file name: ").strip().lower()
+                input(
+                    "Enter file name of alignment file in data/sam-bam/, ex: align.sam or align.bam : "
+                )
+                .strip()
+                .lower()
             )
             alignment_file = open_alignment_file(
                 f"{path_config.SAM_BAM_PATH}/{bam_or_same_file_input}"
