@@ -38,5 +38,5 @@ def test_get_read_alignment_summary_returns_correct_alignment_summary():
         "mapping_rate_percentage": 67.0,
         "low_quality_reads": 1,
         "duplicate_reads": 1,
-        "supplimentary_reads": 1,
+        "supplementary_reads": 1,
     }

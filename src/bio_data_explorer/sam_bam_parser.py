@@ -48,7 +48,7 @@ def get_read_alignment_stats_summary(alignment_file: AlignmentFile):
     unmapped_reads = 0
     low_quality_reads = 0
     duplicate_reads = 0
-    supplimentary_reads = 0
+    supplementary_reads = 0
 
     for read in alignment_file:
         if read.is_mapped:
@@ -61,7 +61,7 @@ def get_read_alignment_stats_summary(alignment_file: AlignmentFile):
             if read.is_duplicate:
                 duplicate_reads += 1
             if read.is_supplementary:
-                supplimentary_reads += 1
+                supplementary_reads += 1
         else:
             unmapped_reads += 1
 
@@ -76,6 +76,6 @@ def get_read_alignment_stats_summary(alignment_file: AlignmentFile):
     alignment_stats["mapping_rate_percentage"] = mapping_rate_percentage
     alignment_stats["low_quality_reads"] = low_quality_reads
     alignment_stats["duplicate_reads"] = duplicate_reads
-    alignment_stats["supplimentary_reads"] = supplimentary_reads
+    alignment_stats["supplementary_reads"] = supplementary_reads
 
     return alignment_stats
