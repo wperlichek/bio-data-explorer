@@ -81,6 +81,8 @@ def main() -> None:
             )
             if len(low_confidence_variants) > 0:
                 print_low_confidence_variants(low_confidence_variants)
+            else:
+                print(f"{variant_file} had no low confidence variants")
         elif menu_choice == "6":
             bam_or_same_file_input = (
                 input(
