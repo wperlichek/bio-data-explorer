@@ -40,7 +40,7 @@ def main() -> None:
     while True:
         print("Bio Data Explorer")
         print("1. List all genes")
-        print("2. View sequence of gene")
+        print("2. View sequence info of gene")
         print("3. Count nucleotides of gene")
         print("4. Run BLAST search")
         print("5. Filter variants (VCF)")
@@ -54,19 +54,10 @@ def main() -> None:
         elif menu_choice == "2":
             gene_name = input("Enter gene name: ").strip().lower()
             sequence = genes_explorer.get_gene_sequence(gene_name)
-            if sequence:
-                print(
-                    f"{genes_explorer.get_gene_name_original_casing(gene_name)}: {sequence}"
-                )
-                print(
-                    f"Sequence length: {genes_explorer.get_sequence_length(sequence)}"
-                )
-                print(
-                    f"Reverse compliment: {genes_explorer.get_reverse_compliment(sequence)}"
-                )
-                print(
-                    f"DNA to RNA transcription: {genes_explorer.get_dna_to_rna_transcription(sequence)}"
-                )
+            if not sequence:
+                return
+            else:
+                print_sequence_info(genes_explorer, gene_name, sequence)
         elif menu_choice == "3":
             gene_name = input("Enter gene name: ").strip().lower()
             sequence = genes_explorer.get_gene_sequence(gene_name)
@@ -144,6 +135,23 @@ def print_blast_record(blast_record: Optional[Iterator[Record]] = None) -> None:
                 print(f"Score: {hsp.score}")
                 print(f"E-Value: {hsp.expect}")
         print("****")
+
+
+def print_sequence_info(
+    genes_explorer: GenesExplorer, gene_name: str = "", sequence: str = ""
+):
+    if genes_explorer is None or not gene_name or not sequence:
+        logger.warning(
+            "Must provide valid genes_explorer, gene_name, and sequence to print sequence info"
+        )
+        return
+    else:
+        print(f"{genes_explorer.get_gene_name_original_casing(gene_name)}: {sequence}")
+        print(f"Sequence length: {genes_explorer.get_sequence_length(sequence)}")
+        print(f"Reverse compliment: {genes_explorer.get_reverse_compliment(sequence)}")
+        print(
+            f"DNA to RNA transcription: {genes_explorer.get_dna_to_rna_transcription(sequence)}"
+        )
 
 
 def print_alignment_summary(alignment_stats: Dict[str, int]):
