@@ -1,5 +1,4 @@
 import sys, logging
-from typing import Dict, Iterator, List, Optional
 from pathlib import Path
 from .config import path_config, logging_config
 from .util import cli_util
@@ -9,8 +8,6 @@ from .fastq_parser import parse_fastq_file
 from .vcf_parser import show_low_confidence_variants
 from .blast_client import make_blast_call, BlastDatabase, BlastProgram
 from .sam_bam_parser import open_alignment_file, get_read_alignment_stats_summary
-from pysam import AlignmentFile
-from Bio.Blast import Record
 
 logging_config.setup_logging()
 
@@ -56,7 +53,7 @@ def main() -> None:
             gene_name = input("Enter gene name: ").strip().lower()
             sequence = genes_explorer.get_gene_sequence(gene_name)
             if sequence:
-                print_sequence_info(genes_explorer, gene_name, sequence)
+                cli_util.print_sequence_info(genes_explorer, gene_name, sequence)
         elif menu_choice == "3":
             gene_name = input("Enter gene name: ").strip().lower()
             sequence = genes_explorer.get_gene_sequence(gene_name)
@@ -72,7 +69,7 @@ def main() -> None:
             blast_record = make_blast_call(
                 BlastProgram.BLASTN, BlastDatabase.NT, sequence
             )
-            print_blast_record(blast_record)
+            cli_util.print_blast_record(blast_record)
         elif menu_choice == "5":
             variant_file = input(
                 "Enter file_name of compressed .vcf file in data/vcf, ex: file_name.vcf.gz:"
@@ -81,7 +78,7 @@ def main() -> None:
                 f"{path_config.VCF_PATH}/{variant_file}"
             )
             if len(low_confidence_variants) > 0:
-                print_low_confidence_variants(low_confidence_variants)
+                cli_util.print_low_confidence_variants(low_confidence_variants)
             else:
                 print(f"{variant_file} had no low confidence variants")
         elif menu_choice == "6":
@@ -96,7 +93,7 @@ def main() -> None:
                 f"{path_config.SAM_BAM_PATH}/{bam_or_same_file_input}"
             )
             alignment_stats = get_read_alignment_stats_summary(alignment_file)
-            print_alignment_summary(alignment_stats)
+            cli_util.print_alignment_summary(alignment_stats)
             alignment_file = open_alignment_file(
                 f"{path_config.SAM_BAM_PATH}/{bam_or_same_file_input}"
             )
@@ -111,7 +108,7 @@ def main() -> None:
                 start = int(input("Enter start (1-based):").strip())
                 end = int(input("Enter end:").strip())
 
-            print_alignment_core_details(alignment_file, chrom, start, end)
+            cli_util.print_alignment_core_details(alignment_file, chrom, start, end)
         elif menu_choice == "7":
             logger.info("Exiting app")
             break
