@@ -75,7 +75,7 @@ def main() -> None:
         elif menu_choice == "5":
             variant_file = input(
                 "Enter file_name of compressed .vcf file in data/vcf, ex: file_name.vcf.gz:"
-            )
+            ).strip()
             if cli_util.validate_file_input(variant_file, ["vcf.gz"]):
                 low_confidence_variants = show_low_confidence_variants(
                     f"{path_config.VCF_PATH}/{variant_file}"
@@ -85,33 +85,30 @@ def main() -> None:
                 else:
                     print(f"{variant_file} had no low confidence variants")
         elif menu_choice == "6":
-            bam_or_same_file_input = (
-                input(
-                    "Enter file name of alignment file in data/sam-bam/, ex: align.sam or align.bam : "
+            bam_or_same_file_input = input(
+                "Enter file name of alignment file in data/sam-bam/, ex: align.sam or align.bam : "
+            ).strip()
+            if cli_util.validate_file_input(bam_or_same_file_input, [".sam", ".bam"]):
+                alignment_file = open_alignment_file(
+                    f"{path_config.SAM_BAM_PATH}/{bam_or_same_file_input}"
                 )
-                .strip()
-                .lower()
-            )
-            alignment_file = open_alignment_file(
-                f"{path_config.SAM_BAM_PATH}/{bam_or_same_file_input}"
-            )
-            alignment_stats = get_read_alignment_stats_summary(alignment_file)
-            cli_util.print_alignment_summary(alignment_stats)
-            alignment_file = open_alignment_file(
-                f"{path_config.SAM_BAM_PATH}/{bam_or_same_file_input}"
-            )
+                alignment_stats = get_read_alignment_stats_summary(alignment_file)
+                cli_util.print_alignment_summary(alignment_stats)
+                alignment_file = open_alignment_file(
+                    f"{path_config.SAM_BAM_PATH}/{bam_or_same_file_input}"
+                )
 
-            chrom = None
-            start = None
-            end = None
+                chrom = None
+                start = None
+                end = None
 
-            if Path(bam_or_same_file_input).suffix == ".bam":
-                # TODO :: this is too brittle, e.g. putting empty for int causes exception
-                chrom = input("Enter chromosome (e.g. chr1):").strip().lower()
-                start = int(input("Enter start (1-based):").strip())
-                end = int(input("Enter end:").strip())
+                if Path(bam_or_same_file_input).suffix == ".bam":
+                    # TODO :: this is too brittle, e.g. putting empty for int causes exception
+                    chrom = input("Enter chromosome (e.g. chr1):").strip()
+                    start = int(input("Enter start (1-based):").strip())
+                    end = int(input("Enter end:").strip())
 
-            cli_util.print_alignment_core_details(alignment_file, chrom, start, end)
+                cli_util.print_alignment_core_details(alignment_file, chrom, start, end)
         elif menu_choice == "7":
             logger.info("Exiting app")
             break
