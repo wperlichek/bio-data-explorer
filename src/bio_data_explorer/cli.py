@@ -107,9 +107,10 @@ def main() -> None:
                     chrom = input("Enter chromosome (e.g. chr1):").strip()
                     start = input("Enter start (1-based):").strip()
                     end = input("Enter end:").strip()
-                    cli_util.print_alignment_core_details(
-                        alignment_file, chrom, start, end
-                    )
+                    if cli_util.sequence_input_range_is_valid(start, end):
+                        cli_util.print_alignment_core_details(
+                            alignment_file, chrom, int(start), int(end)
+                        )
         elif menu_choice == "7":
             logger.info("Exiting app")
             break

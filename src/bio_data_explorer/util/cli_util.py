@@ -109,10 +109,13 @@ def sequence_input_range_is_valid(start: str = "", end: str = ""):
     else:
         start_int = int(start)
         end_int = int(end)
-        if start_int < 0 or end_int < 0:
+        if start_int < 1 or end_int < 1:
             logger.warning(
                 f"Start or end values {start}:{end} invalid, must must be numbers > 0"
             )
+            return False
+        elif start_int > end_int:
+            logger.warning(f"Start {start} must be less than end {end}")
             return False
         else:
             return True
