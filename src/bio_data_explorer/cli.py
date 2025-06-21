@@ -21,13 +21,14 @@ def main() -> None:
 
     try:
         genes_file = sys.argv[1] if len(sys.argv) > 1 else DEFAULT_GENES_FILE
-        if genes_file.endswith(".fasta") or genes_file.endswith("fasta.gz"):
-            genes = parse_fasta_file(f"{path_config.FASTA_PATH}/{genes_file}")
-        elif genes_file.endswith(".fastq") or genes_file.endswith("fastq.gz"):
-            genes = parse_fastq_file(f"{path_config.FASTQ_PATH}/{genes_file}")
+        if cli_util.validate_file_input(genes_file, [".fasta.gz", "fastq.gz"]):
+            if genes_file.endswith(".fasta.gz"):
+                genes = parse_fasta_file(f"{path_config.FASTA_PATH}/{genes_file}")
+            else:
+                genes = parse_fastq_file(f"{path_config.FASTQ_PATH}/{genes_file}")
         else:
             print(
-                f"Unaccepted file format in {genes_file}. Accepted file formats: .fasta, .fasta.gz, .fastq, .fastq.gz"
+                f"Unaccepted file format in {genes_file}. Accepted file formats: .fasta.gz, .fastq.gz"
             )
             return
     except FastaParsingError as e:
