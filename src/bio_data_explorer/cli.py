@@ -38,7 +38,7 @@ def main() -> None:
     genes_explorer = GenesExplorer(genes)
 
     while True:
-        print("-Bio Data Explorer-")
+        print("Bio Data Explorer")
         print("1. List all genes")
         print("2. View sequence of gene")
         print("3. Count nucleotides of gene")
