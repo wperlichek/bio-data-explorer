@@ -10,22 +10,68 @@ This project uses these bioinformatics libraries to help handle the data formats
 
 ## Running locally
 
-Create a virtual environment and activate it:
+### For Windows Users (Using WSL)
 
-    python -m venv .venv
-    source .venv/bin/activate
+#### Step 1: Install WSL and Ubuntu
 
-Install the package:
+To run this project on Windows, you must use Windows Subsystem for Linux (WSL) to ensure proper dependency installation and smooth operation.
 
-    pip install .
+1. Open PowerShell as Administrator (right-click → Run as Administrator).
+2. Run this command to install WSL and the Ubuntu Linux distribution: ```wsl --install```
+3. Restart your computer if prompted.
+4. Launch the Ubuntu app from your Start menu.
+5. Complete the initial setup by creating a Linux username and password.
 
-Run the CLI and use the default FASTA file:
+#### Step 2: Clone the repo
 
-    bio-data-explorer-cli
+```
+git clone https://github.com/yourusername/bio-data-explorer.git
+cd bio-data-explorer
+```
 
-Or run the CLI with your own input file (compressed FASTA or FASTQ):
+#### Step 2: Update packages and install Python 3.11 with dependencies
 
-    bio-data-explorer-cli data/fasta/your_file.fasta.gz
+Inside the Ubuntu terminal, run:
+
+```
+sudo apt update
+sudo apt install -y software-properties-common
+sudo add-apt-repository ppa:deadsnakes/ppa
+sudo apt update
+sudo apt install -y python3.11 python3.11-venv python3.11-distutils python3.11-dev python3-pip build-essential libbz2-dev liblzma-dev libcurl4-openssl-dev libssl-dev
+python3.11 --version
+```
+
+#### Step 3: Create and activate Python virtual environment
+
+```
+python3.11 -m venv .venv
+source .venv/bin/activate
+```
+
+#### Step 4: Upgrade pip and install your package with dev dependencies
+
+```
+pip install --upgrade pip setuptools wheel
+pip install numpy==1.26.4
+pip install --no-binary=cyvcf2 cyvcf2
+pip install .[dev]
+```
+
+#### Step 5: Run the CLI tool
+
+Run with default sample data:
+
+```bio-data-explorer-cli```
+
+Run with your own input file:
+
+```bio-data-explorer-cli data/fasta/your_file.fasta.gz```
+
+
+#### Step 7: Run tests
+
+```pytest```
 
 The app comes with sample files for each format, but you can also place your own data in the following folders:
 
@@ -33,12 +79,6 @@ The app comes with sample files for each format, but you can also place your own
 - data/fastq/ → .fastq.gz
 - data/sam-bam/ → .sam / .bam
 - data/vcf/ → .vcf.gz
-
-## Testing
-
-### Run all unit tests
-
-```pytest```
 
 ## Example Screenshots
 

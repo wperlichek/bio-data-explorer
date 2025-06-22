@@ -92,7 +92,7 @@ def validate_file_input(file: str = "", acceptable_extensions: List[str] = []) -
         if file.endswith(ext):
             return True
     logger.warning(
-        f"{file} does not have one of extension(s) {" ".join(acceptable_extensions)}"
+        f"{file} does not have one of extension(s) {' '.join(acceptable_extensions)}"
     )
     return False
 
