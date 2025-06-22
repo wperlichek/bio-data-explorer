@@ -10,9 +10,7 @@ This project uses these bioinformatics libraries to help handle the data formats
 
 ## Running locally
 
-### For Windows Users (Using WSL)
-
-#### Step 1: Install WSL and Ubuntu
+#### (For Windows Users Only) Step 1: Install WSL and Ubuntu
 
 To run this project on Windows, you must use Windows Subsystem for Linux (WSL) to ensure proper dependency installation and smooth operation.
 
@@ -42,6 +40,18 @@ sudo apt install -y python3.11 python3.11-venv python3.11-distutils python3.11-d
 python3.11 --version
 ```
 
+**Note for macOS users**:
+Please install Python 3.11 and Xcode Command Line Tools before continuing. You can use Homebrew:
+
+```
+brew install python@3.11
+xcode-select --install
+```
+
+
+After that, continue with the next steps below starting at **Step 3: Create and activate Python virtual environment**.
+
+
 #### Step 3: Create and activate Python virtual environment
 
 ```
@@ -60,6 +70,10 @@ pip install .[dev]
 
 #### Step 5: Run the CLI tool
 
+Make sure your virtual environment is activated before running the CLI:
+
+```source .venv/bin/activate```
+
 Run with default sample data:
 
 ```bio-data-explorer-cli```
@@ -68,10 +82,16 @@ Run with your own input file:
 
 ```bio-data-explorer-cli data/fasta/your_file.fasta.gz```
 
+If you ever want to run the CLI command without activating the venv, you can run it explicitly:
+
+```.venv/bin/bio-data-explorer-cli```
+
 
 #### Step 7: Run tests
 
 ```pytest```
+
+#### (Optional) Adding Your Own Data
 
 The app comes with sample files for each format, but you can also place your own data in the following folders:
 
