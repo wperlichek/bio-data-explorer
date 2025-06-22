@@ -19,7 +19,7 @@ This project uses these bioinformatics libraries to help handle the data formats
 ### Step 1: Clone the repo
 
 ```bash
-git clone https://github.com/yourusername/bio-data-explorer.git
+git clone https://github.com/wperlichek/bio-data-explorer.git
 cd bio-data-explorer
 ```
 
@@ -57,7 +57,7 @@ source .venv/bin/activate
 pip install --upgrade pip setuptools wheel
 pip install numpy==1.26.4
 pip install --no-binary=cyvcf2 cyvcf2
-pip install .[dev]
+pip install --editable .[dev]
 ```
 
 ### Step 5: Run the CLI tool
