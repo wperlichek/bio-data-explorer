@@ -80,7 +80,7 @@ Run with default sample data:
 
 Run with your own input file:
 
-```bio-data-explorer-cli data/fasta/your_file.fasta.gz```
+```bio-data-explorer-cli your_file.fasta.gz```
 
 If you ever want to run the CLI command without activating the venv, you can run it explicitly:
 
